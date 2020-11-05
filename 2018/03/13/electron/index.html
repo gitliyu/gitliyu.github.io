@@ -1,0 +1,662 @@
+<!DOCTYPE html>
+<html lang="zh-Hans">
+<head>
+
+    <!--[if lt IE 9]>
+        <style>body {display: none; background: none !important} </style>
+        <meta http-equiv="Refresh" Content="0; url=//outdatedbrowser.com/" />
+    <![endif]-->
+
+<meta charset="utf-8">
+<meta http-equiv="X-UA-Compatible" content="IE=edge, chrome=1" />
+<meta name="viewport" content="width=device-width, initial-scale=1, maximum-scale=1, user-scalable=no">
+<meta name="format-detection" content="telephone=no" />
+<meta name="author" content="Li Yu" />
+
+
+
+<meta name="description" content="&amp;nbsp;&amp;nbsp;&amp;nbsp;&amp;nbsp;最近开始基于electron-vue做一个桌面应用，因为是独立做的项目，也是我首次从搭建环境开始自己做项目开发，踩了很多坑，总结一下一些值得记住的东西吧。">
+<meta name="keywords" content="js,electron,vue">
+<meta property="og:type" content="article">
+<meta property="og:title" content="Electron-Vue项目记录">
+<meta property="og:url" content="https://www.liyu.fun/2018/03/13/electron/index.html">
+<meta property="og:site_name" content="Mr.Li">
+<meta property="og:description" content="&amp;nbsp;&amp;nbsp;&amp;nbsp;&amp;nbsp;最近开始基于electron-vue做一个桌面应用，因为是独立做的项目，也是我首次从搭建环境开始自己做项目开发，踩了很多坑，总结一下一些值得记住的东西吧。">
+<meta property="og:locale" content="zh-Hans">
+<meta property="og:image" content="https://www.liyu.fun/img/iconfont1.png">
+<meta property="og:image" content="https://www.liyu.fun/img/iconfont2.png">
+<meta property="og:image" content="https://www.liyu.fun/img/iconfont3.png">
+<meta property="og:updated_time" content="2019-08-07T10:04:44.939Z">
+<meta name="twitter:card" content="summary">
+<meta name="twitter:title" content="Electron-Vue项目记录">
+<meta name="twitter:description" content="&amp;nbsp;&amp;nbsp;&amp;nbsp;&amp;nbsp;最近开始基于electron-vue做一个桌面应用，因为是独立做的项目，也是我首次从搭建环境开始自己做项目开发，踩了很多坑，总结一下一些值得记住的东西吧。">
+<meta name="twitter:image" content="https://www.liyu.fun/img/iconfont1.png">
+
+<link rel="apple-touch-icon" href= "/apple-touch-icon.png">
+
+
+    <link rel="alternate" href="/atom.xml" title="Mr.Li" type="application/atom+xml">
+
+
+
+    <link rel="shortcut icon" href="/img/niconico.png">
+
+
+
+    <link href="//cdn.bootcss.com/animate.css/3.5.1/animate.min.css" rel="stylesheet">
+
+
+
+    <link href="//cdn.bootcss.com/fancybox/2.1.5/jquery.fancybox.min.css" rel="stylesheet">
+
+
+
+    <script src="//cdn.bootcss.com/pace/1.0.2/pace.min.js"></script>
+    <link href="//cdn.bootcss.com/pace/1.0.2/themes/blue/pace-theme-minimal.css" rel="stylesheet">
+
+
+<link rel="stylesheet" href="/css/style.css">
+
+
+
+<link href="//cdn.bootcss.com/font-awesome/4.6.3/css/font-awesome.min.css" rel="stylesheet">
+
+
+<title>Electron-Vue项目记录 | Mr.Li</title>
+
+<script src="//cdn.bootcss.com/jquery/2.2.4/jquery.min.js"></script>
+<script src="//cdn.bootcss.com/clipboard.js/1.5.10/clipboard.min.js"></script>
+
+<script>
+    var yiliaConfig = {
+        fancybox: true,
+        animate: true,
+        isHome: false,
+        isPost: true,
+        isArchive: false,
+        isTag: false,
+        isCategory: false,
+        fancybox_js: "//cdn.bootcss.com/fancybox/2.1.5/jquery.fancybox.min.js",
+        scrollreveal: "//cdn.bootcss.com/scrollReveal.js/3.1.4/scrollreveal.min.js",
+        search: true
+    }
+</script>
+
+
+    <script>
+        yiliaConfig.jquery_ui = [true, "//cdn.bootcss.com/jqueryui/1.10.4/jquery-ui.min.js", "//cdn.bootcss.com/jqueryui/1.10.4/css/jquery-ui.min.css"];
+    </script>
+
+
+
+    <script> yiliaConfig.rootUrl = "\/";</script>
+
+
+
+    <script src="//s7.addthis.com/js/300/addthis_widget.js#pubid=ra-56ff76c972fc0cf9"></script>
+
+
+
+    <script>
+        var _hmt = _hmt || [];
+        (function() {
+            var hm = document.createElement("script");
+            hm.src = "//hm.baidu.com/hm.js?b8be283af49aba7fa167f7b7a45f63db";
+            var s = document.getElementsByTagName("script")[0]; 
+            s.parentNode.insertBefore(hm, s);
+        })();
+    </script>
+
+
+</head>
+<body>
+  <div id="container">
+    <div class="left-col">
+    <div class="overlay"></div>
+<div class="intrude-less">
+    <header id="header" class="inner">
+        <a href="/" class="profilepic">
+            <img src="/img/avatar.png" class="animated zoomIn">
+        </a>
+        <hgroup>
+          <h1 class="header-author"><a href="/">Li Yu</a></h1>
+        </hgroup>
+
+        
+        <p class="header-subtitle">一三五写bug，二四六改bug</p>
+        
+
+        
+            <form id="search-form">
+            <input type="text" id="local-search-input" name="q" placeholder="search..." class="search form-control" autocomplete="off" autocorrect="off" searchonload="true" />
+            <i class="fa fa-times" onclick="resetSearch()"></i>
+            </form>
+            <div id="local-search-result"></div>
+            <p class='no-result'>No results found <i class='fa fa-spinner fa-pulse'></i></p>
+        
+
+
+        
+            <div id="switch-btn" class="switch-btn">
+                <div class="icon">
+                    <div class="icon-ctn">
+                        <div class="icon-wrap icon-house" data-idx="0">
+                            <div class="birdhouse"></div>
+                            <div class="birdhouse_holes"></div>
+                        </div>
+                        <div class="icon-wrap icon-ribbon hide" data-idx="1">
+                            <div class="ribbon"></div>
+                        </div>
+                        
+                        <div class="icon-wrap icon-link hide" data-idx="2">
+                            <div class="loopback_l"></div>
+                            <div class="loopback_r"></div>
+                        </div>
+                        
+                        
+                        <div class="icon-wrap icon-me hide" data-idx="3">
+                            <div class="user"></div>
+                            <div class="shoulder"></div>
+                        </div>
+                        
+                    </div>
+                    
+                </div>
+                <div class="tips-box hide">
+                    <div class="tips-arrow"></div>
+                    <ul class="tips-inner">
+                        <li>菜单</li>
+                        <li>标签</li>
+                        
+                        <li>友情链接</li>
+                        
+                        
+                        <li>关于我</li>
+                        
+                    </ul>
+                </div>
+            </div>
+        
+
+        <div id="switch-area" class="switch-area">
+            <div class="switch-wrap">
+                <section class="switch-part switch-part1">
+                    <nav class="header-menu">
+                        <ul>
+                        
+                            <li><a href="/">主页</a></li>
+                        
+                            <li><a href="/archives/">所有文章</a></li>
+                        
+                            <li><a href="/diary">随笔</a></li>
+                        
+                            <li><a href="/tags/">标签云</a></li>
+                        
+                        </ul>
+                    </nav>
+                    <nav class="header-nav">
+                        <ul class="social">
+                            
+                                <a class="fa Email" href="mailto:1042625709@qq.com" title="Email"></a>
+                            
+                                <a class="fa GitHub" href="https://github.com/gitliyu" title="GitHub"></a>
+                            
+                                <a class="fa QQ" href="http://wpa.qq.com/msgrd?v=3&uin=1042625709&site=qq&menu=yes" title="QQ"></a>
+                            
+                        </ul>
+                    </nav>
+                </section>
+                
+                
+                <section class="switch-part switch-part2">
+                    <div class="widget tagcloud" id="js-tagcloud">
+                        <ul class="tag-list"><li class="tag-list-item"><a class="tag-list-link" href="/tags/AutoHotkey/">AutoHotkey</a></li><li class="tag-list-item"><a class="tag-list-link" href="/tags/SQL/">SQL</a></li><li class="tag-list-item"><a class="tag-list-link" href="/tags/angular/">angular</a></li><li class="tag-list-item"><a class="tag-list-link" href="/tags/canvas/">canvas</a></li><li class="tag-list-item"><a class="tag-list-link" href="/tags/cordova/">cordova</a></li><li class="tag-list-item"><a class="tag-list-link" href="/tags/crypto/">crypto</a></li><li class="tag-list-item"><a class="tag-list-link" href="/tags/css/">css</a></li><li class="tag-list-item"><a class="tag-list-link" href="/tags/dataTables/">dataTables</a></li><li class="tag-list-item"><a class="tag-list-link" href="/tags/echart/">echart</a></li><li class="tag-list-item"><a class="tag-list-link" href="/tags/electron/">electron</a></li><li class="tag-list-item"><a class="tag-list-link" href="/tags/es6/">es6</a></li><li class="tag-list-item"><a class="tag-list-link" href="/tags/hexo/">hexo</a></li><li class="tag-list-item"><a class="tag-list-link" href="/tags/html/">html</a></li><li class="tag-list-item"><a class="tag-list-link" href="/tags/iot/">iot</a></li><li class="tag-list-item"><a class="tag-list-link" href="/tags/jQuery/">jQuery</a></li><li class="tag-list-item"><a class="tag-list-link" href="/tags/java/">java</a></li><li class="tag-list-item"><a class="tag-list-link" href="/tags/javascript/">javascript</a></li><li class="tag-list-item"><a class="tag-list-link" href="/tags/jquery/">jquery</a></li><li class="tag-list-item"><a class="tag-list-link" href="/tags/js/">js</a></li><li class="tag-list-item"><a class="tag-list-link" href="/tags/laravel/">laravel</a></li><li class="tag-list-item"><a class="tag-list-link" href="/tags/linux/">linux</a></li><li class="tag-list-item"><a class="tag-list-link" href="/tags/mysql/">mysql</a></li><li class="tag-list-item"><a class="tag-list-link" href="/tags/nginx/">nginx</a></li><li class="tag-list-item"><a class="tag-list-link" href="/tags/node/">node</a></li><li class="tag-list-item"><a class="tag-list-link" href="/tags/npm/">npm</a></li><li class="tag-list-item"><a class="tag-list-link" href="/tags/otter/">otter</a></li><li class="tag-list-item"><a class="tag-list-link" href="/tags/php/">php</a></li><li class="tag-list-item"><a class="tag-list-link" href="/tags/pjax/">pjax</a></li><li class="tag-list-item"><a class="tag-list-link" href="/tags/pushState/">pushState</a></li><li class="tag-list-item"><a class="tag-list-link" href="/tags/rds/">rds</a></li><li class="tag-list-item"><a class="tag-list-link" href="/tags/redis/">redis</a></li><li class="tag-list-item"><a class="tag-list-link" href="/tags/require/">require</a></li><li class="tag-list-item"><a class="tag-list-link" href="/tags/sonarqube/">sonarqube</a></li><li class="tag-list-item"><a class="tag-list-link" href="/tags/superset/">superset</a></li><li class="tag-list-item"><a class="tag-list-link" href="/tags/thingsboard/">thingsboard</a></li><li class="tag-list-item"><a class="tag-list-link" href="/tags/vue/">vue</a></li><li class="tag-list-item"><a class="tag-list-link" href="/tags/vuex/">vuex</a></li><li class="tag-list-item"><a class="tag-list-link" href="/tags/webAPI/">webAPI</a></li><li class="tag-list-item"><a class="tag-list-link" href="/tags/yelee/">yelee</a></li><li class="tag-list-item"><a class="tag-list-link" href="/tags/微信/">微信</a></li><li class="tag-list-item"><a class="tag-list-link" href="/tags/支付宝/">支付宝</a></li><li class="tag-list-item"><a class="tag-list-link" href="/tags/游戏/">游戏</a></li></ul>
+                    </div>
+                </section>
+                
+                
+                
+                <section class="switch-part switch-part3">
+                    <div id="js-friends">
+                    
+                      <a class="main-nav-link switch-friends-link" href="https://hexo.io">Hexo</a>
+                    
+                      <a class="main-nav-link switch-friends-link" href="https://pages.github.com/">GitHub</a>
+                    
+                      <a class="main-nav-link switch-friends-link" href="http://mafei.fun/">flyforfun</a>
+                    
+                    </div>
+                </section>
+                
+
+                
+                
+                <section class="switch-part switch-part4">
+                
+                    <div id="js-aboutme">欢迎来到我的个人博客，期待你的建议与交流，可以点击菜单栏下方按钮发送邮件或者QQ给我</div>
+                </section>
+                
+            </div>
+        </div>
+    </header>                
+</div>
+    </div>
+    <div class="mid-col">
+      <nav id="mobile-nav">
+      <div class="overlay">
+          <div class="slider-trigger"></div>
+          <h1 class="header-author js-mobile-header hide"><a href="/" title="回到主页">Li Yu</a></h1>
+      </div>
+    <div class="intrude-less">
+        <header id="header" class="inner">
+            <a href="/" class="profilepic">
+                <img src="/img/avatar.png" class="animated zoomIn">
+            </a>
+            <hgroup>
+              <h1 class="header-author"><a href="/" title="回到主页">Li Yu</a></h1>
+            </hgroup>
+            
+            <p class="header-subtitle">一三五写bug，二四六改bug</p>
+            
+            <nav class="header-menu">
+                <ul>
+                
+                    <li><a href="/">主页</a></li>
+                
+                    <li><a href="/archives/">所有文章</a></li>
+                
+                    <li><a href="/diary">随笔</a></li>
+                
+                    <li><a href="/tags/">标签云</a></li>
+                
+                <div class="clearfix"></div>
+                </ul>
+            </nav>
+            <nav class="header-nav">
+                        <ul class="social">
+                            
+                                <a class="fa Email" target="_blank" href="mailto:1042625709@qq.com" title="Email"></a>
+                            
+                                <a class="fa GitHub" target="_blank" href="https://github.com/gitliyu" title="GitHub"></a>
+                            
+                                <a class="fa QQ" target="_blank" href="http://wpa.qq.com/msgrd?v=3&uin=1042625709&site=qq&menu=yes" title="QQ"></a>
+                            
+                        </ul>
+            </nav>
+        </header>                
+    </div>
+    <link class="menu-list" tags="标签" friends="友情链接" about="关于我"/>
+</nav>
+      <div class="body-wrap"><article id="post-electron" class="article article-type-post" itemscope itemprop="blogPost">
+  
+    <div class="article-meta">
+      <a href="/2018/03/13/electron/" class="article-date">
+      <time datetime="2018-03-13T10:15:36.000Z" itemprop="datePublished">2018-03-13</time>
+</a>
+
+
+    </div>
+  
+  <div class="article-inner">
+    
+      <input type="hidden" class="isFancy" />
+    
+    
+      <header class="article-header">
+        
+  
+    <h1 class="article-title" itemprop="name">
+      Electron-Vue项目记录
+    </h1>
+  
+
+      </header>
+      
+      <div class="article-info article-info-post">
+        
+    <div class="article-category tagcloud">
+    <a class="article-category-link" href="/categories/项目实例/">项目实例</a><a class="article-category-link" href="/categories/项目实例/经验总结/">经验总结</a>
+    </div>
+
+
+        
+    <div class="article-tag tagcloud">
+        <ul class="article-tag-list"><li class="article-tag-list-item"><a class="article-tag-list-link" href="/tags/electron/">electron</a></li><li class="article-tag-list-item"><a class="article-tag-list-link" href="/tags/js/">js</a></li><li class="article-tag-list-item"><a class="article-tag-list-link" href="/tags/vue/">vue</a></li></ul>
+    </div>
+
+        <div class="clearfix"></div>
+      </div>
+      
+    
+    <div class="article-entry" itemprop="articleBody">
+      
+          
+        <p>&nbsp;&nbsp;&nbsp;&nbsp;最近开始基于electron-vue做一个桌面应用，因为是独立做的项目，也是我首次从搭建环境开始自己做项目开发，踩了很多坑，总结一下一些值得记住的东西吧。<br><a id="more"></a></p>
+<h3 id="简介"><a href="#简介" class="headerlink" title="简介"></a>简介</h3><p>&nbsp;&nbsp;&nbsp;&nbsp;首先简单介绍一下Electron吧。<br>&nbsp;&nbsp;&nbsp;&nbsp;当用Electron启动一个应用，会创建一个主进程。这个主进程负责与你系统原生的GUI进行交互并为你的应用创建GUI（在你的应用窗口），所以你能把它看作成一个被 JavaScript 控制的，精简版的 Chromium 浏览器。<br>&nbsp;&nbsp;&nbsp;&nbsp;Electron-Vue集成了vue-cli脚手架，项目环境同常规的vue项目大致相同。</p>
+<h3 id="安装"><a href="#安装" class="headerlink" title="安装"></a>安装</h3><p>作为<code>vue-cli</code>的一个模板，可以直接使用以下命令搭建<br><figure class="highlight plain"><table><tr><td class="gutter"><pre><span class="line">1</span><br><span class="line">2</span><br></pre></td><td class="code"><pre><span class="line">npm install -g vue-cli</span><br><span class="line">vue init simulatedgreg/electron-vue my-project</span><br></pre></td></tr></table></figure></p>
+<h3 id="跨域"><a href="#跨域" class="headerlink" title="跨域"></a>跨域</h3><p>在后台没有设置<code>Access-Control-Allow-Origin</code>的情况下，浏览器对于跨域请求会出错<br><figure class="highlight plain"><table><tr><td class="gutter"><pre><span class="line">1</span><br></pre></td><td class="code"><pre><span class="line">Response to preflight request doesn&apos;t pass access control check: No &apos;Access-Control-Allow-Origin&apos; header is present on the requested resource. Origin &apos;http://localhost:9080&apos; is therefore not allowed access.</span><br></pre></td></tr></table></figure></p>
+<p>我们可以在前台解决这个问题，取消浏览器对于非同源请求的限制，在初始化Electron的BrowserWindow模块中配置这样一个参数：<br><figure class="highlight javascript"><table><tr><td class="gutter"><pre><span class="line">1</span><br><span class="line">2</span><br><span class="line">3</span><br><span class="line">4</span><br></pre></td><td class="code"><pre><span class="line"><span class="comment">// /src/main/index.js</span></span><br><span class="line">mainWindow = <span class="keyword">new</span> BrowserWindow(&#123;</span><br><span class="line">    webPreferences: &#123;<span class="attr">webSecurity</span>: <span class="literal">false</span>&#125;,</span><br><span class="line">&#125;)</span><br></pre></td></tr></table></figure></p>
+<p><code>webSecurity</code>是什么意思呢？顾名思义，他是设置web安全性，如果参数设置为 false，它将禁用相同地方的规则 (通常测试服), 并且如果有2个非用户设置的参数，就设置 <code>allowDisplayingInsecureContent</code> 和 <code>allowRunningInsecureContent</code>的值为true。 （webSecurity的默认值为true）</p>
+<p>allowDisplayingInsecureContent表示是否允许一个使用 https的界面来展示由 http URLs 传过来的资源。默认false。<br>allowRunningInsecureContent表示是否允许一个使用 https的界面来渲染由 http URLs 提交的html，css，javascript。默认为 false。</p>
+<h3 id="build空白"><a href="#build空白" class="headerlink" title="build空白"></a>build空白</h3><p><code>npm run build:win32</code>打包出来一片空白，几经波折之后在<code>webpack.renderer.config.js</code>中发现了以下代码<br><figure class="highlight javascript"><table><tr><td class="gutter"><pre><span class="line">1</span><br><span class="line">2</span><br><span class="line">3</span><br><span class="line">4</span><br><span class="line">5</span><br><span class="line">6</span><br></pre></td><td class="code"><pre><span class="line">plugins: [</span><br><span class="line">  ……</span><br><span class="line">  nodeModules: process.env.NODE_ENV !== <span class="string">'production'</span></span><br><span class="line">        ? path.resolve(__dirname, <span class="string">'../node_modules'</span>)</span><br><span class="line">        : <span class="literal">false</span></span><br><span class="line">]</span><br></pre></td></tr></table></figure></p>
+<p>一脸懵比。。原来是<code>node_modules</code>没有加载上，于是就有了解决办法</p>
+<ul>
+<li>打包之前修改环境为production</li>
+<li>修改代码为 <figure class="highlight javascript"><table><tr><td class="gutter"><pre><span class="line">1</span><br></pre></td><td class="code"><pre><span class="line">nodeModules: path.resolve(__dirname, <span class="string">'../node_modules'</span>)</span><br></pre></td></tr></table></figure>
+</li>
+</ul>
+<h3 id="全屏显示"><a href="#全屏显示" class="headerlink" title="全屏显示"></a>全屏显示</h3><figure class="highlight javascript"><table><tr><td class="gutter"><pre><span class="line">1</span><br><span class="line">2</span><br><span class="line">3</span><br><span class="line">4</span><br><span class="line">5</span><br><span class="line">6</span><br><span class="line">7</span><br><span class="line">8</span><br><span class="line">9</span><br><span class="line">10</span><br><span class="line">11</span><br><span class="line">12</span><br><span class="line">13</span><br><span class="line">14</span><br><span class="line">15</span><br><span class="line">16</span><br><span class="line">17</span><br></pre></td><td class="code"><pre><span class="line"><span class="keyword">import</span> &#123; app, globalShortcut, BrowserWindow &#125; <span class="keyword">from</span> <span class="string">'electron'</span></span><br><span class="line"></span><br><span class="line">mainWindow = <span class="keyword">new</span> BrowserWindow(&#123;</span><br><span class="line">  height: <span class="number">768</span>,</span><br><span class="line">  width: <span class="number">1024</span>,</span><br><span class="line">  autoHideMenuBar: <span class="literal">true</span>,</span><br><span class="line">  webPreferences: &#123;</span><br><span class="line">    webSecurity: <span class="literal">false</span></span><br><span class="line">  &#125;</span><br><span class="line">&#125;)</span><br><span class="line"></span><br><span class="line">mainWindow.setFullScreen(<span class="literal">true</span>)</span><br><span class="line"><span class="comment">// mainWindow.setMenu(null)</span></span><br><span class="line"></span><br><span class="line">globalShortcut.register(<span class="string">'ESC'</span>, () =&gt; &#123;</span><br><span class="line">  mainWindow.setFullScreen(<span class="literal">false</span>);</span><br><span class="line">&#125;)</span><br></pre></td></tr></table></figure>
+<ul>
+<li>通过设置<code>win.setFullScreen(true)</code>全屏显示，<code>ESC</code>退出全屏</li>
+<li>配置项<code>autoHideMenuBar: true</code>用来隐藏菜单栏，这样设置的话按<code>Alt</code>键会显示菜单，想要完全隐藏的话，可以设置<code>win.setMenu(null)</code></li>
+</ul>
+<h3 id="注册快捷键"><a href="#注册快捷键" class="headerlink" title="注册快捷键"></a>注册快捷键</h3><p><code>global-shortcut</code> 模块可以便捷的设置(注册/注销)各种自定义操作的快捷键，例如上面的<code>ESC</code>退出全屏，包含以下函数:<br>1.globalShortcut.register(accelerator, callback)</p>
+<ul>
+<li><code>accelerator</code> <a href="https://electronjs.org/docs/api/accelerator" target="_blank" rel="noopener">‘accelerator’</a></li>
+<li><code>callback</code> Function<br>快捷方式使用 register 方法在 globalShortcut 模块中注册, 即:<figure class="highlight javascript"><table><tr><td class="gutter"><pre><span class="line">1</span><br><span class="line">2</span><br><span class="line">3</span><br><span class="line">4</span><br><span class="line">5</span><br><span class="line">6</span><br><span class="line">7</span><br><span class="line">8</span><br></pre></td><td class="code"><pre><span class="line"><span class="keyword">const</span> &#123;app, globalShortcut&#125; = <span class="built_in">require</span>(<span class="string">'electron'</span>)</span><br><span class="line">  </span><br><span class="line">  app.on(<span class="string">'ready'</span>, () =&gt; &#123;</span><br><span class="line">    <span class="comment">// Register a 'CommandOrControl+Y' shortcut listener.</span></span><br><span class="line">    globalShortcut.register(<span class="string">'CommandOrControl+Y'</span>, () =&gt; &#123;</span><br><span class="line">      <span class="comment">// Do stuff when Y and either Command/Control is pressed.</span></span><br><span class="line">    &#125;)</span><br><span class="line">  &#125;)</span><br></pre></td></tr></table></figure>
+</li>
+</ul>
+<p>2.globalShortcut.isRegistered(accelerator)<br>查询 accelerator 快捷键是否已经被注册过了,将会返回 true(已被注册) 或 false(未注册).<br>3.globalShortcut.unregister(accelerator)<br>注销全局快捷键 accelerator.<br>4.globalShortcut.unregisterAll()<br>注销本应用注册的所有全局快捷键.</p>
+<h3 id="axios封装"><a href="#axios封装" class="headerlink" title="axios封装"></a>axios封装</h3><p>目的：</p>
+<ol>
+<li>设置请求头</li>
+<li>数据处理</li>
+<li>添加loading</li>
+<li>返回值验证</li>
+</ol>
+<figure class="highlight javascript"><table><tr><td class="gutter"><pre><span class="line">1</span><br><span class="line">2</span><br><span class="line">3</span><br><span class="line">4</span><br><span class="line">5</span><br><span class="line">6</span><br><span class="line">7</span><br><span class="line">8</span><br><span class="line">9</span><br><span class="line">10</span><br><span class="line">11</span><br><span class="line">12</span><br><span class="line">13</span><br><span class="line">14</span><br><span class="line">15</span><br><span class="line">16</span><br><span class="line">17</span><br><span class="line">18</span><br><span class="line">19</span><br><span class="line">20</span><br><span class="line">21</span><br><span class="line">22</span><br><span class="line">23</span><br><span class="line">24</span><br><span class="line">25</span><br><span class="line">26</span><br><span class="line">27</span><br><span class="line">28</span><br><span class="line">29</span><br><span class="line">30</span><br><span class="line">31</span><br><span class="line">32</span><br><span class="line">33</span><br><span class="line">34</span><br><span class="line">35</span><br><span class="line">36</span><br><span class="line">37</span><br><span class="line">38</span><br><span class="line">39</span><br><span class="line">40</span><br><span class="line">41</span><br><span class="line">42</span><br><span class="line">43</span><br><span class="line">44</span><br><span class="line">45</span><br><span class="line">46</span><br><span class="line">47</span><br><span class="line">48</span><br><span class="line">49</span><br></pre></td><td class="code"><pre><span class="line"><span class="keyword">import</span> Vue <span class="keyword">from</span> <span class="string">'vue'</span></span><br><span class="line"><span class="keyword">import</span> axios <span class="keyword">from</span> <span class="string">'axios'</span></span><br><span class="line"><span class="keyword">import</span> qs <span class="keyword">from</span> <span class="string">'qs'</span></span><br><span class="line"><span class="keyword">import</span> store <span class="keyword">from</span> <span class="string">'../../store'</span></span><br><span class="line"><span class="keyword">import</span> &#123;Loading&#125; <span class="keyword">from</span> <span class="string">'element-ui'</span></span><br><span class="line"></span><br><span class="line"><span class="keyword">let</span> loading;</span><br><span class="line"></span><br><span class="line"><span class="comment">// Add a request interceptor</span></span><br><span class="line">axios.interceptors.request.use(<span class="function"><span class="keyword">function</span> (<span class="params">config</span>) </span>&#123;</span><br><span class="line">  showLoading();</span><br><span class="line">  config.url = <span class="string">'http://xxxxxx'</span> + config.url;</span><br><span class="line">  config.headers[<span class="string">'Content-Type'</span>] = <span class="string">'application/x-www-form-urlencoded'</span>;</span><br><span class="line">  config.headers[<span class="string">'Authorization'</span>] = localStorage.getItem(<span class="string">'token'</span>);</span><br><span class="line">  <span class="keyword">if</span> (config.method === <span class="string">'post'</span>) &#123;</span><br><span class="line">    config.data = qs.stringify(&#123;</span><br><span class="line">      ...config.data</span><br><span class="line">    &#125;)</span><br><span class="line">  &#125;</span><br><span class="line">  <span class="keyword">return</span> config</span><br><span class="line">&#125;, <span class="function"><span class="keyword">function</span> (<span class="params">error</span>) </span>&#123;</span><br><span class="line">  <span class="keyword">return</span> <span class="built_in">Promise</span>.reject(error)</span><br><span class="line">&#125;)</span><br><span class="line"></span><br><span class="line"><span class="comment">// Add a response interceptor</span></span><br><span class="line">axios.interceptors.response.use(<span class="function"><span class="keyword">function</span> (<span class="params">response</span>) </span>&#123;</span><br><span class="line">  hideLoading();</span><br><span class="line">  <span class="keyword">if</span> (response.data.error_code === <span class="string">'002'</span>) &#123;</span><br><span class="line">    store.commit(<span class="string">'_setOnlineStatus'</span>, <span class="literal">false</span>)<span class="comment">// sign out</span></span><br><span class="line">  &#125; <span class="keyword">else</span> &#123;</span><br><span class="line">    <span class="keyword">return</span> response</span><br><span class="line">  &#125;</span><br><span class="line">&#125;, <span class="function"><span class="keyword">function</span> (<span class="params">error</span>) </span>&#123;</span><br><span class="line">  hideLoading();</span><br><span class="line">  <span class="keyword">return</span> <span class="built_in">Promise</span>.reject(error)</span><br><span class="line">&#125;)</span><br><span class="line"></span><br><span class="line"><span class="function"><span class="keyword">function</span> <span class="title">showLoading</span> (<span class="params"></span>) </span>&#123;</span><br><span class="line">  loading = Loading.service(&#123;</span><br><span class="line">    fullscreen: <span class="literal">true</span>,</span><br><span class="line">    lock: <span class="literal">false</span>,</span><br><span class="line">    text: <span class="string">'Loading...'</span></span><br><span class="line">  &#125;)</span><br><span class="line">&#125;</span><br><span class="line"><span class="function"><span class="keyword">function</span> <span class="title">hideLoading</span> (<span class="params"></span>) </span>&#123;</span><br><span class="line">  loading.close()</span><br><span class="line">&#125;</span><br><span class="line"></span><br><span class="line">Vue.http = Vue.prototype.$http = axios</span><br></pre></td></tr></table></figure>
+<p>这里使用的是axios提供的<code>interceptors</code>拦截器方法，对request和response进行了拦截。<br>request: 添加loading，修改url，token，Content-Type，我在用户登录时，将token存在了localStorage中，并使用qs模块对post请求发送的数据进行了处理。<br>response: 移除loading，当token过期时，退出登录，这里的退出功能使用了vuex来实现，在根组件监听<code>onlineStatus</code>的变化，当值为false时登出。<br>。<br>最后将axios注册在Vue实例的原型上，可以直接通过<code>this.$http</code>来调用。<br><figure class="highlight javascript"><table><tr><td class="gutter"><pre><span class="line">1</span><br></pre></td><td class="code"><pre><span class="line"><span class="keyword">this</span>.$http.get(<span class="string">'/list'</span>).then(<span class="function"><span class="params">res</span> =&gt;</span> &#123;&#125;).catch(<span class="function"><span class="params">()</span> =&gt;</span> &#123;&#125;);</span><br></pre></td></tr></table></figure></p>
+<h3 id="I18n多语言设置"><a href="#I18n多语言设置" class="headerlink" title="I18n多语言设置"></a>I18n多语言设置</h3><p>项目要求使用多语言，我选择使用了vue-i18n，配置如下：<br><figure class="highlight javascript"><table><tr><td class="gutter"><pre><span class="line">1</span><br><span class="line">2</span><br><span class="line">3</span><br><span class="line">4</span><br><span class="line">5</span><br><span class="line">6</span><br><span class="line">7</span><br><span class="line">8</span><br><span class="line">9</span><br><span class="line">10</span><br><span class="line">11</span><br><span class="line">12</span><br><span class="line">13</span><br><span class="line">14</span><br><span class="line">15</span><br><span class="line">16</span><br><span class="line">17</span><br><span class="line">18</span><br></pre></td><td class="code"><pre><span class="line"><span class="keyword">import</span> Vue <span class="keyword">from</span> <span class="string">'vue'</span></span><br><span class="line"><span class="keyword">import</span> VueI18n <span class="keyword">from</span> <span class="string">'vue-i18n'</span></span><br><span class="line"><span class="keyword">import</span> enLocale <span class="keyword">from</span> <span class="string">'element-ui/lib/locale/lang/en'</span></span><br><span class="line"><span class="keyword">import</span> zhLocale <span class="keyword">from</span> <span class="string">'element-ui/lib/locale/lang/zh-CN'</span></span><br><span class="line"></span><br><span class="line">Vue.use(VueI18n);</span><br><span class="line"><span class="keyword">let</span> locale = localStorage.getItem(<span class="string">'locale'</span>);</span><br><span class="line"></span><br><span class="line"><span class="keyword">export</span> <span class="keyword">const</span> i18n = <span class="keyword">new</span> VueI18n(&#123;</span><br><span class="line">  locale: locale || <span class="string">'zh-CN'</span>, <span class="comment">// set locale</span></span><br><span class="line">  silentTranslationWarn: <span class="literal">true</span>,</span><br><span class="line">  messages: &#123;</span><br><span class="line">    <span class="string">'zh-CN'</span>: <span class="built_in">require</span>(<span class="string">'./zh-CN'</span>).default,</span><br><span class="line">    <span class="string">'en'</span>: <span class="built_in">require</span>(<span class="string">'./en'</span>).default</span><br><span class="line">  &#125;</span><br><span class="line">&#125;);</span><br><span class="line">i18n.mergeLocaleMessage(<span class="string">'zh-CN'</span>, zhLocale);</span><br><span class="line">i18n.mergeLocaleMessage(<span class="string">'en'</span>, enLocale);</span><br></pre></td></tr></table></figure></p>
+<p>项目使用了<code>Element-ui</code>，所以需要导入语言包，后来发现<code>Element-ui</code>有方法导入多语言，就不需要再用<code>mergeLocaleMessage</code>进行合并，在<code>main.js</code>中引入时这样使用<br><figure class="highlight javascript"><table><tr><td class="gutter"><pre><span class="line">1</span><br><span class="line">2</span><br><span class="line">3</span><br><span class="line">4</span><br><span class="line">5</span><br><span class="line">6</span><br></pre></td><td class="code"><pre><span class="line"><span class="comment">// 注意这里的i8n是上面语言配置文件导出的VueI18n实例</span></span><br><span class="line"><span class="keyword">import</span> &#123; i18n &#125; <span class="keyword">from</span> <span class="string">'./lang'</span></span><br><span class="line"></span><br><span class="line">Vue.use(ElementUI, &#123;</span><br><span class="line">  i18n: <span class="function">(<span class="params">key, value</span>) =&gt;</span> i18n.t(key, value)</span><br><span class="line">&#125;);</span><br></pre></td></tr></table></figure></p>
+<p>我选择将语言的配置存放在<code>localStorage</code>中，在每次切换语言后修改<code>localStorage</code>，记录当前所选择的语言，切换语言时调用<br><figure class="highlight javascript"><table><tr><td class="gutter"><pre><span class="line">1</span><br><span class="line">2</span><br></pre></td><td class="code"><pre><span class="line"><span class="keyword">this</span>.$i18n.locale = <span class="string">'en'</span>;</span><br><span class="line">localStorage.setItem(<span class="string">'locale'</span>, <span class="string">'en'</span>);</span><br></pre></td></tr></table></figure></p>
+<p>当然，在配置完成之后，还需要在<code>main.js</code>中实例化Vue的时候引入<br><figure class="highlight javascript"><table><tr><td class="gutter"><pre><span class="line">1</span><br><span class="line">2</span><br><span class="line">3</span><br><span class="line">4</span><br><span class="line">5</span><br><span class="line">6</span><br><span class="line">7</span><br><span class="line">8</span><br><span class="line">9</span><br></pre></td><td class="code"><pre><span class="line"><span class="keyword">import</span> &#123; i18n &#125; <span class="keyword">from</span> <span class="string">'./lang'</span>;</span><br><span class="line"></span><br><span class="line"><span class="keyword">new</span> Vue(&#123;</span><br><span class="line">  components: &#123; App &#125;,</span><br><span class="line">  router,</span><br><span class="line">  store,</span><br><span class="line">  i18n,</span><br><span class="line">  template: <span class="string">'&lt;App/&gt;'</span></span><br><span class="line">&#125;)</span><br></pre></td></tr></table></figure></p>
+<p>以中文文件为例，为了方便管理，在’zh-CN文件夹下引入各个模块的语言文件<br><figure class="highlight javascript"><table><tr><td class="gutter"><pre><span class="line">1</span><br><span class="line">2</span><br><span class="line">3</span><br><span class="line">4</span><br><span class="line">5</span><br><span class="line">6</span><br><span class="line">7</span><br><span class="line">8</span><br><span class="line">9</span><br><span class="line">10</span><br><span class="line">11</span><br><span class="line">12</span><br><span class="line">13</span><br></pre></td><td class="code"><pre><span class="line"><span class="comment">// index.js</span></span><br><span class="line"><span class="keyword">export</span> <span class="keyword">default</span> &#123;</span><br><span class="line">  <span class="string">'table'</span>: <span class="built_in">require</span>(<span class="string">'./table'</span>).default,</span><br><span class="line">  <span class="string">'order'</span>: <span class="built_in">require</span>(<span class="string">'./order'</span>).default,</span><br><span class="line">  <span class="string">'indent'</span>: <span class="built_in">require</span>(<span class="string">'./indent'</span>).default,</span><br><span class="line">  <span class="string">'member'</span>: <span class="built_in">require</span>(<span class="string">'./member'</span>).default,</span><br><span class="line">  <span class="string">'report'</span>: <span class="built_in">require</span>(<span class="string">'./report'</span>).default,</span><br><span class="line">  <span class="string">'login'</span>: <span class="built_in">require</span>(<span class="string">'./login'</span>).default</span><br><span class="line">&#125;</span><br><span class="line"><span class="comment">// login.js</span></span><br><span class="line"><span class="keyword">export</span> <span class="keyword">default</span> &#123;</span><br><span class="line">  <span class="string">'title'</span>: <span class="string">'登录'</span></span><br><span class="line">&#125;</span><br></pre></td></tr></table></figure></p>
+<p>使用方法:<br><figure class="highlight plain"><table><tr><td class="gutter"><pre><span class="line">1</span><br></pre></td><td class="code"><pre><span class="line">&lt;div&gt;&#123;&#123; $t(&apos;login.title&apos;) &#125;&#125;&lt;/div&gt;	//登录</span><br></pre></td></tr></table></figure></p>
+<blockquote>
+<p>在组件中，可以使用<code>this.$i18n</code>访问对象</p>
+</blockquote>
+<h3 id="登录超时"><a href="#登录超时" class="headerlink" title="登录超时"></a>登录超时</h3><p>项目要求无操作1分钟后退出登录，退出前有消息提示(这里需要吐槽一下1分钟这个时间)，话不多说，直接贴代码，我把登录超时验证的逻辑放在了与<code>login.vue</code>同级的<code>full.vue</code>根文件上，除登陆页之外的所有页面都注册在它的子路由下。<br><figure class="highlight html"><table><tr><td class="gutter"><pre><span class="line">1</span><br><span class="line">2</span><br><span class="line">3</span><br><span class="line">4</span><br><span class="line">5</span><br></pre></td><td class="code"><pre><span class="line"><span class="tag">&lt;<span class="name">template</span>&gt;</span></span><br><span class="line">  <span class="tag">&lt;<span class="name">div</span> <span class="attr">class</span>=<span class="string">"full-page"</span> @<span class="attr">mousemove</span>=<span class="string">"onMouseMove"</span>&gt;</span></span><br><span class="line">    <span class="tag">&lt;<span class="name">router-view</span>&gt;</span><span class="tag">&lt;/<span class="name">router-view</span>&gt;</span></span><br><span class="line">  <span class="tag">&lt;/<span class="name">div</span>&gt;</span></span><br><span class="line"><span class="tag">&lt;/<span class="name">template</span>&gt;</span></span><br></pre></td></tr></table></figure></p>
+<figure class="highlight javascript"><table><tr><td class="gutter"><pre><span class="line">1</span><br><span class="line">2</span><br><span class="line">3</span><br><span class="line">4</span><br><span class="line">5</span><br><span class="line">6</span><br><span class="line">7</span><br><span class="line">8</span><br><span class="line">9</span><br><span class="line">10</span><br><span class="line">11</span><br><span class="line">12</span><br><span class="line">13</span><br><span class="line">14</span><br><span class="line">15</span><br><span class="line">16</span><br><span class="line">17</span><br><span class="line">18</span><br><span class="line">19</span><br><span class="line">20</span><br><span class="line">21</span><br><span class="line">22</span><br><span class="line">23</span><br><span class="line">24</span><br><span class="line">25</span><br><span class="line">26</span><br><span class="line">27</span><br><span class="line">28</span><br><span class="line">29</span><br><span class="line">30</span><br><span class="line">31</span><br><span class="line">32</span><br><span class="line">33</span><br><span class="line">34</span><br><span class="line">35</span><br><span class="line">36</span><br><span class="line">37</span><br><span class="line">38</span><br><span class="line">39</span><br><span class="line">40</span><br><span class="line">41</span><br><span class="line">42</span><br><span class="line">43</span><br><span class="line">44</span><br><span class="line">45</span><br><span class="line">46</span><br><span class="line">47</span><br></pre></td><td class="code"><pre><span class="line">&lt;script type=<span class="string">"text/javascript"</span>&gt;</span><br><span class="line">  <span class="keyword">import</span> moment <span class="keyword">from</span> <span class="string">'moment'</span>;</span><br><span class="line">  <span class="keyword">export</span> <span class="keyword">default</span> &#123;</span><br><span class="line">    data () &#123;</span><br><span class="line">      <span class="keyword">return</span> &#123;</span><br><span class="line">        lastTime: <span class="literal">null</span>,		<span class="comment">// 上次操作的时间</span></span><br><span class="line">        showMessage: <span class="literal">true</span>   <span class="comment">// 防止重复弹出message box</span></span><br><span class="line">      &#125;</span><br><span class="line">    &#125;,</span><br><span class="line">    created () &#123;</span><br><span class="line">      <span class="keyword">if</span> (!localStorage.getItem(<span class="string">'token'</span>)) &#123;	  <span class="comment">// 登录超时后刷新页面也会退出</span></span><br><span class="line">        <span class="keyword">this</span>.onExit();</span><br><span class="line">      &#125;</span><br><span class="line">    &#125;,</span><br><span class="line">    mounted () &#123;</span><br><span class="line">      <span class="keyword">this</span>.checkTime();</span><br><span class="line">    &#125;,</span><br><span class="line">    methods: &#123;</span><br><span class="line">      onMouseMove () &#123;	<span class="comment">// 记录上次操作的时间</span></span><br><span class="line">        <span class="keyword">this</span>.lastTime = moment();</span><br><span class="line">      &#125;,</span><br><span class="line">      checkTime () &#123;</span><br><span class="line">        <span class="keyword">this</span>.lastTime = moment();</span><br><span class="line">        <span class="keyword">let</span> timer = setInterval(<span class="function"><span class="params">()</span> =&gt;</span> &#123;</span><br><span class="line">          <span class="keyword">let</span> time = moment() - moment(<span class="keyword">this</span>.lastTime);</span><br><span class="line">          <span class="keyword">if</span> (time &gt; <span class="number">60000</span> &amp;&amp; <span class="keyword">this</span>.showMessage) &#123;	<span class="comment">// 时间差大于一分钟</span></span><br><span class="line">            localStorage.removeItem(<span class="string">'token'</span>);</span><br><span class="line">            <span class="keyword">this</span>.showMessage = <span class="literal">false</span>;</span><br><span class="line">            <span class="keyword">this</span>.$alert(<span class="keyword">this</span>.$t(<span class="string">'login.errors.overtime_text'</span>), <span class="keyword">this</span>.$t(<span class="string">'login.errors.overtime'</span>), &#123;</span><br><span class="line">              confirmButtonText: <span class="keyword">this</span>.$t(<span class="string">'confirm'</span>),</span><br><span class="line">              closeOnClickModal: <span class="literal">true</span>,</span><br><span class="line">              callback: <span class="function"><span class="params">()</span> =&gt;</span> &#123;</span><br><span class="line">                <span class="keyword">this</span>.showMessage = <span class="literal">true</span>;</span><br><span class="line">                clearInterval(timer);	</span><br><span class="line">                <span class="keyword">this</span>.onExit();</span><br><span class="line">              &#125;</span><br><span class="line">            &#125;)</span><br><span class="line">          &#125;</span><br><span class="line">        &#125;, <span class="number">5000</span>)</span><br><span class="line">      &#125;,</span><br><span class="line">      onExit () &#123;</span><br><span class="line">        localStorage.removeItem(<span class="string">'token'</span>);</span><br><span class="line">        <span class="keyword">this</span>.$router.push(<span class="string">'/login'</span>);</span><br><span class="line">      &#125;</span><br><span class="line">    &#125;</span><br><span class="line">  &#125;</span><br><span class="line">&lt;<span class="regexp">/script&gt;</span></span><br></pre></td></tr></table></figure>
+<p>其实道理很简单，给根页面绑定mousemove事件，记录上次操作的时间，然后启动定时器，判断当前时间差，超时之后弹出消息提示，这时候已经清掉了储存的token，已经算是退出登录了，在message box的回掉中退出到登陆页。</p>
+<blockquote>
+<p>一定要清定时器！一定要清定时器！一定要清定时器！</p>
+</blockquote>
+<h3 id="Eslint-从入门到放弃"><a href="#Eslint-从入门到放弃" class="headerlink" title="Eslint 从入门到放弃"></a>Eslint 从入门到放弃</h3><p>之前提到Electron-Vue使用了vue-cli脚手架来搭建项目环境，在使用vue-cli安装时，可以选择直接安装eslint，如果想安装eslint到其他项目<br><figure class="highlight plain"><table><tr><td class="gutter"><pre><span class="line">1</span><br><span class="line">2</span><br></pre></td><td class="code"><pre><span class="line">npm install -g eslint</span><br><span class="line">eslint --init</span><br></pre></td></tr></table></figure></p>
+<p>全局安装eslint之后，在项目文件夹执行命令生成.eslintrc配置文件即可,下面来大致介绍一下</p>
+<ul>
+<li>env: 脚本运行环境，如brower、node环境变量、es6环境变量、mocha环境变量等</li>
+<li>globals: 额外的全局变量</li>
+<li>rules: 开启规则和发生错误时报告的等级</li>
+</ul>
+<p>规则的错误等级有三种：<br><figure class="highlight plain"><table><tr><td class="gutter"><pre><span class="line">1</span><br><span class="line">2</span><br><span class="line">3</span><br></pre></td><td class="code"><pre><span class="line">0或&apos;off&apos;：关闭规则。</span><br><span class="line">1或&apos;warn&apos;：打开规则，并且作为一个警告（并不会导致检查不通过）。</span><br><span class="line">2或&apos;error&apos;：打开规则，并且作为一个错误 (退出码为1，检查不通过)。</span><br></pre></td></tr></table></figure></p>
+<p>默认配置的eslint有很多特(sang)别(xin)贴(bing)心(kuang)的地方，就不一一赘述了，我在开发的时候关闭了一些自己不能忍的规则<br><figure class="highlight javascript"><table><tr><td class="gutter"><pre><span class="line">1</span><br><span class="line">2</span><br><span class="line">3</span><br><span class="line">4</span><br><span class="line">5</span><br><span class="line">6</span><br><span class="line">7</span><br><span class="line">8</span><br><span class="line">9</span><br><span class="line">10</span><br><span class="line">11</span><br><span class="line">12</span><br><span class="line">13</span><br><span class="line">14</span><br></pre></td><td class="code"><pre><span class="line"><span class="string">'rules'</span>: &#123;</span><br><span class="line">  <span class="string">"no-unused-vars"</span>: [<span class="number">2</span>, &#123;</span><br><span class="line">    <span class="comment">// 允许声明未使用变量</span></span><br><span class="line">    <span class="string">"vars"</span>: <span class="string">"local"</span>,</span><br><span class="line">    <span class="comment">// 参数不检查</span></span><br><span class="line">    <span class="string">"args"</span>: <span class="string">"none"</span></span><br><span class="line">  &#125;],</span><br><span class="line">  <span class="comment">// 关闭语句强制分号结尾</span></span><br><span class="line">  <span class="string">"semi"</span>: [<span class="number">0</span>],</span><br><span class="line">  <span class="comment">//空行最多不能超过100行</span></span><br><span class="line">  <span class="string">"no-multiple-empty-lines"</span>: [<span class="number">0</span>, &#123;<span class="string">"max"</span>: <span class="number">100</span>&#125;],</span><br><span class="line">  <span class="comment">//关闭禁止混用tab和空格</span></span><br><span class="line">  <span class="string">"no-mixed-spaces-and-tabs"</span>: [<span class="number">0</span>],</span><br><span class="line">&#125;</span><br></pre></td></tr></table></figure></p>
+<p>由于Eslint不允许使用未声明的变量，因此在使用全局变量的时候会出现<code>no-undef</code>的报错<br><figure class="highlight plain"><table><tr><td class="gutter"><pre><span class="line">1</span><br></pre></td><td class="code"><pre><span class="line">&apos;axios&apos; is not defined</span><br></pre></td></tr></table></figure></p>
+<p>几番尝试之后发现这种东西似乎是关不掉的，于是只能在<code>globals</code>中添加允许的全局变量<br><figure class="highlight javascript"><table><tr><td class="gutter"><pre><span class="line">1</span><br><span class="line">2</span><br><span class="line">3</span><br><span class="line">4</span><br></pre></td><td class="code"><pre><span class="line">globals: &#123;</span><br><span class="line">  __static: <span class="literal">true</span>,</span><br><span class="line">  axios: <span class="literal">true</span></span><br><span class="line">&#125;</span><br></pre></td></tr></table></figure></p>
+<blockquote>
+<p>对于使用webstrom / phpstrom的童鞋，想体验eslint的酸爽的话，需要手动开启vip体验<br>Preferences -&gt; Languages &amp; Frameworks -&gt; JavaScript -&gt; Code Quality Tools -&gt; Eslint -&gt; Enable (勾选) -&gt; Apply -&gt; OK</p>
+</blockquote>
+<p>当然，在使用vue-cli脚手架不小心安装了eslint的时候，直接在webpack的config配置文件中删除即可<br><figure class="highlight javascript"><table><tr><td class="gutter"><pre><span class="line">1</span><br><span class="line">2</span><br><span class="line">3</span><br><span class="line">4</span><br><span class="line">5</span><br><span class="line">6</span><br><span class="line">7</span><br><span class="line">8</span><br><span class="line">9</span><br><span class="line">10</span><br><span class="line">11</span><br><span class="line">12</span><br><span class="line">13</span><br><span class="line">14</span><br><span class="line">15</span><br></pre></td><td class="code"><pre><span class="line"><span class="built_in">module</span>: &#123;</span><br><span class="line">  rules: [</span><br><span class="line">    <span class="comment">// &#123;</span></span><br><span class="line">    <span class="comment">//   test: /\.(js)$/,</span></span><br><span class="line">    <span class="comment">//   enforce: 'pre',</span></span><br><span class="line">    <span class="comment">//   exclude: /node_modules/,</span></span><br><span class="line">    <span class="comment">//   use: &#123;</span></span><br><span class="line">    <span class="comment">//     loader: 'eslint-loader',</span></span><br><span class="line">    <span class="comment">//     options: &#123;</span></span><br><span class="line">    <span class="comment">//       formatter: require('eslint-friendly-formatter')</span></span><br><span class="line">    <span class="comment">//     &#125;</span></span><br><span class="line">    <span class="comment">//   &#125;</span></span><br><span class="line">    <span class="comment">// &#125;,</span></span><br><span class="line">  &#125;</span><br><span class="line">&#125;</span><br></pre></td></tr></table></figure></p>
+<h3 id="Better-Scroll滚动封装"><a href="#Better-Scroll滚动封装" class="headerlink" title="Better-Scroll滚动封装"></a>Better-Scroll滚动封装</h3><p>因为是应用于pos机的桌面应用，很多地方就要考虑内容的滚动，这里使用了<a href="https://github.com/ustbhuangyi/better-scroll" target="_blank" rel="noopener">‘better-scroll’</a>;<br>具体的使用方法见官方文档，我在使用的时候并没有像官方文档那样封装scroll组件，因为项目不需要那么复杂的功能和配置，当然，也进行了简单的封装，用<a href="https://cn.vuejs.org/v2/guide/mixins.html" target="_blank" rel="noopener">‘mixin’</a>的形式调用方法。<br><figure class="highlight javascript"><table><tr><td class="gutter"><pre><span class="line">1</span><br><span class="line">2</span><br><span class="line">3</span><br><span class="line">4</span><br><span class="line">5</span><br><span class="line">6</span><br><span class="line">7</span><br><span class="line">8</span><br><span class="line">9</span><br><span class="line">10</span><br><span class="line">11</span><br><span class="line">12</span><br><span class="line">13</span><br><span class="line">14</span><br><span class="line">15</span><br><span class="line">16</span><br><span class="line">17</span><br><span class="line">18</span><br><span class="line">19</span><br><span class="line">20</span><br><span class="line">21</span><br><span class="line">22</span><br><span class="line">23</span><br><span class="line">24</span><br><span class="line">25</span><br><span class="line">26</span><br><span class="line">27</span><br><span class="line">28</span><br><span class="line">29</span><br><span class="line">30</span><br><span class="line">31</span><br><span class="line">32</span><br><span class="line">33</span><br><span class="line">34</span><br><span class="line">35</span><br><span class="line">36</span><br></pre></td><td class="code"><pre><span class="line"><span class="comment">// scroll.js</span></span><br><span class="line"><span class="keyword">import</span> BScroll <span class="keyword">from</span> <span class="string">'better-scroll'</span>;</span><br><span class="line"></span><br><span class="line"><span class="keyword">export</span> <span class="keyword">default</span>&#123;</span><br><span class="line">  data () &#123;</span><br><span class="line">    <span class="keyword">return</span> &#123;</span><br><span class="line">      scroll: <span class="literal">null</span></span><br><span class="line">    &#125;</span><br><span class="line">  &#125;,</span><br><span class="line">  methods: &#123;</span><br><span class="line">    initScroll (dom = <span class="keyword">this</span>.$refs.wrapper, option) &#123;</span><br><span class="line">      <span class="keyword">this</span>.$nextTick(<span class="function"><span class="params">()</span> =&gt;</span> &#123;  <span class="comment">//等待dom元素加载完成</span></span><br><span class="line">        <span class="keyword">if</span> (!<span class="keyword">this</span>.scroll) &#123;</span><br><span class="line">          <span class="keyword">this</span>.scroll = <span class="keyword">new</span> BScroll(dom, option || &#123;</span><br><span class="line">            scrollbar: &#123;</span><br><span class="line">              fade: <span class="literal">true</span>,</span><br><span class="line">              interactive: <span class="literal">false</span></span><br><span class="line">            &#125;</span><br><span class="line">          &#125;);</span><br><span class="line">          <span class="keyword">this</span>.scrollPullDown();</span><br><span class="line">        &#125; <span class="keyword">else</span> &#123;</span><br><span class="line">          <span class="keyword">this</span>.scroll.refresh();  <span class="comment">//刷新</span></span><br><span class="line">        &#125;</span><br><span class="line">      &#125;)</span><br><span class="line">    &#125;,  </span><br><span class="line">    scrollPullDown () &#123;   <span class="comment">//下拉事件</span></span><br><span class="line">      <span class="keyword">if</span> (<span class="keyword">this</span>.pullDown) &#123;</span><br><span class="line">        <span class="keyword">this</span>.scroll.on(<span class="string">'scrollEnd'</span>, (&#123;x, y&#125;) =&gt; &#123;</span><br><span class="line">          <span class="keyword">if</span> (y === <span class="keyword">this</span>.scroll.maxScrollY) &#123;</span><br><span class="line">            <span class="keyword">this</span>.onPullDown();</span><br><span class="line">          &#125;</span><br><span class="line">        &#125;)</span><br><span class="line">      &#125;</span><br><span class="line">    &#125;</span><br><span class="line">  &#125;</span><br><span class="line">&#125;</span><br></pre></td></tr></table></figure></p>
+<p>在配置option的时候只添加了滚动条，没有其他的配置，在vue文件中使用scroll时<br><figure class="highlight html"><table><tr><td class="gutter"><pre><span class="line">1</span><br><span class="line">2</span><br><span class="line">3</span><br><span class="line">4</span><br></pre></td><td class="code"><pre><span class="line">// html </span><br><span class="line"><span class="tag">&lt;<span class="name">div</span> <span class="attr">class</span>=<span class="string">"scroll-wrapper"</span> <span class="attr">ref</span>=<span class="string">"wrapper"</span>&gt;</span></span><br><span class="line">    <span class="tag">&lt;<span class="name">div</span> <span class="attr">class</span>=<span class="string">"content"</span>&gt;</span><span class="tag">&lt;/<span class="name">div</span>&gt;</span></span><br><span class="line"><span class="tag">&lt;/<span class="name">div</span>&gt;</span></span><br></pre></td></tr></table></figure></p>
+<figure class="highlight javascript"><table><tr><td class="gutter"><pre><span class="line">1</span><br><span class="line">2</span><br><span class="line">3</span><br><span class="line">4</span><br><span class="line">5</span><br><span class="line">6</span><br><span class="line">7</span><br><span class="line">8</span><br><span class="line">9</span><br><span class="line">10</span><br><span class="line">11</span><br><span class="line">12</span><br><span class="line">13</span><br><span class="line">14</span><br><span class="line">15</span><br><span class="line">16</span><br><span class="line">17</span><br></pre></td><td class="code"><pre><span class="line"><span class="comment">// js</span></span><br><span class="line"><span class="keyword">import</span> scroll <span class="keyword">from</span> <span class="string">'../../assets/js/scroll'</span>;</span><br><span class="line"><span class="keyword">export</span> <span class="keyword">default</span> &#123;</span><br><span class="line">    mixins: [</span><br><span class="line">      scroll</span><br><span class="line">    ]</span><br><span class="line">    ……</span><br><span class="line">    methods: &#123;</span><br><span class="line">        queryData () &#123;</span><br><span class="line">            axios.post(<span class="string">'url'</span>, &#123;&#125;).then(<span class="function"><span class="params">()</span> =&gt;</span> &#123;</span><br><span class="line">            	<span class="keyword">this</span>.initScroll();</span><br><span class="line">            &#125;).catch(<span class="function"><span class="params">()</span> =&gt;</span> &#123;</span><br><span class="line">                <span class="keyword">this</span>.initScroll();</span><br><span class="line">            &#125;)	</span><br><span class="line">        &#125;</span><br><span class="line">    &#125;</span><br><span class="line">&#125;</span><br></pre></td></tr></table></figure>
+<blockquote>
+<p>注意设置wrapper样式</p>
+</blockquote>
+<figure class="highlight plain"><table><tr><td class="gutter"><pre><span class="line">1</span><br><span class="line">2</span><br><span class="line">3</span><br><span class="line">4</span><br><span class="line">5</span><br><span class="line">6</span><br></pre></td><td class="code"><pre><span class="line">.scroll-wrapper&#123;</span><br><span class="line">    overflow: hidden;</span><br><span class="line">    position: relative(滚动条定位)</span><br><span class="line">    margin: 0 -15px;(空出滚动条的位置)</span><br><span class="line">    padding: 0 15px;</span><br><span class="line">&#125;</span><br></pre></td></tr></table></figure>
+<p>定义的<code>scrollPullDown</code>方法，为滚动对象绑定了一个下拉事件，当滚动区域下拉至底部时触发，我在这里把他应用于表格的分页加载，因为是桌面应用，没有使用传统的分页器，而是使用下拉来加载下一页使用，需要设置<code>pullDown: true</code>以及<code>onPullDown</code>方法使用。</p>
+<blockquote>
+<p>最后发现better-scroll并不是适用于触屏PC，弃用了。。由于electron自带chrome，所以直接通过css修改了滚动条样式，使用原生滚动</p>
+</blockquote>
+<figure class="highlight plain"><table><tr><td class="gutter"><pre><span class="line">1</span><br><span class="line">2</span><br><span class="line">3</span><br><span class="line">4</span><br></pre></td><td class="code"><pre><span class="line">.scroll-wrapper&#123; overflow: auto; &#125;</span><br><span class="line">::-webkit-scrollbar-track-piece&#123; background-color: $white-color; &#125;</span><br><span class="line">::-webkit-scrollbar&#123; width:5px; &#125;</span><br><span class="line">::-webkit-scrollbar-thumb&#123; background-color: rgba(0,0,0,.6); border-radius: 3px &#125;</span><br></pre></td></tr></table></figure>
+<h3 id="Table简易封装"><a href="#Table简易封装" class="headerlink" title="Table简易封装"></a>Table简易封装</h3><p>上文提到了，将table结合scroll，实现下拉刷新。<br><figure class="highlight javascript"><table><tr><td class="gutter"><pre><span class="line">1</span><br><span class="line">2</span><br><span class="line">3</span><br><span class="line">4</span><br><span class="line">5</span><br><span class="line">6</span><br><span class="line">7</span><br><span class="line">8</span><br><span class="line">9</span><br><span class="line">10</span><br><span class="line">11</span><br><span class="line">12</span><br><span class="line">13</span><br><span class="line">14</span><br><span class="line">15</span><br><span class="line">16</span><br><span class="line">17</span><br><span class="line">18</span><br><span class="line">19</span><br><span class="line">20</span><br><span class="line">21</span><br><span class="line">22</span><br><span class="line">23</span><br><span class="line">24</span><br><span class="line">25</span><br><span class="line">26</span><br><span class="line">27</span><br><span class="line">28</span><br><span class="line">29</span><br><span class="line">30</span><br></pre></td><td class="code"><pre><span class="line"><span class="keyword">import</span> scroll <span class="keyword">from</span> <span class="string">'./scroll'</span>;</span><br><span class="line"></span><br><span class="line"><span class="keyword">export</span> <span class="keyword">default</span>&#123;</span><br><span class="line">  mixins: [</span><br><span class="line">    scroll</span><br><span class="line">  ],</span><br><span class="line">  data () &#123;</span><br><span class="line">    <span class="keyword">return</span> &#123;</span><br><span class="line">      tableData: [],</span><br><span class="line">      pullDown: <span class="literal">true</span></span><br><span class="line">    &#125;</span><br><span class="line">  &#125;,</span><br><span class="line">  mounted () &#123;</span><br><span class="line">    <span class="keyword">this</span>.queryTableData();</span><br><span class="line">  &#125;,</span><br><span class="line">  methods: &#123;</span><br><span class="line">    queryTableData () &#123;</span><br><span class="line">      <span class="keyword">if</span> (<span class="keyword">this</span>.resource) &#123;</span><br><span class="line">        <span class="keyword">this</span>.$http.post(<span class="keyword">this</span>.resource, <span class="keyword">this</span>.parms).then(<span class="function"><span class="params">res</span> =&gt;</span> &#123;</span><br><span class="line">          <span class="keyword">this</span>.tableData = <span class="keyword">this</span>.tableData.concat(res.data.data)</span><br><span class="line">          <span class="keyword">this</span>.initScroll(<span class="string">'.el-table__body-wrapper'</span>);</span><br><span class="line">        &#125;)</span><br><span class="line">      &#125;</span><br><span class="line">    &#125;,</span><br><span class="line">    onPullDown () &#123;</span><br><span class="line">      <span class="keyword">this</span>.parms.page++;</span><br><span class="line">      <span class="keyword">this</span>.queryTableData();</span><br><span class="line">    &#125;</span><br><span class="line">  &#125;</span><br><span class="line">&#125;</span><br></pre></td></tr></table></figure></p>
+<p>贴上简易版本的代码，依旧使用mixin的方法，在组件中导入后，配置resource请求地址和params请求参数，绑定tableData为表格数据，下拉时请求下一页数据。<br>在组件中也可以通过调用<code>queryTableData</code>方法刷新表格。</p>
+<blockquote>
+<p>上面提到了弃用了better-scroll，这里自己写了一个<code>touchend</code>方法来控制刷新表格</p>
+</blockquote>
+<figure class="highlight javascript"><table><tr><td class="gutter"><pre><span class="line">1</span><br><span class="line">2</span><br><span class="line">3</span><br><span class="line">4</span><br><span class="line">5</span><br><span class="line">6</span><br><span class="line">7</span><br><span class="line">8</span><br><span class="line">9</span><br><span class="line">10</span><br><span class="line">11</span><br></pre></td><td class="code"><pre><span class="line">touchStart (ev) &#123;</span><br><span class="line">  <span class="keyword">this</span>.touchStartSite = ev.touches[<span class="number">0</span>].pageY;</span><br><span class="line">&#125;,</span><br><span class="line">touchEnd (ev) &#123;</span><br><span class="line">  <span class="keyword">let</span> endSite = ev.changedTouches[<span class="number">0</span>].pageY;</span><br><span class="line">  <span class="keyword">let</span> wrapper = <span class="built_in">document</span>.getElementsByClassName(<span class="string">'el-table__body-wrapper'</span>)[<span class="number">0</span>];</span><br><span class="line">  <span class="keyword">let</span> content = <span class="built_in">document</span>.getElementsByClassName(<span class="string">'el-table__body'</span>)[<span class="number">0</span>];</span><br><span class="line">  <span class="keyword">if</span> (wrapper.scrollTop === (content.clientHeight - wrapper.clientHeight) &amp;&amp; (<span class="keyword">this</span>.touchStartSite - endSite) &gt; <span class="number">50</span>) &#123;</span><br><span class="line">    <span class="keyword">this</span>.onPullDown();</span><br><span class="line">  &#125;</span><br><span class="line">&#125;,</span><br></pre></td></tr></table></figure>
+<p>在<code>el-table</code>绑定事件，判断触摸滑动的位移等于内容差且滑动的垂直距离大于50px，前者是为了判断是否滑到底，后者是为了限制滑动最短距离，判断完成后加载下一页。</p>
+<blockquote>
+<p>还有一种封装方式，将表格作为一个组件，内容作为slot插入进去，这样在将配置项传入组件之后就可以使用了，在表格配件较多情况下，感觉这种方法相比mixins更方便。</p>
+</blockquote>
+<h3 id="Sass预设"><a href="#Sass预设" class="headerlink" title="Sass预设"></a>Sass预设</h3><p>相信用过bootstrap4的都会对它的样式预设印象深刻，特别是盒模型的样式预设，对于我这种习惯使用的人来说，已经是爱不释手了，为了减少项目打包的负担，没有使用bootstrap，就自己使用sass写了一套，发布成了一个npm包<a href="https://github.com/gitliyu/ly-sass" target="_blank" rel="noopener">‘ly-sass’</a>，部分代码如下<br><figure class="highlight javascript"><table><tr><td class="gutter"><pre><span class="line">1</span><br><span class="line">2</span><br><span class="line">3</span><br><span class="line">4</span><br><span class="line">5</span><br><span class="line">6</span><br><span class="line">7</span><br><span class="line">8</span><br><span class="line">9</span><br><span class="line">10</span><br><span class="line">11</span><br><span class="line">12</span><br><span class="line">13</span><br><span class="line">14</span><br><span class="line">15</span><br><span class="line">16</span><br><span class="line">17</span><br><span class="line">18</span><br><span class="line">19</span><br><span class="line">20</span><br><span class="line">21</span><br><span class="line">22</span><br><span class="line">23</span><br><span class="line">24</span><br><span class="line">25</span><br><span class="line">26</span><br><span class="line">27</span><br><span class="line">28</span><br><span class="line">29</span><br><span class="line">30</span><br><span class="line">31</span><br></pre></td><td class="code"><pre><span class="line"><span class="comment">// margin padding setting</span></span><br><span class="line">$directions: (l: left, <span class="attr">r</span>: right, <span class="attr">t</span>: top, <span class="attr">b</span>: bottom);</span><br><span class="line"></span><br><span class="line">@<span class="keyword">for</span> $index <span class="keyword">from</span> <span class="number">0</span> to <span class="number">10</span> &#123;</span><br><span class="line">  .p-#&#123;$index&#125; &#123;</span><br><span class="line">    padding: $index * <span class="number">0.5</span>rem !important;</span><br><span class="line">  &#125;</span><br><span class="line">  .m-#&#123;$index&#125; &#123;</span><br><span class="line">    margin: $index * <span class="number">0.5</span>rem !important;</span><br><span class="line">  &#125;</span><br><span class="line">  @each $key,$value <span class="keyword">in</span> $directions &#123;</span><br><span class="line">    .p#&#123;$key&#125;-#&#123;$index&#125; &#123;</span><br><span class="line">      padding-#&#123;$value&#125;: $index * 0.5rem !important;</span><br><span class="line">    &#125;</span><br><span class="line">    .m#&#123;$key&#125;-#&#123;$index&#125; &#123;</span><br><span class="line">      margin-#&#123;$value&#125;: $index * 0.5rem !important;</span><br><span class="line">    &#125;</span><br><span class="line">  &#125;</span><br><span class="line">&#125;</span><br><span class="line"></span><br><span class="line">@<span class="keyword">for</span> $index <span class="keyword">from</span> <span class="number">-1</span> to <span class="number">101</span> &#123;</span><br><span class="line">  .w-#&#123;$index&#125;&#123;</span><br><span class="line">    width: #&#123;$index&#125;% !important;</span><br><span class="line">  &#125;</span><br><span class="line">  .h-#&#123;$index&#125;&#123;</span><br><span class="line">    height: #&#123;$index&#125;% !important;</span><br><span class="line">  &#125;</span><br><span class="line">  .font-#&#123;$index&#125;&#123;</span><br><span class="line">    font-size: #&#123;$index&#125;px !important;</span><br><span class="line">  &#125;</span><br><span class="line">&#125;</span><br></pre></td></tr></table></figure></p>
+<p>使用时类似<br><figure class="highlight plain"><table><tr><td class="gutter"><pre><span class="line">1</span><br><span class="line">2</span><br></pre></td><td class="code"><pre><span class="line">&lt;div class=&apos;m-0 pt-2 ml-1&apos;&gt;&lt;/div&gt;  // margin: 0; padding-top: 1rem; margin-left: 0.5rem;</span><br><span class="line">&lt;div class=&apos;w-50 h-100 font-20&apos;&gt;&lt;/div&gt;  // width: 50%; height: 100%; font-size: 20px;</span><br></pre></td></tr></table></figure></p>
+<blockquote>
+<p>这只是其中比较有代表性的，具体的代码就不贴了，其他的预设都类似这种写法。</p>
+</blockquote>
+<h3 id="读卡器"><a href="#读卡器" class="headerlink" title="读卡器"></a>读卡器</h3><p>由于项目需要刷卡登录，刷卡识别会员卡等功能，所以外连了一个读卡器跟扫码枪，而且是功能最基础的那种，甚至没有任何的事件或者回调。。在读卡的时候会在光标处打出识别的卡号。<br>想要用这么个玩意实现刷卡登录。。。em。。苦思冥想好几天之后，发现这个读卡器是可以呗keydown事件捕获的，那么问题就在于，如何去区分扫码和正常的按键盘，最后的实现代码：<br><figure class="highlight javascript"><table><tr><td class="gutter"><pre><span class="line">1</span><br><span class="line">2</span><br><span class="line">3</span><br><span class="line">4</span><br><span class="line">5</span><br><span class="line">6</span><br><span class="line">7</span><br><span class="line">8</span><br><span class="line">9</span><br><span class="line">10</span><br><span class="line">11</span><br><span class="line">12</span><br><span class="line">13</span><br><span class="line">14</span><br><span class="line">15</span><br><span class="line">16</span><br><span class="line">17</span><br><span class="line">18</span><br><span class="line">19</span><br><span class="line">20</span><br><span class="line">21</span><br><span class="line">22</span><br><span class="line">23</span><br><span class="line">24</span><br><span class="line">25</span><br><span class="line">26</span><br><span class="line">27</span><br><span class="line">28</span><br><span class="line">29</span><br><span class="line">30</span><br><span class="line">31</span><br><span class="line">32</span><br><span class="line">33</span><br></pre></td><td class="code"><pre><span class="line"><span class="keyword">export</span> <span class="keyword">let</span> cardReader = &#123;</span><br><span class="line">  data () &#123;</span><br><span class="line">    <span class="keyword">return</span> &#123;</span><br><span class="line">      keyList: [],		<span class="comment">// 记录字符集</span></span><br><span class="line">      keyTime: <span class="literal">null</span>,	<span class="comment">// 记录上次键盘时间</span></span><br><span class="line">      card_sn: <span class="literal">null</span></span><br><span class="line">    &#125;</span><br><span class="line">  &#125;,</span><br><span class="line">  mounted () &#123;</span><br><span class="line">    <span class="keyword">this</span>.initCardReader();</span><br><span class="line">  &#125;,</span><br><span class="line">  methods: &#123;</span><br><span class="line">    initCardReader () &#123;</span><br><span class="line">      <span class="keyword">let</span> vm = <span class="keyword">this</span>;</span><br><span class="line">      <span class="built_in">window</span>.onkeydown = <span class="function"><span class="params">e</span> =&gt;</span> &#123;</span><br><span class="line">        <span class="keyword">if</span> (e.timeStamp - vm.keyTime &gt; <span class="number">50</span>) &#123;</span><br><span class="line">          vm.keyList = [];</span><br><span class="line">          vm.card_sn = <span class="literal">null</span>;</span><br><span class="line">        &#125;</span><br><span class="line">        vm.keyTime = e.timeStamp;</span><br><span class="line">        vm.keyList.push(e.key);</span><br><span class="line">      &#125;</span><br><span class="line">    &#125;</span><br><span class="line">  &#125;,</span><br><span class="line">  watch: &#123;</span><br><span class="line">    keyList: <span class="function"><span class="keyword">function</span> (<span class="params">val</span>) </span>&#123;</span><br><span class="line">      <span class="keyword">if</span> (val.length === <span class="number">10</span>) &#123;	<span class="comment">// 识别10位会员号之后执行回调</span></span><br><span class="line">        <span class="keyword">this</span>.card_sn = val.join(<span class="string">''</span>);	</span><br><span class="line">        <span class="keyword">this</span>.readerCallback();		</span><br><span class="line">      &#125;</span><br><span class="line">    &#125;</span><br><span class="line">  &#125;</span><br><span class="line">&#125;;</span><br></pre></td></tr></table></figure></p>
+<p>通过比较两次keydown事件的时间差，如果相隔时间超过50毫秒，清空keyList数组，在长度达到10位时(会员卡号为10位)，执行回调<code>readerCallback</code>。</p>
+<blockquote>
+<p>由于用mixin的方式引入<code>cardReader</code>方法，在使用时发现当同一页面中有不同组件(dialog)中加载方法时，由于键盘事件是注册在window上的，会导致多个组件中只有一个能用，解决方式是在每个dialog弹出时重新调用<code>initCardReader</code></p>
+</blockquote>
+<h3 id="Iconfont图标"><a href="#Iconfont图标" class="headerlink" title="Iconfont图标"></a>Iconfont图标</h3><p>很早就听说过<a href="http://www.iconfont.cn/" target="_blank" rel="noopener">‘Iconfont’</a>的大名，这次自己当家作主的项目，终于有了应用的机会，在实际开发一段时间之后，觉得这个东西是真的好用啊，不需要导入更多图标库，不需要再为了找图标浪费时间，话不多说，下面来介绍一下这个犀利的图标库吧。<br><img src="/img/iconfont1.png" alt="&#39;搜索图标&#39;"><br>在打开Iconfont网站之后，登录用户名(github账号即可)，查询到你想要的图标，点击加入购物车，<br><img src="/img/iconfont2.png" alt="&#39;添加项目&#39;"><br>然后点右上角的购物车打开，创建项目并添加图标到项目中，然后进入到项目页面<br><img src="/img/iconfont3.png" alt="&#39;添加项目&#39;"><br>在这里就可以看到项目图标库代码以及图标的代码，复制上面的代码，和iconfont的字体样式一同加入到项目中，这里列举三种使用方法</p>
+<h4 id="在线字体库"><a href="#在线字体库" class="headerlink" title="在线字体库"></a>在线字体库</h4><p>直接复制图标库代码使用，项目开发过程中方便修改<br><figure class="highlight plain"><table><tr><td class="gutter"><pre><span class="line">1</span><br><span class="line">2</span><br><span class="line">3</span><br><span class="line">4</span><br><span class="line">5</span><br><span class="line">6</span><br><span class="line">7</span><br><span class="line">8</span><br><span class="line">9</span><br><span class="line">10</span><br><span class="line">11</span><br><span class="line">12</span><br><span class="line">13</span><br><span class="line">14</span><br><span class="line">15</span><br><span class="line">16</span><br><span class="line">17</span><br></pre></td><td class="code"><pre><span class="line">@font-face &#123;</span><br><span class="line">  font-family: iconfont;</span><br><span class="line">  src: url(&apos;//at.alicdn.com/t/font_592912_662zcis5mcu6usor.eot&apos;);	/* IE9*/</span><br><span class="line">  src: url(&apos;//at.alicdn.com/t/font_592912_662zcis5mcu6usor.eot?#iefix&apos;)   /* IE6-IE8 */format(&apos;embedded-opentype&apos;),</span><br><span class="line">  url(&apos;//at.alicdn.com/t/font_592912_662zcis5mcu6usor.woff&apos;) format(&apos;woff&apos;),  /* chrome, firefox*/</span><br><span class="line">  url(&apos;//at.alicdn.com/t/font_592912_662zcis5mcu6usor.ttf&apos;) format(&apos;truetype&apos;), /* chrome, firefox, opera, Safari, Android, iOS 4.2+*/</span><br><span class="line">  url(&apos;//at.alicdn.com/t/font_592912_662zcis5mcu6usor.svg#iconfont&apos;) format(&apos;svg&apos;); /* iOS 4.1- */</span><br><span class="line">&#125;</span><br><span class="line"></span><br><span class="line">.iconfont&#123;</span><br><span class="line">  font-family: iconfont !important;</span><br><span class="line">  font-size:16px;</span><br><span class="line">  font-style:normal;</span><br><span class="line">  -webkit-font-smoothing: antialiased;</span><br><span class="line">  -webkit-text-stroke-width: 0.2px;</span><br><span class="line">  -moz-osx-font-smoothing: grayscale;</span><br><span class="line">&#125;</span><br></pre></td></tr></table></figure></p>
+<h4 id="引用css文件"><a href="#引用css文件" class="headerlink" title="引用css文件"></a>引用css文件</h4><p>在项目代码的<code>Font Class</code>选项中可以查看路径<br><figure class="highlight plain"><table><tr><td class="gutter"><pre><span class="line">1</span><br></pre></td><td class="code"><pre><span class="line">&lt;link rel=&quot;stylesheet&quot; type=&quot;text/css&quot; href=&quot;at.alicdn.com/t/font_611773_gnzu317r1jvvaemi.css&quot;&gt;</span><br></pre></td></tr></table></figure></p>
+<h4 id="引入图标文件"><a href="#引入图标文件" class="headerlink" title="引入图标文件"></a>引入图标文件</h4><p>在项目图标库定义完成之后，可以直接使用项目代码中的字体地址下载字体文件，引入使用<br><figure class="highlight plain"><table><tr><td class="gutter"><pre><span class="line">1</span><br><span class="line">2</span><br><span class="line">3</span><br><span class="line">4</span><br></pre></td><td class="code"><pre><span class="line">@font-face &#123;</span><br><span class="line">  font-family: iconfont;</span><br><span class="line">  src: url(assets/font/iconfont.ttf)	// electron只需要兼容chrome即可</span><br><span class="line">&#125;</span><br></pre></td></tr></table></figure></p>
+<blockquote>
+<p>对于使用webpack的项目，在打包之后会存在字体文件缺失的情况，需要下载字体文件并且按照webpack的引用规则引入文件。</p>
+</blockquote>
+<p>ok，这样就完成iconfont的设置了，复制上面的图标代码使用就可以了<br><figure class="highlight"><table><tr><td class="gutter"><pre><span class="line">1</span><br></pre></td><td class="code"><pre><span class="line">&lt;i class="iconfont"&gt;&amp;#xe649;&lt;/i&gt;</span><br></pre></td></tr></table></figure></p>
+<blockquote>
+<p>每次添加新图标都需要更新图标库代码</p>
+</blockquote>
+
+      
+    </div>
+    
+  </div>
+  
+    
+    <div class="copyright">
+        <p><span>本文标题:</span><a href="/2018/03/13/electron/">Electron-Vue项目记录</a></p>
+        <p><span>文章作者:</span><a href="/" title="回到主页">Li Yu</a></p>
+        <p><span>发布时间:</span>2018-03-13, 18:15:36</p>
+        <p><span>最后更新:</span>2019-08-07, 18:04:44</p>
+        <p>
+            <span>原始链接:</span><a class="post-url" href="/2018/03/13/electron/" title="Electron-Vue项目记录">https://www.liyu.fun/2018/03/13/electron/</a>
+            <span class="copy-path" data-clipboard-text="原文: https://www.liyu.fun/2018/03/13/electron/　　作者: Li Yu" title="点击复制文章链接"><i class="fa fa-clipboard"></i></span>
+            <script> var clipboard = new Clipboard('.copy-path'); </script>
+        </p>
+        <p>
+            <span>许可协议:</span><i class="fa fa-creative-commons"></i> <a rel="license" href="http://creativecommons.org/licenses/by-nc-sa/4.0/" title="CC BY-NC-SA 4.0 International" target = "_blank">"署名-非商用-相同方式共享 4.0"</a> 转载请保留原文链接及作者。
+        </p>
+    </div>
+
+
+
+    <nav id="article-nav">
+        
+            <div id="article-nav-newer" class="article-nav-title">
+                <a href="/2018/05/28/autohotkey/">
+                    AutoHotkey禁用热键以及Electron中的使用
+                </a>
+            </div>
+        
+        
+            <div id="article-nav-older" class="article-nav-title">
+                <a href="/2018/03/01/webapi/">
+                    使用webAPI预览上传图片和调用摄像头
+                </a>
+            </div>
+        
+    </nav>
+
+  
+</article>
+
+    <div id="toc" class="toc-article">
+        <strong class="toc-title">文章目录</strong>
+        
+            <ol class="toc"><li class="toc-item toc-level-3"><a class="toc-link" href="#简介"><span class="toc-number">1.</span> <span class="toc-text">简介</span></a></li><li class="toc-item toc-level-3"><a class="toc-link" href="#安装"><span class="toc-number">2.</span> <span class="toc-text">安装</span></a></li><li class="toc-item toc-level-3"><a class="toc-link" href="#跨域"><span class="toc-number">3.</span> <span class="toc-text">跨域</span></a></li><li class="toc-item toc-level-3"><a class="toc-link" href="#build空白"><span class="toc-number">4.</span> <span class="toc-text">build空白</span></a></li><li class="toc-item toc-level-3"><a class="toc-link" href="#全屏显示"><span class="toc-number">5.</span> <span class="toc-text">全屏显示</span></a></li><li class="toc-item toc-level-3"><a class="toc-link" href="#注册快捷键"><span class="toc-number">6.</span> <span class="toc-text">注册快捷键</span></a></li><li class="toc-item toc-level-3"><a class="toc-link" href="#axios封装"><span class="toc-number">7.</span> <span class="toc-text">axios封装</span></a></li><li class="toc-item toc-level-3"><a class="toc-link" href="#I18n多语言设置"><span class="toc-number">8.</span> <span class="toc-text">I18n多语言设置</span></a></li><li class="toc-item toc-level-3"><a class="toc-link" href="#登录超时"><span class="toc-number">9.</span> <span class="toc-text">登录超时</span></a></li><li class="toc-item toc-level-3"><a class="toc-link" href="#Eslint-从入门到放弃"><span class="toc-number">10.</span> <span class="toc-text">Eslint 从入门到放弃</span></a></li><li class="toc-item toc-level-3"><a class="toc-link" href="#Better-Scroll滚动封装"><span class="toc-number">11.</span> <span class="toc-text">Better-Scroll滚动封装</span></a></li><li class="toc-item toc-level-3"><a class="toc-link" href="#Table简易封装"><span class="toc-number">12.</span> <span class="toc-text">Table简易封装</span></a></li><li class="toc-item toc-level-3"><a class="toc-link" href="#Sass预设"><span class="toc-number">13.</span> <span class="toc-text">Sass预设</span></a></li><li class="toc-item toc-level-3"><a class="toc-link" href="#读卡器"><span class="toc-number">14.</span> <span class="toc-text">读卡器</span></a></li><li class="toc-item toc-level-3"><a class="toc-link" href="#Iconfont图标"><span class="toc-number">15.</span> <span class="toc-text">Iconfont图标</span></a><ol class="toc-child"><li class="toc-item toc-level-4"><a class="toc-link" href="#在线字体库"><span class="toc-number">15.1.</span> <span class="toc-text">在线字体库</span></a></li><li class="toc-item toc-level-4"><a class="toc-link" href="#引用css文件"><span class="toc-number">15.2.</span> <span class="toc-text">引用css文件</span></a></li><li class="toc-item toc-level-4"><a class="toc-link" href="#引入图标文件"><span class="toc-number">15.3.</span> <span class="toc-text">引入图标文件</span></a></li></ol></li></ol>
+        
+    </div>
+    <style>
+        .left-col .switch-btn,
+        .left-col .switch-area {
+            display: none;
+        }
+        .toc-level-3 i,
+        .toc-level-3 ol {
+            display: none !important;
+        }
+    </style>
+
+    <input type="button" id="tocButton" value="隐藏目录"  title="点击按钮隐藏或者显示文章目录">
+
+    <script>
+        yiliaConfig.toc = ["隐藏目录", "显示目录", !!"false"];
+    </script>
+
+
+
+    
+<div class="share">
+    
+
+    
+        <div class="addthis_sharing_toolbox"></div>
+    
+</div>
+
+
+
+
+
+
+
+    
+    <div id="cyEmoji" role="cylabs" data-use="emoji"></div>
+	  <!--PC和WAP自适应版-->
+<div id="SOHUCS" ></div> 
+<script type="text/javascript"> 
+(function(){ 
+var appid = 'cyt8R9vtY'; 
+var conf = 'prod_be8ce27d78baffc4c5afad75a6faf6e2'; 
+var width = window.innerWidth || document.documentElement.clientWidth; 
+if (width < 960) { 
+window.document.write('<script id="changyan_mobile_js" charset="utf-8" type="text/javascript" src="//changyan.sohu.com/upload/mobile/wap-js/changyan_mobile.js?client_id=' + appid + '&conf=' + conf + '"><\/script>'); } else { var loadJs=function(d,a){var c=document.getElementsByTagName("head")[0]||document.head||document.documentElement;var b=document.createElement("script");b.setAttribute("type","text/javascript");b.setAttribute("charset","UTF-8");b.setAttribute("src",d);if(typeof a==="function"){if(window.attachEvent){b.onreadystatechange=function(){var e=b.readyState;if(e==="loaded"||e==="complete"){b.onreadystatechange=null;a()}}}else{b.onload=a}}c.appendChild(b)};loadJs("//changyan.sohu.com/upload/changyan.js",function(){window.changyan.api.config({appid:appid,conf:conf})}); } })(); </script>
+    <script type="text/javascript" charset="utf-8" src="https://changyan.sohu.com/js/changyan.labs.https.js?appid=cyt8R9vtY"></script>
+    
+
+
+
+
+    <div class="scroll" id="post-nav-button">
+        
+            <a href="/2018/05/28/autohotkey/" title="上一篇: AutoHotkey禁用热键以及Electron中的使用">
+                <i class="fa fa-angle-left"></i>
+            </a>
+        
+
+        <a title="文章列表"><i class="fa fa-bars"></i><i class="fa fa-times"></i></a>
+
+        
+            <a href="/2018/03/01/webapi/" title="下一篇: 使用webAPI预览上传图片和调用摄像头">
+                <i class="fa fa-angle-right"></i>
+            </a>
+        
+    </div>
+
+    <ul class="post-list"><li class="post-list-item"><a class="post-list-link" href="/2020/11/05/thingsboard/">IOT开源项目Thingsboard开发环境搭建</a></li><li class="post-list-item"><a class="post-list-link" href="/2020/08/18/cordova/">Cordova混合开发APP踩坑记录</a></li><li class="post-list-item"><a class="post-list-link" href="/2020/07/02/sonarqube/">SonarQube简介与Mac快速搭建</a></li><li class="post-list-item"><a class="post-list-link" href="/2020/03/29/otter/">Otter数据同步简介</a></li><li class="post-list-item"><a class="post-list-link" href="/2020/03/28/rds/">阿里云RDS快速上手</a></li><li class="post-list-item"><a class="post-list-link" href="/2020/01/22/explain/">Mysql优化：Explain分析介绍</a></li><li class="post-list-item"><a class="post-list-link" href="/2020/01/15/drag-map/">插件:DragMap</a></li><li class="post-list-item"><a class="post-list-link" href="/2020/01/04/superset/">从无到有搭建Superset(Mac)</a></li><li class="post-list-item"><a class="post-list-link" href="/2020/01/01/review-2019/">回顾一下我的2019</a></li><li class="post-list-item"><a class="post-list-link" href="/2019/08/07/mamp/">MAMP配置PHP环境的一些问题</a></li><li class="post-list-item"><a class="post-list-link" href="/2019/05/16/redis/">Redis常用命令及数据结构介绍</a></li><li class="post-list-item"><a class="post-list-link" href="/2019/05/15/crontab/">Crontab定时任务</a></li><li class="post-list-item"><a class="post-list-link" href="/2019/05/14/shutdown/">PHP执行命令关闭Linux服务器</a></li><li class="post-list-item"><a class="post-list-link" href="/2019/05/09/predis/">使用Predis操作Redis</a></li><li class="post-list-item"><a class="post-list-link" href="/2019/04/25/npm-proxy/">Npm代理和镜像源设置</a></li><li class="post-list-item"><a class="post-list-link" href="/2019/04/24/electron-update-helper/">Npm包：electron-update-helper</a></li><li class="post-list-item"><a class="post-list-link" href="/2019/03/14/lazyload-widget/">Vue插件:Vue-lazyload-widget</a></li><li class="post-list-item"><a class="post-list-link" href="/2019/01/22/review-2018/">回顾一下我的2018</a></li><li class="post-list-item"><a class="post-list-link" href="/2019/01/10/wechat-refund/">微信&支付宝退款</a></li><li class="post-list-item"><a class="post-list-link" href="/2018/12/13/electron-single/">Electron阻止应用多开</a></li><li class="post-list-item"><a class="post-list-link" href="/2018/11/08/date-sql/">查询日期范围内固定时段的数据</a></li><li class="post-list-item"><a class="post-list-link" href="/2018/10/23/mobile-media/">关于移动端网页尺寸问题</a></li><li class="post-list-item"><a class="post-list-link" href="/2018/10/07/vue-loading/">Vue插件:Vue-nice-loading</a></li><li class="post-list-item"><a class="post-list-link" href="/2018/09/08/vue-note/">Vue源码分析</a></li><li class="post-list-item"><a class="post-list-link" href="/2018/08/23/wechat-login/">微信授权注册&登录</a></li><li class="post-list-item"><a class="post-list-link" href="/2018/08/02/test/">最近做的测试题</a></li><li class="post-list-item"><a class="post-list-link" href="/2018/07/20/伪静态/">伪静态地址获取用户头像</a></li><li class="post-list-item"><a class="post-list-link" href="/2018/06/15/wechat/">微信H5支付&公众号支付大型攻略</a></li><li class="post-list-item"><a class="post-list-link" href="/2018/06/01/jsKnack/">Javascript的一些实用技巧(持续更新)</a></li><li class="post-list-item"><a class="post-list-link" href="/2018/05/28/autohotkey/">AutoHotkey禁用热键以及Electron中的使用</a></li><li class="post-list-item"><a class="post-list-link" href="/2018/03/13/electron/">Electron-Vue项目记录</a></li><li class="post-list-item"><a class="post-list-link" href="/2018/03/01/webapi/">使用webAPI预览上传图片和调用摄像头</a></li><li class="post-list-item"><a class="post-list-link" href="/2018/02/08/laravel-vue/">Laravel+Vue开发环境搭建</a></li><li class="post-list-item"><a class="post-list-link" href="/2018/01/22/pjax/">JQuery pjax技术简介与示例</a></li><li class="post-list-item"><a class="post-list-link" href="/2018/01/18/前端构建工具/">(转)前端构建工具的比较</a></li><li class="post-list-item"><a class="post-list-link" href="/2018/01/16/echart/">Vue项目中对EChart的应用</a></li><li class="post-list-item"><a class="post-list-link" href="/2017/12/13/vue文本隐藏组件/">Vue实例:文本隐藏提示组件</a></li><li class="post-list-item"><a class="post-list-link" href="/2017/11/28/vuex/">Vuex简单入门</a></li><li class="post-list-item"><a class="post-list-link" href="/2017/10/13/php面向对象/">PHP学习笔记:面向对象</a></li><li class="post-list-item"><a class="post-list-link" href="/2017/10/12/vue汇总/">Vue学习笔记:汇总</a></li><li class="post-list-item"><a class="post-list-link" href="/2017/10/10/php基础语法/">PHP学习笔记:基础语法</a></li><li class="post-list-item"><a class="post-list-link" href="/2017/10/09/vue组件通信/">Vue学习笔记:组件之间的通信方式</a></li><li class="post-list-item"><a class="post-list-link" href="/2017/09/30/记录/">记录贴:那些年踩过的坑</a></li><li class="post-list-item"><a class="post-list-link" href="/2017/09/21/Crypto-JS加密/">Crypto-JS加密</a></li><li class="post-list-item"><a class="post-list-link" href="/2017/09/18/datatables分页/">Datatables分页</a></li><li class="post-list-item"><a class="post-list-link" href="/2017/08/14/requirejs/">Require.js的使用</a></li><li class="post-list-item"><a class="post-list-link" href="/2017/08/09/hexo自定义样式/">Hexo引用自定义js与css</a></li><li class="post-list-item"><a class="post-list-link" href="/2017/08/03/js实现贪吃蛇/">JS实现贪吃蛇</a></li><li class="post-list-item"><a class="post-list-link" href="/2017/08/03/Hexo使用技巧/">Hexo使用技巧(持续更新ing)</a></li><li class="post-list-item"><a class="post-list-link" href="/2017/08/03/Hexo博客畅言评论/">Hexo博客畅言评论支持</a></li><li class="post-list-item"><a class="post-list-link" href="/2017/08/01/js尺寸/">JS常用尺寸和坐标</a></li><li class="post-list-item"><a class="post-list-link" href="/2017/08/01/npm命令/">npm常用命令</a></li><li class="post-list-item"><a class="post-list-link" href="/2017/07/28/angular通信/">Angular学习笔记:通信方式</a></li><li class="post-list-item"><a class="post-list-link" href="/2017/07/25/angular$watch/">Angular学习笔记:$watch</a></li><li class="post-list-item"><a class="post-list-link" href="/2017/07/19/angular表单验证/">Angular学习笔记:表单验证</a></li></ul>
+
+
+
+
+    <script>
+        
+    </script>
+</div>
+      <footer id="footer">
+    <div class="outer">
+        <div id="footer-info">
+            <div class="footer-left">
+                <i class="fa fa-copyright"></i> 
+                2016-2020 Li Yu
+            </div>
+            <div class="footer-right">
+                <a href="http://hexo.io/" target="_blank" title="快速、简洁且高效的博客框架">Hexo</a>  Theme <a href="https://github.com/MOxFIVE/hexo-theme-yelee" target="_blank" title="简而不减 Hexo 双栏博客主题  v3.5">Yelee</a> by MOxFIVE <i class="fa fa-heart animated infinite pulse"></i>
+            </div>
+        </div>
+        
+            <div class="visit">
+                
+                    <span id="busuanzi_container_site_pv" style='display:none'>
+                        <span id="site-visit" title="本站到访数"><i class="fa fa-user" aria-hidden="true"></i><span id="busuanzi_value_site_uv"></span>
+                        </span>
+                    </span>
+                
+                
+                    <span>| </span>
+                
+                
+                    <span id="busuanzi_container_page_pv" style='display:none'>
+                        <span id="page-visit"  title="本页阅读量"><i class="fa fa-eye animated infinite pulse" aria-hidden="true"></i><span id="busuanzi_value_page_pv"></span>
+                        </span>
+                    </span>
+                
+            </div>
+        
+    </div>
+</footer>
+    </div>
+    
+<script data-main="/js/main.js" src="//cdn.bootcss.com/require.js/2.2.0/require.min.js"></script>
+
+    <script>
+        $(document).ready(function() {
+            var iPad = window.navigator.userAgent.indexOf('iPad');
+            if (iPad > -1 || $(".left-col").css("display") === "none") {
+                var bgColorList = ["#9db3f4", "#414141", "#e5a859", "#f5dfc6", "#c084a0", "#847e72", "#cd8390", "#996731"];
+                var bgColor = Math.ceil(Math.random() * (bgColorList.length - 1));
+                $("body").css({"background-color": bgColorList[bgColor], "background-size": "cover"});
+            }
+            else {
+                var backgroundnum = 5;
+                var backgroundimg = "url(/background/bg-x.jpg)".replace(/x/gi, Math.ceil(Math.random() * backgroundnum));
+                $("body").css({"background": backgroundimg, "background-attachment": "fixed", "background-size": "cover"});
+            }
+        })
+    </script>
+
+
+
+
+
+<div class="scroll" id="scroll">
+    <a href="#" title="返回顶部"><i class="fa fa-arrow-up"></i></a>
+    <a href="#comments" onclick="load$hide();" title="查看评论"><i class="fa fa-comments-o"></i></a>
+    <a href="#footer" title="转到底部"><i class="fa fa-arrow-down"></i></a>
+</div>
+<script>
+    // Open in New Window
+    
+        var oOpenInNew = {
+            
+            
+             post: ".article-entry a[href], .copyright a[href]", 
+             tags: ".article-tag a", 
+             categories: ".article-category a, a.tag-list-link", 
+            
+             archives: ".archive-article-title", 
+             miniArchives: "a.post-list-link", 
+            
+             friends: "#js-friends a", 
+             socail: ".social a" 
+        }
+        for (var x in oOpenInNew) {
+            $(oOpenInNew[x]).attr("target", "_blank");
+        }
+    
+</script>
+
+<script async src="https://busuanzi.ibruce.info/busuanzi/2.3/busuanzi.pure.mini.js">
+</script>
+  </div>
+</body>
+</html>
+<script type="text/javascript">
+    var host = "liyu.fun";
+    if ((host == window.location.host) && (window.location.protocol != "https:"))
+        window.location.protocol = "https";
+</script>
+<script src='/js/myjs.js'></script>
+<script src='/js/heart.js'></script>    

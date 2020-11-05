@@ -1,0 +1,596 @@
+<!DOCTYPE html>
+<html lang="zh-Hans">
+<head>
+
+    <!--[if lt IE 9]>
+        <style>body {display: none; background: none !important} </style>
+        <meta http-equiv="Refresh" Content="0; url=//outdatedbrowser.com/" />
+    <![endif]-->
+
+<meta charset="utf-8">
+<meta http-equiv="X-UA-Compatible" content="IE=edge, chrome=1" />
+<meta name="viewport" content="width=device-width, initial-scale=1, maximum-scale=1, user-scalable=no">
+<meta name="format-detection" content="telephone=no" />
+<meta name="author" content="Li Yu" />
+
+
+
+<meta name="description" content="记录一下遇到的问题和解决方法，我有预感，这一篇会很长。">
+<meta property="og:type" content="article">
+<meta property="og:title" content="记录贴:那些年踩过的坑">
+<meta property="og:url" content="https://www.liyu.fun/2017/09/30/记录/index.html">
+<meta property="og:site_name" content="Mr.Li">
+<meta property="og:description" content="记录一下遇到的问题和解决方法，我有预感，这一篇会很长。">
+<meta property="og:locale" content="zh-Hans">
+<meta property="og:updated_time" content="2019-08-04T11:02:00.806Z">
+<meta name="twitter:card" content="summary">
+<meta name="twitter:title" content="记录贴:那些年踩过的坑">
+<meta name="twitter:description" content="记录一下遇到的问题和解决方法，我有预感，这一篇会很长。">
+
+<link rel="apple-touch-icon" href= "/apple-touch-icon.png">
+
+
+    <link rel="alternate" href="/atom.xml" title="Mr.Li" type="application/atom+xml">
+
+
+
+    <link rel="shortcut icon" href="/img/niconico.png">
+
+
+
+    <link href="//cdn.bootcss.com/animate.css/3.5.1/animate.min.css" rel="stylesheet">
+
+
+
+    <link href="//cdn.bootcss.com/fancybox/2.1.5/jquery.fancybox.min.css" rel="stylesheet">
+
+
+
+    <script src="//cdn.bootcss.com/pace/1.0.2/pace.min.js"></script>
+    <link href="//cdn.bootcss.com/pace/1.0.2/themes/blue/pace-theme-minimal.css" rel="stylesheet">
+
+
+<link rel="stylesheet" href="/css/style.css">
+
+
+
+<link href="//cdn.bootcss.com/font-awesome/4.6.3/css/font-awesome.min.css" rel="stylesheet">
+
+
+<title>记录贴:那些年踩过的坑 | Mr.Li</title>
+
+<script src="//cdn.bootcss.com/jquery/2.2.4/jquery.min.js"></script>
+<script src="//cdn.bootcss.com/clipboard.js/1.5.10/clipboard.min.js"></script>
+
+<script>
+    var yiliaConfig = {
+        fancybox: true,
+        animate: true,
+        isHome: false,
+        isPost: true,
+        isArchive: false,
+        isTag: false,
+        isCategory: false,
+        fancybox_js: "//cdn.bootcss.com/fancybox/2.1.5/jquery.fancybox.min.js",
+        scrollreveal: "//cdn.bootcss.com/scrollReveal.js/3.1.4/scrollreveal.min.js",
+        search: true
+    }
+</script>
+
+
+    <script>
+        yiliaConfig.jquery_ui = [true, "//cdn.bootcss.com/jqueryui/1.10.4/jquery-ui.min.js", "//cdn.bootcss.com/jqueryui/1.10.4/css/jquery-ui.min.css"];
+    </script>
+
+
+
+    <script> yiliaConfig.rootUrl = "\/";</script>
+
+
+
+    <script src="//s7.addthis.com/js/300/addthis_widget.js#pubid=ra-56ff76c972fc0cf9"></script>
+
+
+
+    <script>
+        var _hmt = _hmt || [];
+        (function() {
+            var hm = document.createElement("script");
+            hm.src = "//hm.baidu.com/hm.js?b8be283af49aba7fa167f7b7a45f63db";
+            var s = document.getElementsByTagName("script")[0]; 
+            s.parentNode.insertBefore(hm, s);
+        })();
+    </script>
+
+
+</head>
+<body>
+  <div id="container">
+    <div class="left-col">
+    <div class="overlay"></div>
+<div class="intrude-less">
+    <header id="header" class="inner">
+        <a href="/" class="profilepic">
+            <img src="/img/avatar.png" class="animated zoomIn">
+        </a>
+        <hgroup>
+          <h1 class="header-author"><a href="/">Li Yu</a></h1>
+        </hgroup>
+
+        
+        <p class="header-subtitle">一三五写bug，二四六改bug</p>
+        
+
+        
+            <form id="search-form">
+            <input type="text" id="local-search-input" name="q" placeholder="search..." class="search form-control" autocomplete="off" autocorrect="off" searchonload="true" />
+            <i class="fa fa-times" onclick="resetSearch()"></i>
+            </form>
+            <div id="local-search-result"></div>
+            <p class='no-result'>No results found <i class='fa fa-spinner fa-pulse'></i></p>
+        
+
+
+        
+            <div id="switch-btn" class="switch-btn">
+                <div class="icon">
+                    <div class="icon-ctn">
+                        <div class="icon-wrap icon-house" data-idx="0">
+                            <div class="birdhouse"></div>
+                            <div class="birdhouse_holes"></div>
+                        </div>
+                        <div class="icon-wrap icon-ribbon hide" data-idx="1">
+                            <div class="ribbon"></div>
+                        </div>
+                        
+                        <div class="icon-wrap icon-link hide" data-idx="2">
+                            <div class="loopback_l"></div>
+                            <div class="loopback_r"></div>
+                        </div>
+                        
+                        
+                        <div class="icon-wrap icon-me hide" data-idx="3">
+                            <div class="user"></div>
+                            <div class="shoulder"></div>
+                        </div>
+                        
+                    </div>
+                    
+                </div>
+                <div class="tips-box hide">
+                    <div class="tips-arrow"></div>
+                    <ul class="tips-inner">
+                        <li>菜单</li>
+                        <li>标签</li>
+                        
+                        <li>友情链接</li>
+                        
+                        
+                        <li>关于我</li>
+                        
+                    </ul>
+                </div>
+            </div>
+        
+
+        <div id="switch-area" class="switch-area">
+            <div class="switch-wrap">
+                <section class="switch-part switch-part1">
+                    <nav class="header-menu">
+                        <ul>
+                        
+                            <li><a href="/">主页</a></li>
+                        
+                            <li><a href="/archives/">所有文章</a></li>
+                        
+                            <li><a href="/diary">随笔</a></li>
+                        
+                            <li><a href="/tags/">标签云</a></li>
+                        
+                        </ul>
+                    </nav>
+                    <nav class="header-nav">
+                        <ul class="social">
+                            
+                                <a class="fa Email" href="mailto:1042625709@qq.com" title="Email"></a>
+                            
+                                <a class="fa GitHub" href="https://github.com/gitliyu" title="GitHub"></a>
+                            
+                                <a class="fa QQ" href="http://wpa.qq.com/msgrd?v=3&uin=1042625709&site=qq&menu=yes" title="QQ"></a>
+                            
+                        </ul>
+                    </nav>
+                </section>
+                
+                
+                <section class="switch-part switch-part2">
+                    <div class="widget tagcloud" id="js-tagcloud">
+                        <ul class="tag-list"><li class="tag-list-item"><a class="tag-list-link" href="/tags/AutoHotkey/">AutoHotkey</a></li><li class="tag-list-item"><a class="tag-list-link" href="/tags/SQL/">SQL</a></li><li class="tag-list-item"><a class="tag-list-link" href="/tags/angular/">angular</a></li><li class="tag-list-item"><a class="tag-list-link" href="/tags/canvas/">canvas</a></li><li class="tag-list-item"><a class="tag-list-link" href="/tags/cordova/">cordova</a></li><li class="tag-list-item"><a class="tag-list-link" href="/tags/crypto/">crypto</a></li><li class="tag-list-item"><a class="tag-list-link" href="/tags/css/">css</a></li><li class="tag-list-item"><a class="tag-list-link" href="/tags/dataTables/">dataTables</a></li><li class="tag-list-item"><a class="tag-list-link" href="/tags/echart/">echart</a></li><li class="tag-list-item"><a class="tag-list-link" href="/tags/electron/">electron</a></li><li class="tag-list-item"><a class="tag-list-link" href="/tags/es6/">es6</a></li><li class="tag-list-item"><a class="tag-list-link" href="/tags/hexo/">hexo</a></li><li class="tag-list-item"><a class="tag-list-link" href="/tags/html/">html</a></li><li class="tag-list-item"><a class="tag-list-link" href="/tags/iot/">iot</a></li><li class="tag-list-item"><a class="tag-list-link" href="/tags/jQuery/">jQuery</a></li><li class="tag-list-item"><a class="tag-list-link" href="/tags/java/">java</a></li><li class="tag-list-item"><a class="tag-list-link" href="/tags/javascript/">javascript</a></li><li class="tag-list-item"><a class="tag-list-link" href="/tags/jquery/">jquery</a></li><li class="tag-list-item"><a class="tag-list-link" href="/tags/js/">js</a></li><li class="tag-list-item"><a class="tag-list-link" href="/tags/laravel/">laravel</a></li><li class="tag-list-item"><a class="tag-list-link" href="/tags/linux/">linux</a></li><li class="tag-list-item"><a class="tag-list-link" href="/tags/mysql/">mysql</a></li><li class="tag-list-item"><a class="tag-list-link" href="/tags/nginx/">nginx</a></li><li class="tag-list-item"><a class="tag-list-link" href="/tags/node/">node</a></li><li class="tag-list-item"><a class="tag-list-link" href="/tags/npm/">npm</a></li><li class="tag-list-item"><a class="tag-list-link" href="/tags/otter/">otter</a></li><li class="tag-list-item"><a class="tag-list-link" href="/tags/php/">php</a></li><li class="tag-list-item"><a class="tag-list-link" href="/tags/pjax/">pjax</a></li><li class="tag-list-item"><a class="tag-list-link" href="/tags/pushState/">pushState</a></li><li class="tag-list-item"><a class="tag-list-link" href="/tags/rds/">rds</a></li><li class="tag-list-item"><a class="tag-list-link" href="/tags/redis/">redis</a></li><li class="tag-list-item"><a class="tag-list-link" href="/tags/require/">require</a></li><li class="tag-list-item"><a class="tag-list-link" href="/tags/sonarqube/">sonarqube</a></li><li class="tag-list-item"><a class="tag-list-link" href="/tags/superset/">superset</a></li><li class="tag-list-item"><a class="tag-list-link" href="/tags/thingsboard/">thingsboard</a></li><li class="tag-list-item"><a class="tag-list-link" href="/tags/vue/">vue</a></li><li class="tag-list-item"><a class="tag-list-link" href="/tags/vuex/">vuex</a></li><li class="tag-list-item"><a class="tag-list-link" href="/tags/webAPI/">webAPI</a></li><li class="tag-list-item"><a class="tag-list-link" href="/tags/yelee/">yelee</a></li><li class="tag-list-item"><a class="tag-list-link" href="/tags/微信/">微信</a></li><li class="tag-list-item"><a class="tag-list-link" href="/tags/支付宝/">支付宝</a></li><li class="tag-list-item"><a class="tag-list-link" href="/tags/游戏/">游戏</a></li></ul>
+                    </div>
+                </section>
+                
+                
+                
+                <section class="switch-part switch-part3">
+                    <div id="js-friends">
+                    
+                      <a class="main-nav-link switch-friends-link" href="https://hexo.io">Hexo</a>
+                    
+                      <a class="main-nav-link switch-friends-link" href="https://pages.github.com/">GitHub</a>
+                    
+                      <a class="main-nav-link switch-friends-link" href="http://mafei.fun/">flyforfun</a>
+                    
+                    </div>
+                </section>
+                
+
+                
+                
+                <section class="switch-part switch-part4">
+                
+                    <div id="js-aboutme">欢迎来到我的个人博客，期待你的建议与交流，可以点击菜单栏下方按钮发送邮件或者QQ给我</div>
+                </section>
+                
+            </div>
+        </div>
+    </header>                
+</div>
+    </div>
+    <div class="mid-col">
+      <nav id="mobile-nav">
+      <div class="overlay">
+          <div class="slider-trigger"></div>
+          <h1 class="header-author js-mobile-header hide"><a href="/" title="回到主页">Li Yu</a></h1>
+      </div>
+    <div class="intrude-less">
+        <header id="header" class="inner">
+            <a href="/" class="profilepic">
+                <img src="/img/avatar.png" class="animated zoomIn">
+            </a>
+            <hgroup>
+              <h1 class="header-author"><a href="/" title="回到主页">Li Yu</a></h1>
+            </hgroup>
+            
+            <p class="header-subtitle">一三五写bug，二四六改bug</p>
+            
+            <nav class="header-menu">
+                <ul>
+                
+                    <li><a href="/">主页</a></li>
+                
+                    <li><a href="/archives/">所有文章</a></li>
+                
+                    <li><a href="/diary">随笔</a></li>
+                
+                    <li><a href="/tags/">标签云</a></li>
+                
+                <div class="clearfix"></div>
+                </ul>
+            </nav>
+            <nav class="header-nav">
+                        <ul class="social">
+                            
+                                <a class="fa Email" target="_blank" href="mailto:1042625709@qq.com" title="Email"></a>
+                            
+                                <a class="fa GitHub" target="_blank" href="https://github.com/gitliyu" title="GitHub"></a>
+                            
+                                <a class="fa QQ" target="_blank" href="http://wpa.qq.com/msgrd?v=3&uin=1042625709&site=qq&menu=yes" title="QQ"></a>
+                            
+                        </ul>
+            </nav>
+        </header>                
+    </div>
+    <link class="menu-list" tags="标签" friends="友情链接" about="关于我"/>
+</nav>
+      <div class="body-wrap"><article id="post-记录" class="article article-type-post" itemscope itemprop="blogPost">
+  
+    <div class="article-meta">
+      <a href="/2017/09/30/记录/" class="article-date">
+      <time datetime="2017-09-30T02:15:47.000Z" itemprop="datePublished">2017-09-30</time>
+</a>
+
+
+    </div>
+  
+  <div class="article-inner">
+    
+      <input type="hidden" class="isFancy" />
+    
+    
+      <header class="article-header">
+        
+  
+    <h1 class="article-title" itemprop="name">
+      记录贴:那些年踩过的坑
+    </h1>
+  
+
+      </header>
+      
+      <div class="article-info article-info-post">
+        
+    <div class="article-category tagcloud">
+    <a class="article-category-link" href="/categories/经验总结/">经验总结</a>
+    </div>
+
+
+        
+        <div class="clearfix"></div>
+      </div>
+      
+    
+    <div class="article-entry" itemprop="articleBody">
+      
+          
+        <p>记录一下遇到的问题和解决方法，我有预感，这一篇会很长。<br><a id="more"></a></p>
+<h3 id="表单提交不刷新页面"><a href="#表单提交不刷新页面" class="headerlink" title="表单提交不刷新页面"></a>表单提交不刷新页面</h3><figure class="highlight html"><table><tr><td class="gutter"><pre><span class="line">1</span><br><span class="line">2</span><br><span class="line">3</span><br><span class="line">4</span><br></pre></td><td class="code"><pre><span class="line"><span class="tag">&lt;<span class="name">form</span> <span class="attr">id</span>=<span class="string">"myForm"</span> <span class="attr">method</span>=<span class="string">"post"</span> <span class="attr">target</span>=<span class="string">"formsubmit"</span>&gt;</span></span><br><span class="line">	……</span><br><span class="line"><span class="tag">&lt;/<span class="name">form</span>&gt;</span></span><br><span class="line"><span class="tag">&lt;<span class="name">iframe</span> <span class="attr">name</span>=<span class="string">"formsubmit"</span> <span class="attr">class</span>=<span class="string">"hide"</span>&gt;</span><span class="tag">&lt;/<span class="name">iframe</span>&gt;</span></span><br></pre></td></tr></table></figure>
+<p>form表单提交到iframe里面处理，而这个iframe是隐藏的，所以提交表单的时候当前页面没有发生任何变化。form的target属性指向iframe的name值，这样就实现了提交到隐藏的iframe中。<br>提交时使用js提交<br><figure class="highlight javascript"><table><tr><td class="gutter"><pre><span class="line">1</span><br></pre></td><td class="code"><pre><span class="line">$(<span class="string">'#myForm'</span>).attr(<span class="string">'action'</span>, url).submit();</span><br></pre></td></tr></table></figure></p>
+<blockquote>
+<p>也可以通过设置target=”_blank”在新页面提交表单</p>
+</blockquote>
+<h3 id="ie8-ajax请求无效"><a href="#ie8-ajax请求无效" class="headerlink" title="ie8 ajax请求无效"></a>ie8 ajax请求无效</h3><p>设置<br><figure class="highlight javascript"><table><tr><td class="gutter"><pre><span class="line">1</span><br></pre></td><td class="code"><pre><span class="line">$.support.cors = <span class="literal">true</span></span><br></pre></td></tr></table></figure></p>
+<p>$.support.cors判断浏览器是否支持跨域访问，在ie8中默认值是false，需要手动开启</p>
+<h3 id="dataTables中文配置"><a href="#dataTables中文配置" class="headerlink" title="dataTables中文配置"></a>dataTables中文配置</h3><figure class="highlight javascript"><table><tr><td class="gutter"><pre><span class="line">1</span><br><span class="line">2</span><br><span class="line">3</span><br><span class="line">4</span><br><span class="line">5</span><br><span class="line">6</span><br><span class="line">7</span><br><span class="line">8</span><br><span class="line">9</span><br><span class="line">10</span><br></pre></td><td class="code"><pre><span class="line"><span class="string">"language"</span>    : &#123;</span><br><span class="line">    <span class="string">"paginate"</span>  : &#123;</span><br><span class="line">        <span class="string">"next"</span>    : <span class="string">"下一页"</span>,</span><br><span class="line">        <span class="string">"previous"</span>: <span class="string">'上一页'</span></span><br><span class="line">    &#125;,</span><br><span class="line">    <span class="string">"lengthMenu"</span>: <span class="string">"显示 _MENU_ 条/页"</span>,</span><br><span class="line">    <span class="string">"info"</span>      : <span class="string">"共_TOTAL_条记录"</span>,</span><br><span class="line">    <span class="string">"infoEmpty"</span> : <span class="string">"共0条记录"</span>,</span><br><span class="line">    <span class="string">"emptyTable"</span>: <span class="string">"没有查询到数据"</span></span><br><span class="line">&#125;</span><br></pre></td></tr></table></figure>
+<h3 id="dataTables数据为空时报错"><a href="#dataTables数据为空时报错" class="headerlink" title="dataTables数据为空时报错"></a>dataTables数据为空时报错</h3><p>在配置columns时加上<code>defaultContent:&#39;&#39;</code></p>
+<h3 id="select默认选中第一个"><a href="#select默认选中第一个" class="headerlink" title="select默认选中第一个"></a>select默认选中第一个</h3><figure class="highlight javascript"><table><tr><td class="gutter"><pre><span class="line">1</span><br></pre></td><td class="code"><pre><span class="line">$(<span class="string">"select option:first"</span>).prop(<span class="string">"selected"</span>, <span class="string">"selected"</span>);</span><br></pre></td></tr></table></figure>
+<h3 id="checkbox的值"><a href="#checkbox的值" class="headerlink" title="checkbox的值"></a>checkbox的值</h3><p>checkbox不能通过val()拿到值，需要判断<code>checked</code>属性<br><figure class="highlight plain"><table><tr><td class="gutter"><pre><span class="line">1</span><br><span class="line">2</span><br></pre></td><td class="code"><pre><span class="line">$(&apos;input[type=&quot;chekcbox&quot;]&apos;).attr(&apos;checked&apos;, true)	//选中</span><br><span class="line">$(&apos;input[type=&quot;chekcbox&quot;]&apos;).removeAttr(&apos;checked&apos;)	//取消选中</span><br></pre></td></tr></table></figure></p>
+<h3 id="ie8设置固定定位和透明"><a href="#ie8设置固定定位和透明" class="headerlink" title="ie8设置固定定位和透明"></a>ie8设置固定定位和透明</h3><figure class="highlight javascript"><table><tr><td class="gutter"><pre><span class="line">1</span><br><span class="line">2</span><br><span class="line">3</span><br><span class="line">4</span><br><span class="line">5</span><br><span class="line">6</span><br><span class="line">7</span><br></pre></td><td class="code"><pre><span class="line">position: fixed;</span><br><span class="line">_position: absolute;</span><br><span class="line">_clear: both;</span><br><span class="line">_top:expression(<span class="built_in">eval</span>(<span class="built_in">document</span>.compatMode &amp;&amp; <span class="built_in">document</span>.compatMode==<span class="string">'CSS1Compat'</span>) ? documentElement.scrollTop   +(documentElement.clientHeight-<span class="keyword">this</span>.clientHeight) - <span class="number">1</span>   : <span class="built_in">document</span>.body.scrollTop   +(<span class="built_in">document</span>.body.clientHeight-<span class="keyword">this</span>.clientHeight) - <span class="number">1</span>);</span><br><span class="line"></span><br><span class="line">opacity: <span class="number">0</span>;</span><br><span class="line">-ms-filter:<span class="string">"alpha(opacity=0)"</span>;</span><br></pre></td></tr></table></figure>
+<h3 id="设置表单不可选"><a href="#设置表单不可选" class="headerlink" title="设置表单不可选"></a>设置表单不可选</h3><p>表单元素自带的有两个属性readonly和disabled，都可以设置内容无法改变</p>
+<ul>
+<li>disabled </li>
+</ul>
+<ol>
+<li>在ie9以下浏览器中，字体颜色会变得十分浅，只能用readonly</li>
+<li>设置<code>disabled</code>,<code>disabled=&quot;true&quot;</code>和<code>disabled=&quot;false&quot;</code>都会生效，所以想要取消disabled属性，需要写<figure class="highlight javascript"><table><tr><td class="gutter"><pre><span class="line">1</span><br></pre></td><td class="code"><pre><span class="line">$(<span class="string">'input[disabled]'</span>).removeAttr(<span class="string">'disabled'</span>);</span><br></pre></td></tr></table></figure>
+</li>
+</ol>
+<ul>
+<li>readonly<br>对于select生效，但是因为select本身就是readonly的，依旧可以改变所选项，如果希望select不可改变<figure class="highlight javascript"><table><tr><td class="gutter"><pre><span class="line">1</span><br><span class="line">2</span><br><span class="line">3</span><br><span class="line">4</span><br><span class="line">5</span><br></pre></td><td class="code"><pre><span class="line">$(<span class="string">'select[readonly]'</span>).focus(<span class="function"><span class="keyword">function</span> (<span class="params"></span>) </span>&#123;</span><br><span class="line">    <span class="keyword">this</span>.defaultIndex = <span class="keyword">this</span>.selectedIndex;</span><br><span class="line">&#125;).change(<span class="function"><span class="keyword">function</span> (<span class="params"></span>) </span>&#123;</span><br><span class="line">    <span class="keyword">this</span>.selectedIndex = <span class="keyword">this</span>.defaultIndex;</span><br><span class="line">&#125;)</span><br></pre></td></tr></table></figure>
+</li>
+</ul>
+<h3 id="input回车切换焦点"><a href="#input回车切换焦点" class="headerlink" title="input回车切换焦点"></a>input回车切换焦点</h3><p>这里必须先吐槽一句了，你老老实实用Tab键不行么?我#￥！@#！<br><figure class="highlight javascript"><table><tr><td class="gutter"><pre><span class="line">1</span><br><span class="line">2</span><br><span class="line">3</span><br><span class="line">4</span><br><span class="line">5</span><br><span class="line">6</span><br><span class="line">7</span><br><span class="line">8</span><br><span class="line">9</span><br></pre></td><td class="code"><pre><span class="line">$(<span class="string">'body'</span>).on(<span class="string">'focus'</span>, <span class="string">'input'</span>, <span class="function"><span class="keyword">function</span> (<span class="params"></span>) </span>&#123;</span><br><span class="line">    <span class="keyword">var</span> input = $(<span class="string">'input'</span>);</span><br><span class="line">    input.unbind(<span class="string">'keydown'</span>);</span><br><span class="line">    input.keydown(<span class="function"><span class="keyword">function</span> (<span class="params">ev</span>) </span>&#123;</span><br><span class="line">        <span class="keyword">if</span> (ev.keyCode == <span class="number">13</span>) &#123;</span><br><span class="line">            input.eq(input.index(<span class="keyword">this</span>) + <span class="number">1</span>).focus();</span><br><span class="line">        &#125;</span><br><span class="line">    &#125;)</span><br><span class="line">&#125;);</span><br></pre></td></tr></table></figure></p>
+<p>因为有动态生成的input标签，所以这里把事件绑在了body上，focus时获取所有input的对象集合，回车切换到下一个。</p>
+<blockquote>
+<p>在绑定keydown事件之前一定要先解绑，不然会重复绑定，然后执行2，4，8，16……别问我为什么知道，我浏览器就是这么卡死的。</p>
+</blockquote>
+<h3 id="表单提交对象"><a href="#表单提交对象" class="headerlink" title="表单提交对象"></a>表单提交对象</h3><figure class="highlight javascript"><table><tr><td class="gutter"><pre><span class="line">1</span><br></pre></td><td class="code"><pre><span class="line">$(<span class="string">'input'</span>).val(<span class="built_in">JSON</span>.stringify(&#123;<span class="attr">a</span>:<span class="number">1</span>&#125;)</span><br></pre></td></tr></table></figure>
+<p>数组在赋值的时候会自动转化成字符串 [1,2,3] =&gt; 1,2,3，对象直接赋值会显示object，需要转换一下格式，跟localStorage一个道理，后台拿到字符串后转为JSON格式即可。</p>
+<h3 id="git-clone-403"><a href="#git-clone-403" class="headerlink" title="git clone 403"></a>git clone 403</h3><p>git clone和push的时候碰到403的错误，用户权限不足，，在地址前加上用户名跟密码即可<br><figure class="highlight plain"><table><tr><td class="gutter"><pre><span class="line">1</span><br><span class="line">2</span><br><span class="line">3</span><br></pre></td><td class="code"><pre><span class="line">https://[用户名]:[密码][地址]</span><br><span class="line">//for example</span><br><span class="line">https://liyu:123@github.com/gitliyu/gitliyu.github.io.git</span><br></pre></td></tr></table></figure></p>
+<h3 id="事件委派的重复绑定"><a href="#事件委派的重复绑定" class="headerlink" title="事件委派的重复绑定"></a>事件委派的重复绑定</h3><p>在使用jquery对于一些动态生成的dom元素进行事件绑定时，通常需要绑定在父级上进行委派，常用的方法<br><figure class="highlight javascript"><table><tr><td class="gutter"><pre><span class="line">1</span><br><span class="line">2</span><br><span class="line">3</span><br><span class="line">4</span><br><span class="line">5</span><br><span class="line">6</span><br><span class="line">7</span><br><span class="line">8</span><br><span class="line">9</span><br><span class="line">10</span><br></pre></td><td class="code"><pre><span class="line"><span class="comment">//对a链接添加点击事件</span></span><br><span class="line">$(<span class="string">'body'</span>).click(<span class="function"><span class="keyword">function</span>(<span class="params">e</span>)</span>&#123;</span><br><span class="line">    <span class="keyword">if</span>(e.target.tagName == <span class="string">'A'</span>)&#123;</span><br><span class="line">        ...</span><br><span class="line">    &#125;</span><br><span class="line">&#125;)</span><br><span class="line"></span><br><span class="line">$(<span class="string">'body'</span>).on(<span class="string">'click'</span>, <span class="string">'a'</span>, <span class="function"><span class="keyword">function</span>(<span class="params"></span>)</span>&#123;</span><br><span class="line">    ...</span><br><span class="line">&#125;)</span><br></pre></td></tr></table></figure></p>
+<p>第二种方式当然是没有问题的，在使用第一种方式时，由于比较懒，直接把事件绑在了body而非父级上，在页面局部刷新时(jquery load或pjax)，由于body没有刷新而模板页的js文件重新执行，会出现事件重复绑定,需要在每次绑定事件前解绑<br><figure class="highlight javascript"><table><tr><td class="gutter"><pre><span class="line">1</span><br></pre></td><td class="code"><pre><span class="line">$(<span class="string">'body'</span>).unbind();</span><br></pre></td></tr></table></figure></p>
+<blockquote>
+<p>感觉这个问题出现的太过巧合，除了我估计也没人遇到了</p>
+</blockquote>
+<h3 id="target和currentTarget"><a href="#target和currentTarget" class="headerlink" title="target和currentTarget"></a>target和currentTarget</h3><p>以点击事件为例，target指的是点击的dom对象，可以用来委派事件&amp;判断点击对象，currentTarget指的是所点击的绑定该点击事件的dom对象，防止事件冒泡和默认事件的组织。<br>举个栗子：<br><figure class="highlight javascript"><table><tr><td class="gutter"><pre><span class="line">1</span><br><span class="line">2</span><br><span class="line">3</span><br><span class="line">4</span><br><span class="line">5</span><br><span class="line">6</span><br><span class="line">7</span><br><span class="line">8</span><br><span class="line">9</span><br></pre></td><td class="code"><pre><span class="line">&lt;li onclick=<span class="string">"fn(e)"</span>&gt;</span><br><span class="line">    &lt;a href=<span class="string">"###"</span>&gt;link&lt;<span class="regexp">/a&gt;</span></span><br><span class="line"><span class="regexp">&lt;/</span>li&gt;</span><br><span class="line">&lt;script type=<span class="string">"text/javascript"</span>&gt;</span><br><span class="line">    <span class="function"><span class="keyword">function</span> <span class="title">fn</span>(<span class="params">e</span>)</span>&#123;</span><br><span class="line">        <span class="built_in">console</span>.log(e.target.tagName);</span><br><span class="line">        <span class="built_in">console</span>.log(e.currentTarget.tagName);</span><br><span class="line">    &#125;</span><br><span class="line">&lt;<span class="regexp">/script&gt;</span></span><br></pre></td></tr></table></figure></p>
+<p>在以上代码中，点击a标签时，会分别输出<br><figure class="highlight plain"><table><tr><td class="gutter"><pre><span class="line">1</span><br><span class="line">2</span><br></pre></td><td class="code"><pre><span class="line">A</span><br><span class="line">LI</span><br></pre></td></tr></table></figure></p>
+<h3 id="富文本编辑器过滤标签"><a href="#富文本编辑器过滤标签" class="headerlink" title="富文本编辑器过滤标签"></a>富文本编辑器过滤标签</h3><p>在使用富文本编辑器时，为了保留格式，直接使用v-model取得的value值都带有html标签，在项目中使用到的vue-quill-editor，虽然有提供获取纯文本的方法，但是默认的返回值为”\n”，一个换行符，并且仍然会有部分标签，无法进行非空判断。<br>解决方法：<br><figure class="highlight javascript"><table><tr><td class="gutter"><pre><span class="line">1</span><br></pre></td><td class="code"><pre><span class="line">text = text.replace(<span class="regexp">/(&lt;[^&gt;]*&gt;|&lt;\/[^&gt;]*&gt;|\s+)/gm</span>, <span class="string">''</span>);</span><br></pre></td></tr></table></figure></p>
+<p>过滤掉字符串中的html标签和空格</p>
+<h3 id="隐藏input-number的按钮"><a href="#隐藏input-number的按钮" class="headerlink" title="隐藏input number的按钮"></a>隐藏input number的按钮</h3><figure class="highlight css"><table><tr><td class="gutter"><pre><span class="line">1</span><br><span class="line">2</span><br><span class="line">3</span><br><span class="line">4</span><br><span class="line">5</span><br></pre></td><td class="code"><pre><span class="line"><span class="selector-tag">input</span><span class="selector-pseudo">::-webkit-outer-spin-button</span>,</span><br><span class="line"><span class="selector-tag">input</span><span class="selector-pseudo">::-webkit-inner-spin-button</span> &#123;</span><br><span class="line">  <span class="attribute">-webkit-appearance</span>: none <span class="meta">!important</span>;</span><br><span class="line">  <span class="attribute">margin</span>: <span class="number">0</span>;</span><br><span class="line">&#125;</span><br></pre></td></tr></table></figure>
+<h3 id="减法出现小数"><a href="#减法出现小数" class="headerlink" title="减法出现小数"></a>减法出现小数</h3><p>js对于浮点型不够准确，因此在计算浮点数的减法时经常出现问题<br><figure class="highlight javascript"><table><tr><td class="gutter"><pre><span class="line">1</span><br></pre></td><td class="code"><pre><span class="line"><span class="built_in">console</span>.log(<span class="number">171.2</span> - <span class="number">85</span>)   <span class="comment">// 86.19999999999999</span></span><br></pre></td></tr></table></figure></p>
+<p>解决方法：</p>
+<ul>
+<li>parseInt(), Math.Floor(), Math.Round()等方法取整，不常用</li>
+<li>toFixed(2), 保留有效位数</li>
+<li>扩大倍数之后在进行减法计算，既然浮点型运算有问题，那就换成整型来计算</li>
+</ul>
+<figure class="highlight plain"><table><tr><td class="gutter"><pre><span class="line">1</span><br><span class="line">2</span><br></pre></td><td class="code"><pre><span class="line">console.log((171.2 - 85).toFixed(1))	// &apos;86.2&apos;</span><br><span class="line">console.log((171.2 * 10 - 85 * 10) / 10)	// 86.2</span><br></pre></td></tr></table></figure>
+      
+    </div>
+    
+  </div>
+  
+    
+    <div class="copyright">
+        <p><span>本文标题:</span><a href="/2017/09/30/记录/">记录贴:那些年踩过的坑</a></p>
+        <p><span>文章作者:</span><a href="/" title="回到主页">Li Yu</a></p>
+        <p><span>发布时间:</span>2017-09-30, 10:15:47</p>
+        <p><span>最后更新:</span>2019-08-04, 19:02:00</p>
+        <p>
+            <span>原始链接:</span><a class="post-url" href="/2017/09/30/记录/" title="记录贴:那些年踩过的坑">https://www.liyu.fun/2017/09/30/记录/</a>
+            <span class="copy-path" data-clipboard-text="原文: https://www.liyu.fun/2017/09/30/记录/　　作者: Li Yu" title="点击复制文章链接"><i class="fa fa-clipboard"></i></span>
+            <script> var clipboard = new Clipboard('.copy-path'); </script>
+        </p>
+        <p>
+            <span>许可协议:</span><i class="fa fa-creative-commons"></i> <a rel="license" href="http://creativecommons.org/licenses/by-nc-sa/4.0/" title="CC BY-NC-SA 4.0 International" target = "_blank">"署名-非商用-相同方式共享 4.0"</a> 转载请保留原文链接及作者。
+        </p>
+    </div>
+
+
+
+    <nav id="article-nav">
+        
+            <div id="article-nav-newer" class="article-nav-title">
+                <a href="/2017/10/09/vue组件通信/">
+                    Vue学习笔记:组件之间的通信方式
+                </a>
+            </div>
+        
+        
+            <div id="article-nav-older" class="article-nav-title">
+                <a href="/2017/09/21/Crypto-JS加密/">
+                    Crypto-JS加密
+                </a>
+            </div>
+        
+    </nav>
+
+  
+</article>
+
+    <div id="toc" class="toc-article">
+        <strong class="toc-title">文章目录</strong>
+        
+            <ol class="toc"><li class="toc-item toc-level-3"><a class="toc-link" href="#表单提交不刷新页面"><span class="toc-number">1.</span> <span class="toc-text">表单提交不刷新页面</span></a></li><li class="toc-item toc-level-3"><a class="toc-link" href="#ie8-ajax请求无效"><span class="toc-number">2.</span> <span class="toc-text">ie8 ajax请求无效</span></a></li><li class="toc-item toc-level-3"><a class="toc-link" href="#dataTables中文配置"><span class="toc-number">3.</span> <span class="toc-text">dataTables中文配置</span></a></li><li class="toc-item toc-level-3"><a class="toc-link" href="#dataTables数据为空时报错"><span class="toc-number">4.</span> <span class="toc-text">dataTables数据为空时报错</span></a></li><li class="toc-item toc-level-3"><a class="toc-link" href="#select默认选中第一个"><span class="toc-number">5.</span> <span class="toc-text">select默认选中第一个</span></a></li><li class="toc-item toc-level-3"><a class="toc-link" href="#checkbox的值"><span class="toc-number">6.</span> <span class="toc-text">checkbox的值</span></a></li><li class="toc-item toc-level-3"><a class="toc-link" href="#ie8设置固定定位和透明"><span class="toc-number">7.</span> <span class="toc-text">ie8设置固定定位和透明</span></a></li><li class="toc-item toc-level-3"><a class="toc-link" href="#设置表单不可选"><span class="toc-number">8.</span> <span class="toc-text">设置表单不可选</span></a></li><li class="toc-item toc-level-3"><a class="toc-link" href="#input回车切换焦点"><span class="toc-number">9.</span> <span class="toc-text">input回车切换焦点</span></a></li><li class="toc-item toc-level-3"><a class="toc-link" href="#表单提交对象"><span class="toc-number">10.</span> <span class="toc-text">表单提交对象</span></a></li><li class="toc-item toc-level-3"><a class="toc-link" href="#git-clone-403"><span class="toc-number">11.</span> <span class="toc-text">git clone 403</span></a></li><li class="toc-item toc-level-3"><a class="toc-link" href="#事件委派的重复绑定"><span class="toc-number">12.</span> <span class="toc-text">事件委派的重复绑定</span></a></li><li class="toc-item toc-level-3"><a class="toc-link" href="#target和currentTarget"><span class="toc-number">13.</span> <span class="toc-text">target和currentTarget</span></a></li><li class="toc-item toc-level-3"><a class="toc-link" href="#富文本编辑器过滤标签"><span class="toc-number">14.</span> <span class="toc-text">富文本编辑器过滤标签</span></a></li><li class="toc-item toc-level-3"><a class="toc-link" href="#隐藏input-number的按钮"><span class="toc-number">15.</span> <span class="toc-text">隐藏input number的按钮</span></a></li><li class="toc-item toc-level-3"><a class="toc-link" href="#减法出现小数"><span class="toc-number">16.</span> <span class="toc-text">减法出现小数</span></a></li></ol>
+        
+    </div>
+    <style>
+        .left-col .switch-btn,
+        .left-col .switch-area {
+            display: none;
+        }
+        .toc-level-3 i,
+        .toc-level-3 ol {
+            display: none !important;
+        }
+    </style>
+
+    <input type="button" id="tocButton" value="隐藏目录"  title="点击按钮隐藏或者显示文章目录">
+
+    <script>
+        yiliaConfig.toc = ["隐藏目录", "显示目录", !!"false"];
+    </script>
+
+
+
+    
+<div class="share">
+    
+
+    
+        <div class="addthis_sharing_toolbox"></div>
+    
+</div>
+
+
+
+
+
+
+
+    
+    <div id="cyEmoji" role="cylabs" data-use="emoji"></div>
+	  <!--PC和WAP自适应版-->
+<div id="SOHUCS" ></div> 
+<script type="text/javascript"> 
+(function(){ 
+var appid = 'cyt8R9vtY'; 
+var conf = 'prod_be8ce27d78baffc4c5afad75a6faf6e2'; 
+var width = window.innerWidth || document.documentElement.clientWidth; 
+if (width < 960) { 
+window.document.write('<script id="changyan_mobile_js" charset="utf-8" type="text/javascript" src="//changyan.sohu.com/upload/mobile/wap-js/changyan_mobile.js?client_id=' + appid + '&conf=' + conf + '"><\/script>'); } else { var loadJs=function(d,a){var c=document.getElementsByTagName("head")[0]||document.head||document.documentElement;var b=document.createElement("script");b.setAttribute("type","text/javascript");b.setAttribute("charset","UTF-8");b.setAttribute("src",d);if(typeof a==="function"){if(window.attachEvent){b.onreadystatechange=function(){var e=b.readyState;if(e==="loaded"||e==="complete"){b.onreadystatechange=null;a()}}}else{b.onload=a}}c.appendChild(b)};loadJs("//changyan.sohu.com/upload/changyan.js",function(){window.changyan.api.config({appid:appid,conf:conf})}); } })(); </script>
+    <script type="text/javascript" charset="utf-8" src="https://changyan.sohu.com/js/changyan.labs.https.js?appid=cyt8R9vtY"></script>
+    
+
+
+
+
+    <div class="scroll" id="post-nav-button">
+        
+            <a href="/2017/10/09/vue组件通信/" title="上一篇: Vue学习笔记:组件之间的通信方式">
+                <i class="fa fa-angle-left"></i>
+            </a>
+        
+
+        <a title="文章列表"><i class="fa fa-bars"></i><i class="fa fa-times"></i></a>
+
+        
+            <a href="/2017/09/21/Crypto-JS加密/" title="下一篇: Crypto-JS加密">
+                <i class="fa fa-angle-right"></i>
+            </a>
+        
+    </div>
+
+    <ul class="post-list"><li class="post-list-item"><a class="post-list-link" href="/2020/11/05/thingsboard/">IOT开源项目Thingsboard开发环境搭建</a></li><li class="post-list-item"><a class="post-list-link" href="/2020/08/18/cordova/">Cordova混合开发APP踩坑记录</a></li><li class="post-list-item"><a class="post-list-link" href="/2020/07/02/sonarqube/">SonarQube简介与Mac快速搭建</a></li><li class="post-list-item"><a class="post-list-link" href="/2020/03/29/otter/">Otter数据同步简介</a></li><li class="post-list-item"><a class="post-list-link" href="/2020/03/28/rds/">阿里云RDS快速上手</a></li><li class="post-list-item"><a class="post-list-link" href="/2020/01/22/explain/">Mysql优化：Explain分析介绍</a></li><li class="post-list-item"><a class="post-list-link" href="/2020/01/15/drag-map/">插件:DragMap</a></li><li class="post-list-item"><a class="post-list-link" href="/2020/01/04/superset/">从无到有搭建Superset(Mac)</a></li><li class="post-list-item"><a class="post-list-link" href="/2020/01/01/review-2019/">回顾一下我的2019</a></li><li class="post-list-item"><a class="post-list-link" href="/2019/08/07/mamp/">MAMP配置PHP环境的一些问题</a></li><li class="post-list-item"><a class="post-list-link" href="/2019/05/16/redis/">Redis常用命令及数据结构介绍</a></li><li class="post-list-item"><a class="post-list-link" href="/2019/05/15/crontab/">Crontab定时任务</a></li><li class="post-list-item"><a class="post-list-link" href="/2019/05/14/shutdown/">PHP执行命令关闭Linux服务器</a></li><li class="post-list-item"><a class="post-list-link" href="/2019/05/09/predis/">使用Predis操作Redis</a></li><li class="post-list-item"><a class="post-list-link" href="/2019/04/25/npm-proxy/">Npm代理和镜像源设置</a></li><li class="post-list-item"><a class="post-list-link" href="/2019/04/24/electron-update-helper/">Npm包：electron-update-helper</a></li><li class="post-list-item"><a class="post-list-link" href="/2019/03/14/lazyload-widget/">Vue插件:Vue-lazyload-widget</a></li><li class="post-list-item"><a class="post-list-link" href="/2019/01/22/review-2018/">回顾一下我的2018</a></li><li class="post-list-item"><a class="post-list-link" href="/2019/01/10/wechat-refund/">微信&支付宝退款</a></li><li class="post-list-item"><a class="post-list-link" href="/2018/12/13/electron-single/">Electron阻止应用多开</a></li><li class="post-list-item"><a class="post-list-link" href="/2018/11/08/date-sql/">查询日期范围内固定时段的数据</a></li><li class="post-list-item"><a class="post-list-link" href="/2018/10/23/mobile-media/">关于移动端网页尺寸问题</a></li><li class="post-list-item"><a class="post-list-link" href="/2018/10/07/vue-loading/">Vue插件:Vue-nice-loading</a></li><li class="post-list-item"><a class="post-list-link" href="/2018/09/08/vue-note/">Vue源码分析</a></li><li class="post-list-item"><a class="post-list-link" href="/2018/08/23/wechat-login/">微信授权注册&登录</a></li><li class="post-list-item"><a class="post-list-link" href="/2018/08/02/test/">最近做的测试题</a></li><li class="post-list-item"><a class="post-list-link" href="/2018/07/20/伪静态/">伪静态地址获取用户头像</a></li><li class="post-list-item"><a class="post-list-link" href="/2018/06/15/wechat/">微信H5支付&公众号支付大型攻略</a></li><li class="post-list-item"><a class="post-list-link" href="/2018/06/01/jsKnack/">Javascript的一些实用技巧(持续更新)</a></li><li class="post-list-item"><a class="post-list-link" href="/2018/05/28/autohotkey/">AutoHotkey禁用热键以及Electron中的使用</a></li><li class="post-list-item"><a class="post-list-link" href="/2018/03/13/electron/">Electron-Vue项目记录</a></li><li class="post-list-item"><a class="post-list-link" href="/2018/03/01/webapi/">使用webAPI预览上传图片和调用摄像头</a></li><li class="post-list-item"><a class="post-list-link" href="/2018/02/08/laravel-vue/">Laravel+Vue开发环境搭建</a></li><li class="post-list-item"><a class="post-list-link" href="/2018/01/22/pjax/">JQuery pjax技术简介与示例</a></li><li class="post-list-item"><a class="post-list-link" href="/2018/01/18/前端构建工具/">(转)前端构建工具的比较</a></li><li class="post-list-item"><a class="post-list-link" href="/2018/01/16/echart/">Vue项目中对EChart的应用</a></li><li class="post-list-item"><a class="post-list-link" href="/2017/12/13/vue文本隐藏组件/">Vue实例:文本隐藏提示组件</a></li><li class="post-list-item"><a class="post-list-link" href="/2017/11/28/vuex/">Vuex简单入门</a></li><li class="post-list-item"><a class="post-list-link" href="/2017/10/13/php面向对象/">PHP学习笔记:面向对象</a></li><li class="post-list-item"><a class="post-list-link" href="/2017/10/12/vue汇总/">Vue学习笔记:汇总</a></li><li class="post-list-item"><a class="post-list-link" href="/2017/10/10/php基础语法/">PHP学习笔记:基础语法</a></li><li class="post-list-item"><a class="post-list-link" href="/2017/10/09/vue组件通信/">Vue学习笔记:组件之间的通信方式</a></li><li class="post-list-item"><a class="post-list-link" href="/2017/09/30/记录/">记录贴:那些年踩过的坑</a></li><li class="post-list-item"><a class="post-list-link" href="/2017/09/21/Crypto-JS加密/">Crypto-JS加密</a></li><li class="post-list-item"><a class="post-list-link" href="/2017/09/18/datatables分页/">Datatables分页</a></li><li class="post-list-item"><a class="post-list-link" href="/2017/08/14/requirejs/">Require.js的使用</a></li><li class="post-list-item"><a class="post-list-link" href="/2017/08/09/hexo自定义样式/">Hexo引用自定义js与css</a></li><li class="post-list-item"><a class="post-list-link" href="/2017/08/03/js实现贪吃蛇/">JS实现贪吃蛇</a></li><li class="post-list-item"><a class="post-list-link" href="/2017/08/03/Hexo使用技巧/">Hexo使用技巧(持续更新ing)</a></li><li class="post-list-item"><a class="post-list-link" href="/2017/08/03/Hexo博客畅言评论/">Hexo博客畅言评论支持</a></li><li class="post-list-item"><a class="post-list-link" href="/2017/08/01/js尺寸/">JS常用尺寸和坐标</a></li><li class="post-list-item"><a class="post-list-link" href="/2017/08/01/npm命令/">npm常用命令</a></li><li class="post-list-item"><a class="post-list-link" href="/2017/07/28/angular通信/">Angular学习笔记:通信方式</a></li><li class="post-list-item"><a class="post-list-link" href="/2017/07/25/angular$watch/">Angular学习笔记:$watch</a></li><li class="post-list-item"><a class="post-list-link" href="/2017/07/19/angular表单验证/">Angular学习笔记:表单验证</a></li></ul>
+
+
+
+
+    <script>
+        
+    </script>
+</div>
+      <footer id="footer">
+    <div class="outer">
+        <div id="footer-info">
+            <div class="footer-left">
+                <i class="fa fa-copyright"></i> 
+                2016-2020 Li Yu
+            </div>
+            <div class="footer-right">
+                <a href="http://hexo.io/" target="_blank" title="快速、简洁且高效的博客框架">Hexo</a>  Theme <a href="https://github.com/MOxFIVE/hexo-theme-yelee" target="_blank" title="简而不减 Hexo 双栏博客主题  v3.5">Yelee</a> by MOxFIVE <i class="fa fa-heart animated infinite pulse"></i>
+            </div>
+        </div>
+        
+            <div class="visit">
+                
+                    <span id="busuanzi_container_site_pv" style='display:none'>
+                        <span id="site-visit" title="本站到访数"><i class="fa fa-user" aria-hidden="true"></i><span id="busuanzi_value_site_uv"></span>
+                        </span>
+                    </span>
+                
+                
+                    <span>| </span>
+                
+                
+                    <span id="busuanzi_container_page_pv" style='display:none'>
+                        <span id="page-visit"  title="本页阅读量"><i class="fa fa-eye animated infinite pulse" aria-hidden="true"></i><span id="busuanzi_value_page_pv"></span>
+                        </span>
+                    </span>
+                
+            </div>
+        
+    </div>
+</footer>
+    </div>
+    
+<script data-main="/js/main.js" src="//cdn.bootcss.com/require.js/2.2.0/require.min.js"></script>
+
+    <script>
+        $(document).ready(function() {
+            var iPad = window.navigator.userAgent.indexOf('iPad');
+            if (iPad > -1 || $(".left-col").css("display") === "none") {
+                var bgColorList = ["#9db3f4", "#414141", "#e5a859", "#f5dfc6", "#c084a0", "#847e72", "#cd8390", "#996731"];
+                var bgColor = Math.ceil(Math.random() * (bgColorList.length - 1));
+                $("body").css({"background-color": bgColorList[bgColor], "background-size": "cover"});
+            }
+            else {
+                var backgroundnum = 5;
+                var backgroundimg = "url(/background/bg-x.jpg)".replace(/x/gi, Math.ceil(Math.random() * backgroundnum));
+                $("body").css({"background": backgroundimg, "background-attachment": "fixed", "background-size": "cover"});
+            }
+        })
+    </script>
+
+
+
+
+
+<div class="scroll" id="scroll">
+    <a href="#" title="返回顶部"><i class="fa fa-arrow-up"></i></a>
+    <a href="#comments" onclick="load$hide();" title="查看评论"><i class="fa fa-comments-o"></i></a>
+    <a href="#footer" title="转到底部"><i class="fa fa-arrow-down"></i></a>
+</div>
+<script>
+    // Open in New Window
+    
+        var oOpenInNew = {
+            
+            
+             post: ".article-entry a[href], .copyright a[href]", 
+             tags: ".article-tag a", 
+             categories: ".article-category a, a.tag-list-link", 
+            
+             archives: ".archive-article-title", 
+             miniArchives: "a.post-list-link", 
+            
+             friends: "#js-friends a", 
+             socail: ".social a" 
+        }
+        for (var x in oOpenInNew) {
+            $(oOpenInNew[x]).attr("target", "_blank");
+        }
+    
+</script>
+
+<script async src="https://busuanzi.ibruce.info/busuanzi/2.3/busuanzi.pure.mini.js">
+</script>
+  </div>
+</body>
+</html>
+<script type="text/javascript">
+    var host = "liyu.fun";
+    if ((host == window.location.host) && (window.location.protocol != "https:"))
+        window.location.protocol = "https";
+</script>
+<script src='/js/myjs.js'></script>
+<script src='/js/heart.js'></script>    
