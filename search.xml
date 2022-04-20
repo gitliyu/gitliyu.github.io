@@ -3,6 +3,38 @@
   
     
     <entry>
+      <title><![CDATA[回顾一下我的2021]]></title>
+      <url>/2022/04/20/review-2021/</url>
+      <content type="html"><![CDATA[<p>为什么一个人可以懒到4月份才开始写上一年的年度总结呢<br><a id="more"></a><br>今年已经是工作的第五年了，回忆一下过去一年，似乎并没有什么太大的变化。最初的三年，感觉自己一直处于一个飞速进步的阶段，对技术充满热情，对于未知事物存在很强的求知欲，每天都在朝着更好的方向去努力。反观现在，好像已经没有了最初的动力，不光是技术上，个人工作态度上也进入了瓶颈，有些躺平的意思，今年要努力呢。</p>
+<p>反思时间结束，下面是今年的大事记：</p>
+<ul>
+<li>5月底交房了，虽然不及预期槽点满满，心里总归还是比较开心的</li>
+<li>纪念党的100周年，我们生在国旗下，长在春风里，一起为党庆生</li>
+<li>720暴雨，疫情封城，虽然天灾人祸接踵而至，但是还是要给郑州点赞的</li>
+<li>开始买基金，目前亏损18%，嗯。。。今年目标是回本</li>
+<li>工作方面没啥变化，依旧是每天做着赔钱的项目</li>
+</ul>
+<p>今年的flag：</p>
+<ul>
+<li>锻炼身体</li>
+<li>学好英语</li>
+<li><del>出国旅游</del> 出省旅游</li>
+<li>装修入住</li>
+<li>攒钱买车</li>
+</ul>
+<p>怀抱希望，今年一定会有好运。。。的吧？</p>
+]]></content>
+      
+        <categories>
+            
+            <category> 年度总结 </category>
+            
+        </categories>
+        
+        
+    </entry>
+    
+    <entry>
       <title><![CDATA[回顾一下我的2020]]></title>
       <url>/2021/01/02/review-2020/</url>
       <content type="html"><![CDATA[<p>流光容易把人抛，虽然每年都会说时间过得很快，但我现在回首2020，感觉发生了很多事，又一时想不起来做了什么，不得不再老套的感慨一下，今年过得真快。<br><a id="more"></a><br>相比前两年，在个人技能树方面似乎没有太大的进步，没有学到太多的新技术，甚至自己也没有写出什么拿的出手的东西，真是怠惰呢，就不做总结了。</p>
@@ -2252,9 +2284,9 @@
             
             <tag> js </tag>
             
-            <tag> php </tag>
-            
             <tag> vue </tag>
+            
+            <tag> php </tag>
             
             <tag> laravel </tag>
             
@@ -3223,7 +3255,7 @@
       <title><![CDATA[Hexo博客畅言评论支持]]></title>
       <url>/2017/08/03/Hexo%E5%8D%9A%E5%AE%A2%E7%95%85%E8%A8%80%E8%AF%84%E8%AE%BA/</url>
       <content type="html"><![CDATA[<p>&nbsp;&nbsp;&nbsp;&nbsp;由于多说和网易云跟帖的关闭，很多博客的评论系统受到了影响，这里通过使用Yelee主题举例说明将多说评论替换为畅言的步骤，以及畅言评论的设置问题。<br><a id="more"></a></p>
-<h3 id="代码安装"><a href="#代码安装" class="headerlink" title="代码安装"></a>代码安装</h3><p>1.修改文件 <code>\themes\yelee\layout\_partial\comments\duoshuo.ejs</code> 为如下内容，并重命名为 changyan.ejs。<br><figure class="highlight javascript"><table><tr><td class="gutter"><pre><span class="line">1</span><br><span class="line">2</span><br><span class="line">3</span><br><span class="line">4</span><br><span class="line">5</span><br><span class="line">6</span><br><span class="line">7</span><br><span class="line">8</span><br><span class="line">9</span><br></pre></td><td class="code"><pre><span class="line">&lt;!--PC和WAP自适应版--&gt;</span><br><span class="line">&lt;div id=<span class="string">"SOHUCS"</span> &gt;&lt;/div&gt; </span><br><span class="line">&lt;script type=<span class="string">"text/javascript"</span>&gt; </span><br><span class="line">(<span class="function"><span class="keyword">function</span>(<span class="params"></span>)</span>&#123; </span><br><span class="line"><span class="keyword">var</span> appid = <span class="string">'&lt;%=appid%&gt;'</span>; </span><br><span class="line"><span class="keyword">var</span> conf = <span class="string">'&lt;%=conf%&gt;'</span>; </span><br><span class="line"><span class="keyword">var</span> width = <span class="built_in">window</span>.innerWidth || <span class="built_in">document</span>.documentElement.clientWidth; </span><br><span class="line"><span class="keyword">if</span> (width &lt; <span class="number">960</span>) &#123; </span><br><span class="line"><span class="built_in">window</span>.document.write(<span class="string">'&lt;script id="changyan_mobile_js" charset="utf-8" type="text/javascript" src="//changyan.sohu.com/upload/mobile/wap-js/changyan_mobile.js?client_id='</span> + appid + <span class="string">'&amp;conf='</span> + conf + <span class="string">'"&gt;&lt;\/script&gt;'</span>); &#125; <span class="keyword">else</span> &#123; <span class="keyword">var</span> loadJs=<span class="function"><span class="keyword">function</span>(<span class="params">d,a</span>)</span>&#123;<span class="keyword">var</span> c=<span class="built_in">document</span>.getElementsByTagName(<span class="string">"head"</span>)[<span class="number">0</span>]||<span class="built_in">document</span>.head||<span class="built_in">document</span>.documentElement;<span class="keyword">var</span> b=<span class="built_in">document</span>.createElement(<span class="string">"script"</span>);b.setAttribute(<span class="string">"type"</span>,<span class="string">"text/javascript"</span>);b.setAttribute(<span class="string">"charset"</span>,<span class="string">"UTF-8"</span>);b.setAttribute(<span class="string">"src"</span>,d);<span class="keyword">if</span>(<span class="keyword">typeof</span> a===<span class="string">"function"</span>)&#123;<span class="keyword">if</span>(<span class="built_in">window</span>.attachEvent)&#123;b.onreadystatechange=<span class="function"><span class="keyword">function</span>(<span class="params"></span>)</span>&#123;<span class="keyword">var</span> e=b.readyState;<span class="keyword">if</span>(e===<span class="string">"loaded"</span>||e===<span class="string">"complete"</span>)&#123;b.onreadystatechange=<span class="literal">null</span>;a()&#125;&#125;&#125;<span class="keyword">else</span>&#123;b.onload=a&#125;&#125;c.appendChild(b)&#125;;loadJs(<span class="string">"//changyan.sohu.com/upload/changyan.js"</span>,<span class="function"><span class="keyword">function</span>(<span class="params"></span>)</span>&#123;<span class="built_in">window</span>.changyan.api.config(&#123;<span class="attr">appid</span>:appid,<span class="attr">conf</span>:conf&#125;)&#125;); &#125; &#125;)(); &lt;/script&gt;</span><br></pre></td></tr></table></figure></p>
+<h3 id="代码安装"><a href="#代码安装" class="headerlink" title="代码安装"></a>代码安装</h3><p>1.修改文件 <code>\themes\yelee\layout\_partial\comments\duoshuo.ejs</code> 为如下内容，并重命名为 changyan.ejs。<br><figure class="highlight javascript"><table><tr><td class="gutter"><pre><span class="line">1</span><br><span class="line">2</span><br><span class="line">3</span><br><span class="line">4</span><br><span class="line">5</span><br><span class="line">6</span><br><span class="line">7</span><br><span class="line">8</span><br><span class="line">9</span><br></pre></td><td class="code"><pre><span class="line">&lt;!--PC和WAP自适应版--&gt;</span><br><span class="line">&lt;div id=<span class="string">"SOHUCS"</span> &gt;<span class="xml"><span class="tag">&lt;/<span class="name">div</span>&gt;</span></span> </span><br><span class="line">&lt;script type=<span class="string">"text/javascript"</span>&gt; </span><br><span class="line">(<span class="function"><span class="keyword">function</span>(<span class="params"></span>)</span>&#123; </span><br><span class="line"><span class="keyword">var</span> appid = <span class="string">'&lt;%=appid%&gt;'</span>; </span><br><span class="line"><span class="keyword">var</span> conf = <span class="string">'&lt;%=conf%&gt;'</span>; </span><br><span class="line"><span class="keyword">var</span> width = <span class="built_in">window</span>.innerWidth || <span class="built_in">document</span>.documentElement.clientWidth; </span><br><span class="line"><span class="keyword">if</span> (width &lt; <span class="number">960</span>) &#123; </span><br><span class="line"><span class="built_in">window</span>.document.write(<span class="string">'&lt;script id="changyan_mobile_js" charset="utf-8" type="text/javascript" src="//changyan.sohu.com/upload/mobile/wap-js/changyan_mobile.js?client_id='</span> + appid + <span class="string">'&amp;conf='</span> + conf + <span class="string">'"&gt;&lt;\/script&gt;'</span>); &#125; <span class="keyword">else</span> &#123; <span class="keyword">var</span> loadJs=<span class="function"><span class="keyword">function</span>(<span class="params">d,a</span>)</span>&#123;<span class="keyword">var</span> c=<span class="built_in">document</span>.getElementsByTagName(<span class="string">"head"</span>)[<span class="number">0</span>]||<span class="built_in">document</span>.head||<span class="built_in">document</span>.documentElement;<span class="keyword">var</span> b=<span class="built_in">document</span>.createElement(<span class="string">"script"</span>);b.setAttribute(<span class="string">"type"</span>,<span class="string">"text/javascript"</span>);b.setAttribute(<span class="string">"charset"</span>,<span class="string">"UTF-8"</span>);b.setAttribute(<span class="string">"src"</span>,d);<span class="keyword">if</span>(<span class="keyword">typeof</span> a===<span class="string">"function"</span>)&#123;<span class="keyword">if</span>(<span class="built_in">window</span>.attachEvent)&#123;b.onreadystatechange=<span class="function"><span class="keyword">function</span>(<span class="params"></span>)</span>&#123;<span class="keyword">var</span> e=b.readyState;<span class="keyword">if</span>(e===<span class="string">"loaded"</span>||e===<span class="string">"complete"</span>)&#123;b.onreadystatechange=<span class="literal">null</span>;a()&#125;&#125;&#125;<span class="keyword">else</span>&#123;b.onload=a&#125;&#125;c.appendChild(b)&#125;;loadJs(<span class="string">"//changyan.sohu.com/upload/changyan.js"</span>,<span class="function"><span class="keyword">function</span>(<span class="params"></span>)</span>&#123;<span class="built_in">window</span>.changyan.api.config(&#123;<span class="attr">appid</span>:appid,<span class="attr">conf</span>:conf&#125;)&#125;); &#125; &#125;)(); <span class="xml"><span class="tag">&lt;/<span class="name">script</span>&gt;</span></span></span><br></pre></td></tr></table></figure></p>
 <blockquote>
 <p>这一部分是畅言安装的通用代码，在html中插入这段代码即可加入评论框。<br>没有多说的主题可以直接添加changyan.ejs，或者修改主题支持的评论，下同。</p>
 </blockquote>
@@ -3231,7 +3263,7 @@
 <blockquote>
 <p>对于畅言实验室中的拓展功能，比如表情评论，打赏等功能，同样将代码添加到这部分就行，以表情评论为例</p>
 </blockquote>
-<figure class="highlight javascript"><table><tr><td class="gutter"><pre><span class="line">1</span><br><span class="line">2</span><br><span class="line">3</span><br><span class="line">4</span><br><span class="line">5</span><br><span class="line">6</span><br></pre></td><td class="code"><pre><span class="line">&lt;% <span class="keyword">if</span> (!index &amp;&amp; post.comments)&#123; %&gt;</span><br><span class="line">  &lt;% <span class="keyword">if</span> (theme.changyan.on) &#123; %&gt;</span><br><span class="line">    &lt;div id=<span class="string">"cyEmoji"</span> role=<span class="string">"cylabs"</span> data-use=<span class="string">"emoji"</span>&gt;&lt;/div&gt;</span><br><span class="line">  &lt;% &#125; %&gt;</span><br><span class="line">&lt;% &#125; %&gt;</span><br><span class="line">&lt;script type=<span class="string">"text/javascript"</span> charset=<span class="string">"utf-8"</span> src=<span class="string">"https://changyan.sohu.com/js/changyan.labs.https.js?appid=xxxxxx"</span>&gt;&lt;/script&gt;</span><br></pre></td></tr></table></figure>
+<figure class="highlight javascript"><table><tr><td class="gutter"><pre><span class="line">1</span><br><span class="line">2</span><br><span class="line">3</span><br><span class="line">4</span><br><span class="line">5</span><br><span class="line">6</span><br></pre></td><td class="code"><pre><span class="line">&lt;% <span class="keyword">if</span> (!index &amp;&amp; post.comments)&#123; %&gt;</span><br><span class="line">  &lt;% <span class="keyword">if</span> (theme.changyan.on) &#123; %&gt;</span><br><span class="line">    &lt;div id=<span class="string">"cyEmoji"</span> role=<span class="string">"cylabs"</span> data-use=<span class="string">"emoji"</span>&gt;<span class="xml"><span class="tag">&lt;/<span class="name">div</span>&gt;</span></span></span><br><span class="line">  &lt;% &#125; %&gt;</span><br><span class="line">&lt;% &#125; %&gt;</span><br><span class="line">&lt;script type=<span class="string">"text/javascript"</span> charset=<span class="string">"utf-8"</span> src=<span class="string">"https://changyan.sohu.com/js/changyan.labs.https.js?appid=xxxxxx"</span>&gt;<span class="xml"><span class="tag">&lt;/<span class="name">script</span>&gt;</span></span></span><br></pre></td></tr></table></figure>
 <p>3.修改样式文件 <code>\themes\yelee\source\css\_partial\main.styl</code> ，查找 duoshou，替换为如下样式：<br><figure class="highlight css"><table><tr><td class="gutter"><pre><span class="line">1</span><br><span class="line">2</span><br><span class="line">3</span><br><span class="line">4</span><br></pre></td><td class="code"><pre><span class="line"><span class="selector-id">#SOHUCS</span> &#123;</span><br><span class="line">    <span class="attribute">padding</span>: <span class="number">0</span> <span class="number">40px</span> <span class="meta">!important</span>;</span><br><span class="line">    <span class="attribute">width</span>: inherit <span class="meta">!important</span>;</span><br><span class="line">&#125;</span><br></pre></td></tr></table></figure></p>
 <p>4.修改样式文件 <code>\themes\yelee\source\css\_partial\mobile.styl</code> ，查找 duoshou，替换为如下样式：<br><figure class="highlight css"><table><tr><td class="gutter"><pre><span class="line">1</span><br><span class="line">2</span><br><span class="line">3</span><br></pre></td><td class="code"><pre><span class="line"><span class="selector-id">#SOHUCS</span> &#123;</span><br><span class="line">    <span class="attribute">padding</span>: <span class="number">0</span> <span class="number">13px</span>;</span><br><span class="line">&#125;</span><br></pre></td></tr></table></figure></p>
 <p>5.将theme的 <code>_config.yml</code> 中 duoshuo 的部分修改为：<br><figure class="highlight plain"><table><tr><td class="gutter"><pre><span class="line">1</span><br><span class="line">2</span><br><span class="line">3</span><br><span class="line">4</span><br></pre></td><td class="code"><pre><span class="line">changyan:</span><br><span class="line">  on: on</span><br><span class="line">  appid: </span><br><span class="line">  conf:</span><br></pre></td></tr></table></figure></p>
