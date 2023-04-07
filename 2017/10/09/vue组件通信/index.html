@@ -1,0 +1,620 @@
+<!DOCTYPE html>
+<html lang="zh-Hans">
+<head>
+
+    <!--[if lt IE 9]>
+        <style>body {display: none; background: none !important} </style>
+        <meta http-equiv="Refresh" Content="0; url=//outdatedbrowser.com/" />
+    <![endif]-->
+
+<meta charset="utf-8">
+<meta http-equiv="X-UA-Compatible" content="IE=edge, chrome=1" />
+<meta name="viewport" content="width=device-width, initial-scale=1, maximum-scale=1, user-scalable=no">
+<meta name="format-detection" content="telephone=no" />
+<meta name="author" content="Li Yu" />
+
+
+
+<meta name="description" content="在Vue中组件是实现模块化开发的主要内容，而组件的通信更是vue数据驱动的重点，总结一下目前我了解的组件之间数据通信和访问的方法。">
+<meta name="keywords" content="js,vue">
+<meta property="og:type" content="article">
+<meta property="og:title" content="Vue学习笔记:组件之间的通信方式">
+<meta property="og:url" content="https://liyu.fun/2017/10/09/vue组件通信/index.html">
+<meta property="og:site_name" content="Mr.Li">
+<meta property="og:description" content="在Vue中组件是实现模块化开发的主要内容，而组件的通信更是vue数据驱动的重点，总结一下目前我了解的组件之间数据通信和访问的方法。">
+<meta property="og:locale" content="zh-Hans">
+<meta property="og:updated_time" content="2019-08-04T11:02:00.805Z">
+<meta name="twitter:card" content="summary">
+<meta name="twitter:title" content="Vue学习笔记:组件之间的通信方式">
+<meta name="twitter:description" content="在Vue中组件是实现模块化开发的主要内容，而组件的通信更是vue数据驱动的重点，总结一下目前我了解的组件之间数据通信和访问的方法。">
+
+<link rel="apple-touch-icon" href= "/apple-touch-icon.png">
+
+
+    <link rel="alternate" href="/atom.xml" title="Mr.Li" type="application/atom+xml">
+
+
+
+    <link rel="shortcut icon" href="/img/niconico.png">
+
+
+
+    <link href="//cdn.bootcss.com/animate.css/3.5.1/animate.min.css" rel="stylesheet">
+
+
+
+    <link href="//cdn.bootcss.com/fancybox/2.1.5/jquery.fancybox.min.css" rel="stylesheet">
+
+
+
+    <script src="//cdn.bootcss.com/pace/1.0.2/pace.min.js"></script>
+    <link href="//cdn.bootcss.com/pace/1.0.2/themes/blue/pace-theme-minimal.css" rel="stylesheet">
+
+
+<link rel="stylesheet" href="/css/style.css">
+
+
+
+<link href="//cdn.bootcss.com/font-awesome/4.6.3/css/font-awesome.min.css" rel="stylesheet">
+
+
+<title>Vue学习笔记:组件之间的通信方式 | Mr.Li</title>
+
+<script src="//cdn.bootcss.com/jquery/2.2.4/jquery.min.js"></script>
+<script src="//cdn.bootcss.com/clipboard.js/1.5.10/clipboard.min.js"></script>
+
+<script>
+    var yiliaConfig = {
+        fancybox: true,
+        animate: true,
+        isHome: false,
+        isPost: true,
+        isArchive: false,
+        isTag: false,
+        isCategory: false,
+        fancybox_js: "//cdn.bootcss.com/fancybox/2.1.5/jquery.fancybox.min.js",
+        scrollreveal: "//cdn.bootcss.com/scrollReveal.js/3.1.4/scrollreveal.min.js",
+        search: true
+    }
+</script>
+
+
+    <script>
+        yiliaConfig.jquery_ui = [true, "//cdn.bootcss.com/jqueryui/1.10.4/jquery-ui.min.js", "//cdn.bootcss.com/jqueryui/1.10.4/css/jquery-ui.min.css"];
+    </script>
+
+
+
+    <script> yiliaConfig.rootUrl = "\/";</script>
+
+
+
+    <script src="//s7.addthis.com/js/300/addthis_widget.js#pubid=ra-56ff76c972fc0cf9"></script>
+
+
+
+    <script>
+        var _hmt = _hmt || [];
+        (function() {
+            var hm = document.createElement("script");
+            hm.src = "//hm.baidu.com/hm.js?b8be283af49aba7fa167f7b7a45f63db";
+            var s = document.getElementsByTagName("script")[0]; 
+            s.parentNode.insertBefore(hm, s);
+        })();
+    </script>
+
+
+</head>
+<body>
+  <div id="container">
+    <div class="left-col">
+    <div class="overlay"></div>
+<div class="intrude-less">
+    <header id="header" class="inner">
+        <a href="/" class="profilepic">
+            <img src="/img/avatar.png" class="animated zoomIn">
+        </a>
+        <hgroup>
+          <h1 class="header-author"><a href="/">Li Yu</a></h1>
+        </hgroup>
+
+        
+        <p class="header-subtitle">一三五写bug，二四六改bug</p>
+        
+
+        
+            <form id="search-form">
+            <input type="text" id="local-search-input" name="q" placeholder="search..." class="search form-control" autocomplete="off" autocorrect="off" searchonload="true" />
+            <i class="fa fa-times" onclick="resetSearch()"></i>
+            </form>
+            <div id="local-search-result"></div>
+            <p class='no-result'>No results found <i class='fa fa-spinner fa-pulse'></i></p>
+        
+
+
+        
+            <div id="switch-btn" class="switch-btn">
+                <div class="icon">
+                    <div class="icon-ctn">
+                        <div class="icon-wrap icon-house" data-idx="0">
+                            <div class="birdhouse"></div>
+                            <div class="birdhouse_holes"></div>
+                        </div>
+                        <div class="icon-wrap icon-ribbon hide" data-idx="1">
+                            <div class="ribbon"></div>
+                        </div>
+                        
+                        <div class="icon-wrap icon-link hide" data-idx="2">
+                            <div class="loopback_l"></div>
+                            <div class="loopback_r"></div>
+                        </div>
+                        
+                        
+                        <div class="icon-wrap icon-me hide" data-idx="3">
+                            <div class="user"></div>
+                            <div class="shoulder"></div>
+                        </div>
+                        
+                    </div>
+                    
+                </div>
+                <div class="tips-box hide">
+                    <div class="tips-arrow"></div>
+                    <ul class="tips-inner">
+                        <li>菜单</li>
+                        <li>标签</li>
+                        
+                        <li>友情链接</li>
+                        
+                        
+                        <li>关于我</li>
+                        
+                    </ul>
+                </div>
+            </div>
+        
+
+        <div id="switch-area" class="switch-area">
+            <div class="switch-wrap">
+                <section class="switch-part switch-part1">
+                    <nav class="header-menu">
+                        <ul>
+                        
+                            <li><a href="/">主页</a></li>
+                        
+                            <li><a href="/archives/">所有文章</a></li>
+                        
+                            <li><a href="/diary">随笔</a></li>
+                        
+                            <li><a href="/tags/">标签云</a></li>
+                        
+                        </ul>
+                    </nav>
+                    <nav class="header-nav">
+                        <ul class="social">
+                            
+                                <a class="fa Email" href="mailto:1042625709@qq.com" title="Email"></a>
+                            
+                                <a class="fa GitHub" href="https://github.com/gitliyu" title="GitHub"></a>
+                            
+                                <a class="fa QQ" href="http://wpa.qq.com/msgrd?v=3&uin=1042625709&site=qq&menu=yes" title="QQ"></a>
+                            
+                        </ul>
+                    </nav>
+                </section>
+                
+                
+                <section class="switch-part switch-part2">
+                    <div class="widget tagcloud" id="js-tagcloud">
+                        <ul class="tag-list"><li class="tag-list-item"><a class="tag-list-link" href="/tags/AutoHotkey/">AutoHotkey</a></li><li class="tag-list-item"><a class="tag-list-link" href="/tags/EMQX/">EMQX</a></li><li class="tag-list-item"><a class="tag-list-link" href="/tags/SQL/">SQL</a></li><li class="tag-list-item"><a class="tag-list-link" href="/tags/angular/">angular</a></li><li class="tag-list-item"><a class="tag-list-link" href="/tags/canvas/">canvas</a></li><li class="tag-list-item"><a class="tag-list-link" href="/tags/cordova/">cordova</a></li><li class="tag-list-item"><a class="tag-list-link" href="/tags/crypto/">crypto</a></li><li class="tag-list-item"><a class="tag-list-link" href="/tags/css/">css</a></li><li class="tag-list-item"><a class="tag-list-link" href="/tags/dataTables/">dataTables</a></li><li class="tag-list-item"><a class="tag-list-link" href="/tags/echart/">echart</a></li><li class="tag-list-item"><a class="tag-list-link" href="/tags/electron/">electron</a></li><li class="tag-list-item"><a class="tag-list-link" href="/tags/es6/">es6</a></li><li class="tag-list-item"><a class="tag-list-link" href="/tags/hexo/">hexo</a></li><li class="tag-list-item"><a class="tag-list-link" href="/tags/html/">html</a></li><li class="tag-list-item"><a class="tag-list-link" href="/tags/iot/">iot</a></li><li class="tag-list-item"><a class="tag-list-link" href="/tags/jQuery/">jQuery</a></li><li class="tag-list-item"><a class="tag-list-link" href="/tags/java/">java</a></li><li class="tag-list-item"><a class="tag-list-link" href="/tags/javascript/">javascript</a></li><li class="tag-list-item"><a class="tag-list-link" href="/tags/jquery/">jquery</a></li><li class="tag-list-item"><a class="tag-list-link" href="/tags/js/">js</a></li><li class="tag-list-item"><a class="tag-list-link" href="/tags/laravel/">laravel</a></li><li class="tag-list-item"><a class="tag-list-link" href="/tags/linux/">linux</a></li><li class="tag-list-item"><a class="tag-list-link" href="/tags/mqtt/">mqtt</a></li><li class="tag-list-item"><a class="tag-list-link" href="/tags/mysql/">mysql</a></li><li class="tag-list-item"><a class="tag-list-link" href="/tags/nginx/">nginx</a></li><li class="tag-list-item"><a class="tag-list-link" href="/tags/node/">node</a></li><li class="tag-list-item"><a class="tag-list-link" href="/tags/npm/">npm</a></li><li class="tag-list-item"><a class="tag-list-link" href="/tags/otter/">otter</a></li><li class="tag-list-item"><a class="tag-list-link" href="/tags/php/">php</a></li><li class="tag-list-item"><a class="tag-list-link" href="/tags/pjax/">pjax</a></li><li class="tag-list-item"><a class="tag-list-link" href="/tags/pushState/">pushState</a></li><li class="tag-list-item"><a class="tag-list-link" href="/tags/rds/">rds</a></li><li class="tag-list-item"><a class="tag-list-link" href="/tags/redis/">redis</a></li><li class="tag-list-item"><a class="tag-list-link" href="/tags/require/">require</a></li><li class="tag-list-item"><a class="tag-list-link" href="/tags/sonarqube/">sonarqube</a></li><li class="tag-list-item"><a class="tag-list-link" href="/tags/superset/">superset</a></li><li class="tag-list-item"><a class="tag-list-link" href="/tags/thingsboard/">thingsboard</a></li><li class="tag-list-item"><a class="tag-list-link" href="/tags/vue/">vue</a></li><li class="tag-list-item"><a class="tag-list-link" href="/tags/vuex/">vuex</a></li><li class="tag-list-item"><a class="tag-list-link" href="/tags/webAPI/">webAPI</a></li><li class="tag-list-item"><a class="tag-list-link" href="/tags/websocket/">websocket</a></li><li class="tag-list-item"><a class="tag-list-link" href="/tags/yelee/">yelee</a></li><li class="tag-list-item"><a class="tag-list-link" href="/tags/微信/">微信</a></li><li class="tag-list-item"><a class="tag-list-link" href="/tags/支付宝/">支付宝</a></li><li class="tag-list-item"><a class="tag-list-link" href="/tags/游戏/">游戏</a></li></ul>
+                    </div>
+                </section>
+                
+                
+                
+                <section class="switch-part switch-part3">
+                    <div id="js-friends">
+                    
+                      <a class="main-nav-link switch-friends-link" href="https://hexo.io">Hexo</a>
+                    
+                      <a class="main-nav-link switch-friends-link" href="https://pages.github.com/">GitHub</a>
+                    
+                      <a class="main-nav-link switch-friends-link" href="http://mafei.fun/">flyforfun</a>
+                    
+                    </div>
+                </section>
+                
+
+                
+                
+                <section class="switch-part switch-part4">
+                
+                    <div id="js-aboutme">欢迎来到我的个人博客，期待你的建议与交流，可以点击菜单栏下方按钮发送邮件或者QQ给我</div>
+                </section>
+                
+            </div>
+        </div>
+    </header>                
+</div>
+    </div>
+    <div class="mid-col">
+      <nav id="mobile-nav">
+      <div class="overlay">
+          <div class="slider-trigger"></div>
+          <h1 class="header-author js-mobile-header hide"><a href="/" title="回到主页">Li Yu</a></h1>
+      </div>
+    <div class="intrude-less">
+        <header id="header" class="inner">
+            <a href="/" class="profilepic">
+                <img src="/img/avatar.png" class="animated zoomIn">
+            </a>
+            <hgroup>
+              <h1 class="header-author"><a href="/" title="回到主页">Li Yu</a></h1>
+            </hgroup>
+            
+            <p class="header-subtitle">一三五写bug，二四六改bug</p>
+            
+            <nav class="header-menu">
+                <ul>
+                
+                    <li><a href="/">主页</a></li>
+                
+                    <li><a href="/archives/">所有文章</a></li>
+                
+                    <li><a href="/diary">随笔</a></li>
+                
+                    <li><a href="/tags/">标签云</a></li>
+                
+                <div class="clearfix"></div>
+                </ul>
+            </nav>
+            <nav class="header-nav">
+                        <ul class="social">
+                            
+                                <a class="fa Email" target="_blank" href="mailto:1042625709@qq.com" title="Email"></a>
+                            
+                                <a class="fa GitHub" target="_blank" href="https://github.com/gitliyu" title="GitHub"></a>
+                            
+                                <a class="fa QQ" target="_blank" href="http://wpa.qq.com/msgrd?v=3&uin=1042625709&site=qq&menu=yes" title="QQ"></a>
+                            
+                        </ul>
+            </nav>
+        </header>                
+    </div>
+    <link class="menu-list" tags="标签" friends="友情链接" about="关于我"/>
+</nav>
+      <div class="body-wrap"><article id="post-vue组件通信" class="article article-type-post" itemscope itemprop="blogPost">
+  
+    <div class="article-meta">
+      <a href="/2017/10/09/vue组件通信/" class="article-date">
+      <time datetime="2017-10-09T06:23:21.000Z" itemprop="datePublished">2017-10-09</time>
+</a>
+
+
+    </div>
+  
+  <div class="article-inner">
+    
+      <input type="hidden" class="isFancy" />
+    
+    
+      <header class="article-header">
+        
+  
+    <h1 class="article-title" itemprop="name">
+      Vue学习笔记:组件之间的通信方式
+    </h1>
+  
+
+      </header>
+      
+      <div class="article-info article-info-post">
+        
+    <div class="article-category tagcloud">
+    <a class="article-category-link" href="/categories/学习笔记/">学习笔记</a>
+    </div>
+
+
+        
+    <div class="article-tag tagcloud">
+        <ul class="article-tag-list"><li class="article-tag-list-item"><a class="article-tag-list-link" href="/tags/js/">js</a></li><li class="article-tag-list-item"><a class="article-tag-list-link" href="/tags/vue/">vue</a></li></ul>
+    </div>
+
+        <div class="clearfix"></div>
+      </div>
+      
+    
+    <div class="article-entry" itemprop="articleBody">
+      
+          
+        <p>在Vue中组件是实现模块化开发的主要内容，而组件的通信更是vue数据驱动的重点，总结一下目前我了解的组件之间数据通信和访问的方法。<br><a id="more"></a></p>
+<h3 id="v-bind和props"><a href="#v-bind和props" class="headerlink" title="v-bind和props"></a>v-bind和props</h3><p>父组件在子组件上使用v-bind绑定数据<br><figure class="highlight html"><table><tr><td class="gutter"><pre><span class="line">1</span><br><span class="line">2</span><br><span class="line">3</span><br></pre></td><td class="code"><pre><span class="line"><span class="tag">&lt;<span class="name">div</span>&gt;</span></span><br><span class="line">    <span class="tag">&lt;<span class="name">child</span> <span class="attr">:child-msg</span>=<span class="string">"msg"</span>&gt;</span><span class="tag">&lt;/<span class="name">child</span>&gt;</span>	//这里必须要用 - 代替驼峰</span><br><span class="line"><span class="tag">&lt;/<span class="name">div</span>&gt;</span></span><br></pre></td></tr></table></figure></p>
+<figure class="highlight javascript"><table><tr><td class="gutter"><pre><span class="line">1</span><br><span class="line">2</span><br><span class="line">3</span><br><span class="line">4</span><br><span class="line">5</span><br></pre></td><td class="code"><pre><span class="line">data () &#123;</span><br><span class="line">  <span class="keyword">return</span> &#123;</span><br><span class="line">    msg: <span class="string">'hello'</span></span><br><span class="line">  &#125;;</span><br><span class="line">&#125;</span><br></pre></td></tr></table></figure>
+<p>子组件通过props来接收数据<br><figure class="highlight html"><table><tr><td class="gutter"><pre><span class="line">1</span><br></pre></td><td class="code"><pre><span class="line"><span class="tag">&lt;<span class="name">div</span>&gt;</span>&#123;&#123;childMsg&#125;&#125;<span class="tag">&lt;/<span class="name">div</span>&gt;</span>  //hello</span><br></pre></td></tr></table></figure></p>
+<figure class="highlight javascript"><table><tr><td class="gutter"><pre><span class="line">1</span><br></pre></td><td class="code"><pre><span class="line">props: [<span class="string">'childMsg'</span>]</span><br></pre></td></tr></table></figure>
+<p>可以通过使用this.childMsg调用数据。</p>
+<h3 id="自定义事件和-emit"><a href="#自定义事件和-emit" class="headerlink" title="自定义事件和$emit"></a>自定义事件和$emit</h3><p>子组件要向父组件传递数据，需要使用触发事件的方式，使用$emit通知父组件改变数据<br><figure class="highlight html"><table><tr><td class="gutter"><pre><span class="line">1</span><br></pre></td><td class="code"><pre><span class="line"><span class="tag">&lt;<span class="name">button</span> @<span class="attr">click</span>=<span class="string">'up'</span>&gt;</span>发送<span class="tag">&lt;/<span class="name">button</span>&gt;</span></span><br></pre></td></tr></table></figure></p>
+<figure class="highlight javascript"><table><tr><td class="gutter"><pre><span class="line">1</span><br><span class="line">2</span><br><span class="line">3</span><br><span class="line">4</span><br><span class="line">5</span><br><span class="line">6</span><br><span class="line">7</span><br><span class="line">8</span><br><span class="line">9</span><br><span class="line">10</span><br></pre></td><td class="code"><pre><span class="line">data () &#123;</span><br><span class="line">  <span class="keyword">return</span> &#123;</span><br><span class="line">    msg: <span class="string">'hello'</span></span><br><span class="line">  &#125;;</span><br><span class="line">&#125;</span><br><span class="line">methods: &#123;</span><br><span class="line">  up () &#123;</span><br><span class="line">    <span class="keyword">this</span>.$emit(<span class="string">'getChildMsg'</span>, <span class="keyword">this</span>.msg); </span><br><span class="line">  &#125;</span><br><span class="line">&#125;</span><br></pre></td></tr></table></figure>
+<p>父组件监听子组件触发的up事件,然后调用change方法<br><figure class="highlight html"><table><tr><td class="gutter"><pre><span class="line">1</span><br><span class="line">2</span><br><span class="line">3</span><br></pre></td><td class="code"><pre><span class="line"><span class="tag">&lt;<span class="name">div</span>&gt;</span></span><br><span class="line">  <span class="tag">&lt;<span class="name">child</span> @<span class="attr">getChildMsg</span>=<span class="string">"change"</span>&gt;</span><span class="tag">&lt;/<span class="name">child</span>&gt;</span></span><br><span class="line"><span class="tag">&lt;/<span class="name">div</span>&gt;</span></span><br></pre></td></tr></table></figure></p>
+<figure class="highlight javascript"><table><tr><td class="gutter"><pre><span class="line">1</span><br><span class="line">2</span><br><span class="line">3</span><br><span class="line">4</span><br><span class="line">5</span><br></pre></td><td class="code"><pre><span class="line">methods: &#123;</span><br><span class="line">  change(msg) &#123;</span><br><span class="line">    <span class="built_in">console</span>.log(msg);	<span class="comment">// hello</span></span><br><span class="line">  &#125;</span><br><span class="line">&#125;</span><br></pre></td></tr></table></figure>
+<h3 id="v-model"><a href="#v-model" class="headerlink" title="v-model"></a>v-model</h3><p>在介绍了<code>props</code>和<code>$emit</code>之后，就可以根据它们来实现在自定义组件上使用<code>v-model</code>来进行数据通信了。<br>首先简单的解释一下<code>v-model</code>与二者的关系，以下两中写法实现的效果相同:<br><figure class="highlight javascript"><table><tr><td class="gutter"><pre><span class="line">1</span><br><span class="line">2</span><br><span class="line">3</span><br><span class="line">4</span><br><span class="line">5</span><br><span class="line">6</span><br><span class="line">7</span><br><span class="line">8</span><br><span class="line">9</span><br><span class="line">10</span><br></pre></td><td class="code"><pre><span class="line"><span class="comment">// 使用v-model</span></span><br><span class="line">&lt;component v-model=<span class="string">'msg'</span>&gt;<span class="xml"><span class="tag">&lt;/<span class="name">component</span>&gt;</span></span></span><br><span class="line"></span><br><span class="line"><span class="comment">// 使用props和$emit</span></span><br><span class="line">&lt;component :value=<span class="string">'msg'</span> @input=<span class="string">'getMsg'</span>&gt;<span class="xml"><span class="tag">&lt;/<span class="name">component</span>&gt;</span></span></span><br><span class="line"></span><br><span class="line">……</span><br><span class="line">getMsg(value)&#123;</span><br><span class="line">  <span class="keyword">this</span>.msg = value;</span><br><span class="line">&#125;</span><br></pre></td></tr></table></figure></p>
+<p>对于<code>v-model</code>绑定的变量，相当于在子组件上面绑定了一个<code>value</code>属性，还可以通过接收子组件传递的<code>input</code>属性来再次赋值。<br>这么解释太抽象了，下面是一个简单的封装input组件的例子：<br>父组件<br><figure class="highlight plain"><table><tr><td class="gutter"><pre><span class="line">1</span><br></pre></td><td class="code"><pre><span class="line">&lt;my-input v-model=&apos;number&apos;&gt;&lt;/my-input&gt;</span><br></pre></td></tr></table></figure></p>
+<p>子组件<br><figure class="highlight plain"><table><tr><td class="gutter"><pre><span class="line">1</span><br><span class="line">2</span><br><span class="line">3</span><br></pre></td><td class="code"><pre><span class="line">&lt;div&gt;</span><br><span class="line">  &lt;input type=&quot;text&quot; v-model=&apos;inputValue&apos;&gt;</span><br><span class="line">&lt;/div&gt;</span><br></pre></td></tr></table></figure></p>
+<figure class="highlight javascript"><table><tr><td class="gutter"><pre><span class="line">1</span><br><span class="line">2</span><br><span class="line">3</span><br><span class="line">4</span><br><span class="line">5</span><br><span class="line">6</span><br><span class="line">7</span><br><span class="line">8</span><br><span class="line">9</span><br><span class="line">10</span><br><span class="line">11</span><br><span class="line">12</span><br><span class="line">13</span><br><span class="line">14</span><br><span class="line">15</span><br><span class="line">16</span><br><span class="line">17</span><br><span class="line">18</span><br><span class="line">19</span><br><span class="line">20</span><br><span class="line">21</span><br><span class="line">22</span><br><span class="line">23</span><br></pre></td><td class="code"><pre><span class="line">&lt;script&gt;</span><br><span class="line">  <span class="keyword">export</span> <span class="keyword">default</span> &#123;</span><br><span class="line">    data () &#123;</span><br><span class="line">      <span class="keyword">return</span> &#123;</span><br><span class="line">        inputValue: <span class="string">''</span></span><br><span class="line">      &#125;</span><br><span class="line">    &#125;,</span><br><span class="line">    props: &#123;</span><br><span class="line">      value: [<span class="built_in">String</span>, <span class="built_in">Number</span>]	<span class="comment">// 拿到父组件传递的值</span></span><br><span class="line">    &#125;,</span><br><span class="line">    mounted () &#123;</span><br><span class="line">      <span class="keyword">this</span>.inputValue = <span class="keyword">this</span>.value;</span><br><span class="line">    &#125;,</span><br><span class="line">    watch: &#123;</span><br><span class="line">      value: <span class="function"><span class="keyword">function</span> (<span class="params">val</span>) </span>&#123;	<span class="comment">// 监听父组件传值变化，更新绑定值</span></span><br><span class="line">        <span class="keyword">this</span>.inputValue = val;</span><br><span class="line">      &#125;,</span><br><span class="line">      inputValue: <span class="function"><span class="keyword">function</span> (<span class="params">val</span>) </span>&#123;	<span class="comment">// 内容变化时，通知父组件</span></span><br><span class="line">        <span class="keyword">this</span>.$emit(<span class="string">'input'</span>, val);</span><br><span class="line">      &#125;</span><br><span class="line">    &#125;</span><br><span class="line">  &#125;</span><br><span class="line">&lt;<span class="regexp">/script&gt;</span></span><br></pre></td></tr></table></figure>
+<h3 id="路由传参"><a href="#路由传参" class="headerlink" title="路由传参"></a>路由传参</h3><p>在路由页面跳转时，可以通过传递参数的方式拿到数据。</p>
+<ul>
+<li>router-link</li>
+</ul>
+<figure class="highlight plain"><table><tr><td class="gutter"><pre><span class="line">1</span><br><span class="line">2</span><br><span class="line">3</span><br><span class="line">4</span><br><span class="line">5</span><br><span class="line">6</span><br><span class="line">7</span><br><span class="line">8</span><br><span class="line">9</span><br><span class="line">10</span><br><span class="line">11</span><br><span class="line">12</span><br><span class="line">13</span><br><span class="line">14</span><br><span class="line">15</span><br><span class="line">16</span><br></pre></td><td class="code"><pre><span class="line">&lt;router-link </span><br><span class="line">  :to=&quot;&#123;</span><br><span class="line">    path: &apos;/path&apos;, </span><br><span class="line">    query: &#123;</span><br><span class="line">      name: name</span><br><span class="line">    &#125;</span><br><span class="line">  &#125;&quot;&gt;</span><br><span class="line">&lt;/router-link&gt;</span><br><span class="line">&lt;router-link </span><br><span class="line">  :to=&quot;&#123;</span><br><span class="line">    name: &apos;/path&apos;, </span><br><span class="line">    params: &#123; </span><br><span class="line">      name: name</span><br><span class="line">    &#125;</span><br><span class="line">  &#125;&quot;&gt;</span><br><span class="line">&lt;/router-link&gt;</span><br></pre></td></tr></table></figure>
+<p>需要注意的是，path和query，name和params都是成对出现的，即使用path进行路由跳转时，params的值是拿不到的，只能设置query，反之亦然。<br>params和query都可以传递，区别在于后者会出现在url上，考虑到刷新页面的情况，建议使用query</p>
+<ul>
+<li>$router方式</li>
+</ul>
+<figure class="highlight javascript"><table><tr><td class="gutter"><pre><span class="line">1</span><br><span class="line">2</span><br><span class="line">3</span><br><span class="line">4</span><br><span class="line">5</span><br><span class="line">6</span><br><span class="line">7</span><br><span class="line">8</span><br><span class="line">9</span><br><span class="line">10</span><br><span class="line">11</span><br><span class="line">12</span><br></pre></td><td class="code"><pre><span class="line"><span class="keyword">this</span>.$router.push(&#123;</span><br><span class="line">  path: <span class="string">'/path'</span>,</span><br><span class="line">  query: &#123;</span><br><span class="line">    name: name</span><br><span class="line">  &#125;</span><br><span class="line">&#125;)</span><br><span class="line"><span class="keyword">this</span>.$router.push(&#123;</span><br><span class="line">  name: <span class="string">'name'</span>, <span class="comment">//路由的name值</span></span><br><span class="line">  params: &#123; </span><br><span class="line">    name: name</span><br><span class="line">  &#125;</span><br><span class="line">&#125;)</span><br></pre></td></tr></table></figure>
+<p>参数的规则和router-link相同</p>
+<ul>
+<li>获取参数的方式</li>
+</ul>
+<p>对于使用<code>params</code>方式传递的参数<br><figure class="highlight javascript"><table><tr><td class="gutter"><pre><span class="line">1</span><br></pre></td><td class="code"><pre><span class="line"><span class="keyword">this</span>.$route.params.name</span><br></pre></td></tr></table></figure></p>
+<p>对于使用<code>query</code>方式传递的参数<br><figure class="highlight javascript"><table><tr><td class="gutter"><pre><span class="line">1</span><br></pre></td><td class="code"><pre><span class="line"><span class="keyword">this</span>.$route.query.name</span><br></pre></td></tr></table></figure></p>
+<ul>
+<li>动态路由匹配</li>
+</ul>
+<p>在定义router时使用动态路径参数，以冒号开头<br><figure class="highlight javascript"><table><tr><td class="gutter"><pre><span class="line">1</span><br><span class="line">2</span><br><span class="line">3</span><br><span class="line">4</span><br><span class="line">5</span><br></pre></td><td class="code"><pre><span class="line"><span class="keyword">const</span> router = <span class="keyword">new</span> VueRouter(&#123;</span><br><span class="line">  routes: [</span><br><span class="line">    &#123; <span class="attr">path</span>: <span class="string">'/user/:id'</span>, <span class="attr">component</span>: User &#125;</span><br><span class="line">  ]</span><br><span class="line">&#125;)</span><br></pre></td></tr></table></figure></p>
+<p>这时<code>/user/foo</code> 和 <code>/user/bar</code> 都将映射到相同的路由，在路由页面中获取：<br><figure class="highlight javascript"><table><tr><td class="gutter"><pre><span class="line">1</span><br></pre></td><td class="code"><pre><span class="line"><span class="keyword">this</span>.$route.params.user</span><br></pre></td></tr></table></figure></p>
+<ul>
+<li>props 路由传参</li>
+</ul>
+<figure class="highlight plain"><table><tr><td class="gutter"><pre><span class="line">1</span><br><span class="line">2</span><br><span class="line">3</span><br><span class="line">4</span><br><span class="line">5</span><br></pre></td><td class="code"><pre><span class="line">const router = new VueRouter(&#123;</span><br><span class="line">  routes: [</span><br><span class="line">    &#123; path: &apos;/user/:id&apos;, component: User, props: true &#125;,</span><br><span class="line">  ]</span><br><span class="line">&#125;)</span><br></pre></td></tr></table></figure>
+<p>将路由的<code>props</code>属性设置为true，在路由页就可以通过使用props拿到数据:<br><figure class="highlight plain"><table><tr><td class="gutter"><pre><span class="line">1</span><br></pre></td><td class="code"><pre><span class="line">props: [&apos;id&apos;]</span><br></pre></td></tr></table></figure></p>
+<h3 id="通过slot通信"><a href="#通过slot通信" class="headerlink" title="通过slot通信"></a>通过slot通信</h3><p>关于slot的使用就不介绍了，下面简单举个栗子<br><figure class="highlight plain"><table><tr><td class="gutter"><pre><span class="line">1</span><br><span class="line">2</span><br><span class="line">3</span><br><span class="line">4</span><br><span class="line">5</span><br><span class="line">6</span><br><span class="line">7</span><br><span class="line">8</span><br><span class="line">9</span><br></pre></td><td class="code"><pre><span class="line">// 子组件</span><br><span class="line">&lt;div&gt;</span><br><span class="line">  &lt;slot msg=&quot;hi&quot;&gt;&lt;/slot&gt;</span><br><span class="line">&lt;/div&gt;</span><br><span class="line"></span><br><span class="line">// 父组件</span><br><span class="line">&lt;child&gt; </span><br><span class="line">  &lt;div slot-scope=&quot;scope&quot;&gt;&#123;&#123; scope.msg &#125;&#125;&lt;/div&gt;   // hi</span><br><span class="line">&lt;/child&gt;</span><br></pre></td></tr></table></figure></p>
+<p>在slot插槽上绑定的数据可以通过<code>slot-scope</code>拿到，这里也支持解构的写法<br><figure class="highlight plain"><table><tr><td class="gutter"><pre><span class="line">1</span><br><span class="line">2</span><br><span class="line">3</span><br></pre></td><td class="code"><pre><span class="line">&lt;child&gt; </span><br><span class="line">  &lt;div slot-scope=&quot;&#123; msg &#125;&quot;&gt;&#123;&#123; msg &#125;&#125;&lt;/div&gt;   // hi</span><br><span class="line">&lt;/child&gt;</span><br></pre></td></tr></table></figure></p>
+<h3 id="设置中间件"><a href="#设置中间件" class="headerlink" title="设置中间件"></a>设置中间件</h3><p>创建一个事件中心，相当于中间件，可以用它来传递事件和接收事件<br><figure class="highlight javascript"><table><tr><td class="gutter"><pre><span class="line">1</span><br></pre></td><td class="code"><pre><span class="line"><span class="keyword">var</span> vm = <span class="keyword">new</span> Vue();</span><br></pre></td></tr></table></figure></p>
+<p>发送数据的组件触发<br><figure class="highlight html"><table><tr><td class="gutter"><pre><span class="line">1</span><br></pre></td><td class="code"><pre><span class="line"><span class="tag">&lt;<span class="name">button</span> @<span class="attr">click</span>=<span class="string">"send"</span>&gt;</span>发送<span class="tag">&lt;/<span class="name">button</span>&gt;</span></span><br></pre></td></tr></table></figure></p>
+<figure class="highlight javascript"><table><tr><td class="gutter"><pre><span class="line">1</span><br><span class="line">2</span><br><span class="line">3</span><br><span class="line">4</span><br><span class="line">5</span><br></pre></td><td class="code"><pre><span class="line">methods: &#123;</span><br><span class="line">  send() &#123;</span><br><span class="line">    vm.$emit(<span class="string">'change'</span>,<span class="string">'hello'</span>); </span><br><span class="line">  &#125;</span><br><span class="line">&#125;</span><br></pre></td></tr></table></figure>
+<p>接收数据的组件<br><figure class="highlight javascript"><table><tr><td class="gutter"><pre><span class="line">1</span><br><span class="line">2</span><br><span class="line">3</span><br><span class="line">4</span><br><span class="line">5</span><br></pre></td><td class="code"><pre><span class="line">created() &#123;</span><br><span class="line">  vm.$on(<span class="string">'change'</span>, (msg) =&gt; &#123;</span><br><span class="line">    <span class="keyword">this</span>.msg = msg;	<span class="comment">//hello</span></span><br><span class="line">  &#125;);</span><br><span class="line">&#125;</span><br></pre></td></tr></table></figure></p>
+<p>在vue文件中需要使用中间件通信时，创建中间件，如下<br><figure class="highlight javascript"><table><tr><td class="gutter"><pre><span class="line">1</span><br><span class="line">2</span><br><span class="line">3</span><br></pre></td><td class="code"><pre><span class="line"><span class="keyword">import</span> Vue <span class="keyword">from</span> <span class="string">'Vue'</span>;</span><br><span class="line"></span><br><span class="line"><span class="keyword">export</span> <span class="keyword">default</span> <span class="keyword">new</span> Vue();</span><br></pre></td></tr></table></figure></p>
+<p>使用时在组件中import导入即可</p>
+<h3 id="父组件访问子组件"><a href="#父组件访问子组件" class="headerlink" title="父组件访问子组件"></a>父组件访问子组件</h3><p>当我们需要在父组件中访问子组件时，可以使用<code>$children</code>或者<code>$ref</code><br><figure class="highlight javascript"><table><tr><td class="gutter"><pre><span class="line">1</span><br><span class="line">2</span><br><span class="line">3</span><br><span class="line">4</span><br><span class="line">5</span><br><span class="line">6</span><br><span class="line">7</span><br><span class="line">8</span><br><span class="line">9</span><br><span class="line">10</span><br><span class="line">11</span><br><span class="line">12</span><br></pre></td><td class="code"><pre><span class="line"><span class="comment">//子组件1</span></span><br><span class="line">data () &#123;</span><br><span class="line">  <span class="keyword">return</span> &#123;</span><br><span class="line">    msg: <span class="string">'这是子组件1的信息'</span></span><br><span class="line">  &#125;</span><br><span class="line">&#125;</span><br><span class="line"><span class="comment">//子组件2</span></span><br><span class="line">data () &#123;</span><br><span class="line">  <span class="keyword">return</span> &#123;</span><br><span class="line">    msg: <span class="string">'这是子组件2的信息'</span></span><br><span class="line">  &#125;</span><br><span class="line">&#125;</span><br></pre></td></tr></table></figure></p>
+<ul>
+<li><code>$children</code>返回所有子组件的实例，是一个数组</li>
+</ul>
+<figure class="highlight html"><table><tr><td class="gutter"><pre><span class="line">1</span><br><span class="line">2</span><br><span class="line">3</span><br></pre></td><td class="code"><pre><span class="line"><span class="tag">&lt;<span class="name">div</span>&gt;</span></span><br><span class="line">	<span class="tag">&lt;<span class="name">button</span> @<span class="attr">click</span>=<span class="string">"showmsg"</span>&gt;</span>显示子组件信息<span class="tag">&lt;/<span class="name">button</span>&gt;</span></span><br><span class="line"><span class="tag">&lt;/<span class="name">div</span>&gt;</span></span><br></pre></td></tr></table></figure>
+<figure class="highlight javascript"><table><tr><td class="gutter"><pre><span class="line">1</span><br><span class="line">2</span><br><span class="line">3</span><br><span class="line">4</span><br><span class="line">5</span><br><span class="line">6</span><br><span class="line">7</span><br></pre></td><td class="code"><pre><span class="line">methods: &#123;</span><br><span class="line">  showmsg () &#123;</span><br><span class="line">    <span class="keyword">for</span>(<span class="keyword">var</span> i = <span class="number">0</span>; i &lt; <span class="keyword">this</span>.$children.length; i++) &#123;</span><br><span class="line">      <span class="built_in">console</span>.log(<span class="keyword">this</span>.$children[i].msg)</span><br><span class="line">    &#125;</span><br><span class="line">  &#125;</span><br><span class="line">&#125;</span><br></pre></td></tr></table></figure>
+<ul>
+<li>使用<code>ref</code>为子组件指定一个索引ID,可以在父组件使用<code>$refs</code>访问到</li>
+</ul>
+<figure class="highlight html"><table><tr><td class="gutter"><pre><span class="line">1</span><br><span class="line">2</span><br><span class="line">3</span><br><span class="line">4</span><br><span class="line">5</span><br></pre></td><td class="code"><pre><span class="line"><span class="tag">&lt;<span class="name">div</span> <span class="attr">id</span>=<span class="string">"count"</span>&gt;</span></span><br><span class="line">    <span class="tag">&lt;<span class="name">button</span> @<span class="attr">click</span>=<span class="string">"showmsg"</span>&gt;</span>显示子组件信息<span class="tag">&lt;/<span class="name">button</span>&gt;</span></span><br><span class="line">    <span class="tag">&lt;<span class="name">child1</span> <span class="attr">ref</span>=<span class="string">'c1'</span>&gt;</span><span class="tag">&lt;/<span class="name">child1</span>&gt;</span></span><br><span class="line">    <span class="tag">&lt;<span class="name">child2</span> <span class="attr">ref</span>=<span class="string">'c2'</span>&gt;</span><span class="tag">&lt;/<span class="name">child2</span>&gt;</span></span><br><span class="line"><span class="tag">&lt;/<span class="name">div</span>&gt;</span></span><br></pre></td></tr></table></figure>
+<figure class="highlight javascript"><table><tr><td class="gutter"><pre><span class="line">1</span><br><span class="line">2</span><br><span class="line">3</span><br><span class="line">4</span><br><span class="line">5</span><br><span class="line">6</span><br></pre></td><td class="code"><pre><span class="line">methods: &#123;</span><br><span class="line">  showmsg () &#123;</span><br><span class="line">      <span class="built_in">console</span>.log(<span class="keyword">this</span>.$refs.c1.msg)</span><br><span class="line">    <span class="built_in">console</span>.log(<span class="keyword">this</span>.$refs.c2.msg)</span><br><span class="line">  &#125;</span><br><span class="line">&#125;</span><br></pre></td></tr></table></figure>
+<blockquote>
+<p>在调用子组件方法时，可以通过传参的方式把数据传到子组件</p>
+</blockquote>
+<figure class="highlight javascript"><table><tr><td class="gutter"><pre><span class="line">1</span><br><span class="line">2</span><br><span class="line">3</span><br><span class="line">4</span><br><span class="line">5</span><br><span class="line">6</span><br></pre></td><td class="code"><pre><span class="line"><span class="comment">//父组件</span></span><br><span class="line"><span class="keyword">this</span>.$refs.child.show(<span class="string">'hi'</span>)</span><br><span class="line"><span class="comment">//子组件</span></span><br><span class="line">show(msg)&#123;</span><br><span class="line">	<span class="keyword">this</span>.msg = msg  <span class="comment">//hi</span></span><br><span class="line">&#125;</span><br></pre></td></tr></table></figure>
+<h3 id="Promise方式"><a href="#Promise方式" class="headerlink" title="Promise方式"></a>Promise方式</h3><p>子组件中定义父组件需要调用的方法，并返回一个promise对象<br><figure class="highlight javascript"><table><tr><td class="gutter"><pre><span class="line">1</span><br><span class="line">2</span><br><span class="line">3</span><br><span class="line">4</span><br><span class="line">5</span><br><span class="line">6</span><br><span class="line">7</span><br><span class="line">8</span><br><span class="line">9</span><br><span class="line">10</span><br><span class="line">11</span><br><span class="line">12</span><br><span class="line">13</span><br><span class="line">14</span><br><span class="line">15</span><br><span class="line">16</span><br><span class="line">17</span><br><span class="line">18</span><br><span class="line">19</span><br><span class="line">20</span><br></pre></td><td class="code"><pre><span class="line">data () &#123;</span><br><span class="line">  <span class="keyword">return</span> &#123;</span><br><span class="line">    msg : <span class="string">'hello'</span>,</span><br><span class="line">    promise : &#123;</span><br><span class="line">      resolve: <span class="literal">null</span>,</span><br><span class="line">      reject : <span class="literal">null</span></span><br><span class="line">    &#125;</span><br><span class="line">  &#125;</span><br><span class="line">&#125;</span><br><span class="line">methods: &#123;</span><br><span class="line">  show() &#123;</span><br><span class="line">    <span class="keyword">return</span> <span class="keyword">new</span> <span class="built_in">Promise</span>(<span class="function">(<span class="params">resolve, reject</span>) =&gt;</span> &#123;</span><br><span class="line">      <span class="keyword">this</span>.promise.resolve = resolve;</span><br><span class="line">      <span class="keyword">this</span>.promise.reject = reject;</span><br><span class="line">    &#125;);</span><br><span class="line">  &#125;,</span><br><span class="line">  send () &#123;</span><br><span class="line">    <span class="keyword">this</span>.promise.resolve(<span class="keyword">this</span>.msg);</span><br><span class="line">  &#125;</span><br><span class="line">&#125;</span><br></pre></td></tr></table></figure></p>
+<p>调用send方法时，执行promise的resolve方法，向父组件返回msg，父组件调用show方法拿到返回值<br><figure class="highlight html"><table><tr><td class="gutter"><pre><span class="line">1</span><br></pre></td><td class="code"><pre><span class="line"><span class="tag">&lt;<span class="name">child</span> <span class="attr">ref</span>=<span class="string">"child"</span>&gt;</span><span class="tag">&lt;/<span class="name">child</span>&gt;</span></span><br></pre></td></tr></table></figure></p>
+<figure class="highlight javascript"><table><tr><td class="gutter"><pre><span class="line">1</span><br><span class="line">2</span><br><span class="line">3</span><br><span class="line">4</span><br></pre></td><td class="code"><pre><span class="line"><span class="comment">//调用的方法中</span></span><br><span class="line"><span class="keyword">this</span>.$refs.child.show().then(<span class="function"><span class="params">result</span> =&gt;</span> &#123;</span><br><span class="line">  <span class="built_in">console</span>.log(result)  <span class="comment">//hello</span></span><br><span class="line">&#125;);</span><br></pre></td></tr></table></figure>
+<p>result就是子组件返回的数据，即msg</p>
+<h3 id="Vuex"><a href="#Vuex" class="headerlink" title="Vuex"></a>Vuex</h3><p>将数据存放在store中，另一组件获取state中的数据，或者watch state中数据的变化，来进行相应的操作<br><a href="/2017/11/28/vuex/">‘Vuex简单入门’</a></p>
+<h3 id="子组件访问父组件"><a href="#子组件访问父组件" class="headerlink" title="子组件访问父组件"></a>子组件访问父组件</h3><p>在子组件中使用<code>$parent</code>可以获取到父组件的对象，使用方法同<code>$children</code></p>
+<h3 id="访问根组件"><a href="#访问根组件" class="headerlink" title="访问根组件"></a>访问根组件</h3><p>使用<code>$root</code>可以获取当前组件树的根Vue实例。如果当前实例没有父实例，此实例将会是其自已</p>
+
+      
+    </div>
+    
+  </div>
+  
+    
+    <div class="copyright">
+        <p><span>本文标题:</span><a href="/2017/10/09/vue组件通信/">Vue学习笔记:组件之间的通信方式</a></p>
+        <p><span>文章作者:</span><a href="/" title="回到主页">Li Yu</a></p>
+        <p><span>发布时间:</span>2017-10-09, 14:23:21</p>
+        <p><span>最后更新:</span>2019-08-04, 19:02:00</p>
+        <p>
+            <span>原始链接:</span><a class="post-url" href="/2017/10/09/vue组件通信/" title="Vue学习笔记:组件之间的通信方式">https://liyu.fun/2017/10/09/vue组件通信/</a>
+            <span class="copy-path" data-clipboard-text="原文: https://liyu.fun/2017/10/09/vue组件通信/　　作者: Li Yu" title="点击复制文章链接"><i class="fa fa-clipboard"></i></span>
+            <script> var clipboard = new Clipboard('.copy-path'); </script>
+        </p>
+        <p>
+            <span>许可协议:</span><i class="fa fa-creative-commons"></i> <a rel="license" href="http://creativecommons.org/licenses/by-nc-sa/4.0/" title="CC BY-NC-SA 4.0 International" target = "_blank">"署名-非商用-相同方式共享 4.0"</a> 转载请保留原文链接及作者。
+        </p>
+    </div>
+
+
+
+    <nav id="article-nav">
+        
+            <div id="article-nav-newer" class="article-nav-title">
+                <a href="/2017/10/10/php基础语法/">
+                    PHP学习笔记:基础语法
+                </a>
+            </div>
+        
+        
+            <div id="article-nav-older" class="article-nav-title">
+                <a href="/2017/09/30/记录/">
+                    记录贴:那些年踩过的坑
+                </a>
+            </div>
+        
+    </nav>
+
+  
+</article>
+
+    <div id="toc" class="toc-article">
+        <strong class="toc-title">文章目录</strong>
+        
+            <ol class="toc"><li class="toc-item toc-level-3"><a class="toc-link" href="#v-bind和props"><span class="toc-number">1.</span> <span class="toc-text">v-bind和props</span></a></li><li class="toc-item toc-level-3"><a class="toc-link" href="#自定义事件和-emit"><span class="toc-number">2.</span> <span class="toc-text">自定义事件和$emit</span></a></li><li class="toc-item toc-level-3"><a class="toc-link" href="#v-model"><span class="toc-number">3.</span> <span class="toc-text">v-model</span></a></li><li class="toc-item toc-level-3"><a class="toc-link" href="#路由传参"><span class="toc-number">4.</span> <span class="toc-text">路由传参</span></a></li><li class="toc-item toc-level-3"><a class="toc-link" href="#通过slot通信"><span class="toc-number">5.</span> <span class="toc-text">通过slot通信</span></a></li><li class="toc-item toc-level-3"><a class="toc-link" href="#设置中间件"><span class="toc-number">6.</span> <span class="toc-text">设置中间件</span></a></li><li class="toc-item toc-level-3"><a class="toc-link" href="#父组件访问子组件"><span class="toc-number">7.</span> <span class="toc-text">父组件访问子组件</span></a></li><li class="toc-item toc-level-3"><a class="toc-link" href="#Promise方式"><span class="toc-number">8.</span> <span class="toc-text">Promise方式</span></a></li><li class="toc-item toc-level-3"><a class="toc-link" href="#Vuex"><span class="toc-number">9.</span> <span class="toc-text">Vuex</span></a></li><li class="toc-item toc-level-3"><a class="toc-link" href="#子组件访问父组件"><span class="toc-number">10.</span> <span class="toc-text">子组件访问父组件</span></a></li><li class="toc-item toc-level-3"><a class="toc-link" href="#访问根组件"><span class="toc-number">11.</span> <span class="toc-text">访问根组件</span></a></li></ol>
+        
+    </div>
+    <style>
+        .left-col .switch-btn,
+        .left-col .switch-area {
+            display: none;
+        }
+        .toc-level-3 i,
+        .toc-level-3 ol {
+            display: none !important;
+        }
+    </style>
+
+    <input type="button" id="tocButton" value="隐藏目录"  title="点击按钮隐藏或者显示文章目录">
+
+    <script>
+        yiliaConfig.toc = ["隐藏目录", "显示目录", !!"false"];
+    </script>
+
+
+
+    
+<div class="share">
+    
+
+    
+        <div class="addthis_sharing_toolbox"></div>
+    
+</div>
+
+
+
+
+
+
+
+    
+    <div id="cyEmoji" role="cylabs" data-use="emoji"></div>
+	  <!--PC和WAP自适应版-->
+<div id="SOHUCS" ></div> 
+<script type="text/javascript"> 
+(function(){ 
+var appid = 'cyt8R9vtY'; 
+var conf = 'prod_be8ce27d78baffc4c5afad75a6faf6e2'; 
+var width = window.innerWidth || document.documentElement.clientWidth; 
+if (width < 960) { 
+window.document.write('<script id="changyan_mobile_js" charset="utf-8" type="text/javascript" src="//changyan.sohu.com/upload/mobile/wap-js/changyan_mobile.js?client_id=' + appid + '&conf=' + conf + '"><\/script>'); } else { var loadJs=function(d,a){var c=document.getElementsByTagName("head")[0]||document.head||document.documentElement;var b=document.createElement("script");b.setAttribute("type","text/javascript");b.setAttribute("charset","UTF-8");b.setAttribute("src",d);if(typeof a==="function"){if(window.attachEvent){b.onreadystatechange=function(){var e=b.readyState;if(e==="loaded"||e==="complete"){b.onreadystatechange=null;a()}}}else{b.onload=a}}c.appendChild(b)};loadJs("//changyan.sohu.com/upload/changyan.js",function(){window.changyan.api.config({appid:appid,conf:conf})}); } })(); </script>
+    <script type="text/javascript" charset="utf-8" src="https://changyan.sohu.com/js/changyan.labs.https.js?appid=cyt8R9vtY"></script>
+    
+
+
+
+
+    <div class="scroll" id="post-nav-button">
+        
+            <a href="/2017/10/10/php基础语法/" title="上一篇: PHP学习笔记:基础语法">
+                <i class="fa fa-angle-left"></i>
+            </a>
+        
+
+        <a title="文章列表"><i class="fa fa-bars"></i><i class="fa fa-times"></i></a>
+
+        
+            <a href="/2017/09/30/记录/" title="下一篇: 记录贴:那些年踩过的坑">
+                <i class="fa fa-angle-right"></i>
+            </a>
+        
+    </div>
+
+    <ul class="post-list"><li class="post-list-item"><a class="post-list-link" href="/2023/02/03/review-2022/">回顾一下我的2022</a></li><li class="post-list-item"><a class="post-list-link" href="/2022/05/26/emqx-wss/">EMQX搭建对接WSS</a></li><li class="post-list-item"><a class="post-list-link" href="/2022/04/20/review-2021/">回顾一下我的2021</a></li><li class="post-list-item"><a class="post-list-link" href="/2021/01/02/review-2020/">回顾一下我的2020</a></li><li class="post-list-item"><a class="post-list-link" href="/2020/11/05/thingsboard/">IOT开源项目Thingsboard开发环境搭建</a></li><li class="post-list-item"><a class="post-list-link" href="/2020/08/18/cordova/">Cordova混合开发APP踩坑记录</a></li><li class="post-list-item"><a class="post-list-link" href="/2020/07/02/sonarqube/">SonarQube简介与Mac快速搭建</a></li><li class="post-list-item"><a class="post-list-link" href="/2020/03/29/otter/">Otter数据同步简介</a></li><li class="post-list-item"><a class="post-list-link" href="/2020/03/28/rds/">阿里云RDS快速上手</a></li><li class="post-list-item"><a class="post-list-link" href="/2020/01/22/explain/">Mysql优化：Explain分析介绍</a></li><li class="post-list-item"><a class="post-list-link" href="/2020/01/15/drag-map/">插件:DragMap</a></li><li class="post-list-item"><a class="post-list-link" href="/2020/01/04/superset/">从无到有搭建Superset(Mac)</a></li><li class="post-list-item"><a class="post-list-link" href="/2020/01/01/review-2019/">回顾一下我的2019</a></li><li class="post-list-item"><a class="post-list-link" href="/2019/08/07/mamp/">MAMP配置PHP环境的一些问题</a></li><li class="post-list-item"><a class="post-list-link" href="/2019/05/16/redis/">Redis常用命令及数据结构介绍</a></li><li class="post-list-item"><a class="post-list-link" href="/2019/05/15/crontab/">Crontab定时任务</a></li><li class="post-list-item"><a class="post-list-link" href="/2019/05/14/shutdown/">PHP执行命令关闭Linux服务器</a></li><li class="post-list-item"><a class="post-list-link" href="/2019/05/09/predis/">使用Predis操作Redis</a></li><li class="post-list-item"><a class="post-list-link" href="/2019/04/25/npm-proxy/">Npm代理和镜像源设置</a></li><li class="post-list-item"><a class="post-list-link" href="/2019/04/24/electron-update-helper/">Npm包：electron-update-helper</a></li><li class="post-list-item"><a class="post-list-link" href="/2019/03/14/lazyload-widget/">Vue插件:Vue-lazyload-widget</a></li><li class="post-list-item"><a class="post-list-link" href="/2019/01/22/review-2018/">回顾一下我的2018</a></li><li class="post-list-item"><a class="post-list-link" href="/2019/01/10/wechat-refund/">微信&支付宝退款</a></li><li class="post-list-item"><a class="post-list-link" href="/2018/12/13/electron-single/">Electron阻止应用多开</a></li><li class="post-list-item"><a class="post-list-link" href="/2018/11/08/date-sql/">查询日期范围内固定时段的数据</a></li><li class="post-list-item"><a class="post-list-link" href="/2018/10/23/mobile-media/">关于移动端网页尺寸问题</a></li><li class="post-list-item"><a class="post-list-link" href="/2018/10/07/vue-loading/">Vue插件:Vue-nice-loading</a></li><li class="post-list-item"><a class="post-list-link" href="/2018/09/08/vue-note/">Vue源码分析</a></li><li class="post-list-item"><a class="post-list-link" href="/2018/08/23/wechat-login/">微信授权注册&登录</a></li><li class="post-list-item"><a class="post-list-link" href="/2018/08/02/test/">最近做的测试题</a></li><li class="post-list-item"><a class="post-list-link" href="/2018/07/20/伪静态/">伪静态地址获取用户头像</a></li><li class="post-list-item"><a class="post-list-link" href="/2018/06/15/wechat/">微信H5支付&公众号支付大型攻略</a></li><li class="post-list-item"><a class="post-list-link" href="/2018/06/01/jsKnack/">Javascript的一些实用技巧(持续更新)</a></li><li class="post-list-item"><a class="post-list-link" href="/2018/05/28/autohotkey/">AutoHotkey禁用热键以及Electron中的使用</a></li><li class="post-list-item"><a class="post-list-link" href="/2018/03/13/electron/">Electron-Vue项目记录</a></li><li class="post-list-item"><a class="post-list-link" href="/2018/03/01/webapi/">使用webAPI预览上传图片和调用摄像头</a></li><li class="post-list-item"><a class="post-list-link" href="/2018/02/08/laravel-vue/">Laravel+Vue开发环境搭建</a></li><li class="post-list-item"><a class="post-list-link" href="/2018/01/22/pjax/">JQuery pjax技术简介与示例</a></li><li class="post-list-item"><a class="post-list-link" href="/2018/01/18/前端构建工具/">(转)前端构建工具的比较</a></li><li class="post-list-item"><a class="post-list-link" href="/2018/01/16/echart/">Vue项目中对EChart的应用</a></li><li class="post-list-item"><a class="post-list-link" href="/2017/12/13/vue文本隐藏组件/">Vue实例:文本隐藏提示组件</a></li><li class="post-list-item"><a class="post-list-link" href="/2017/11/28/vuex/">Vuex简单入门</a></li><li class="post-list-item"><a class="post-list-link" href="/2017/10/13/php面向对象/">PHP学习笔记:面向对象</a></li><li class="post-list-item"><a class="post-list-link" href="/2017/10/12/vue汇总/">Vue学习笔记:汇总</a></li><li class="post-list-item"><a class="post-list-link" href="/2017/10/10/php基础语法/">PHP学习笔记:基础语法</a></li><li class="post-list-item"><a class="post-list-link" href="/2017/10/09/vue组件通信/">Vue学习笔记:组件之间的通信方式</a></li><li class="post-list-item"><a class="post-list-link" href="/2017/09/30/记录/">记录贴:那些年踩过的坑</a></li><li class="post-list-item"><a class="post-list-link" href="/2017/09/21/Crypto-JS加密/">Crypto-JS加密</a></li><li class="post-list-item"><a class="post-list-link" href="/2017/09/18/datatables分页/">Datatables分页</a></li><li class="post-list-item"><a class="post-list-link" href="/2017/08/14/requirejs/">Require.js的使用</a></li><li class="post-list-item"><a class="post-list-link" href="/2017/08/09/hexo自定义样式/">Hexo引用自定义js与css</a></li><li class="post-list-item"><a class="post-list-link" href="/2017/08/03/js实现贪吃蛇/">JS实现贪吃蛇</a></li><li class="post-list-item"><a class="post-list-link" href="/2017/08/03/Hexo使用技巧/">Hexo使用技巧(持续更新ing)</a></li><li class="post-list-item"><a class="post-list-link" href="/2017/08/03/Hexo博客畅言评论/">Hexo博客畅言评论支持</a></li><li class="post-list-item"><a class="post-list-link" href="/2017/08/01/js尺寸/">JS常用尺寸和坐标</a></li><li class="post-list-item"><a class="post-list-link" href="/2017/08/01/npm命令/">npm常用命令</a></li><li class="post-list-item"><a class="post-list-link" href="/2017/07/28/angular通信/">Angular学习笔记:通信方式</a></li><li class="post-list-item"><a class="post-list-link" href="/2017/07/25/angular$watch/">Angular学习笔记:$watch</a></li><li class="post-list-item"><a class="post-list-link" href="/2017/07/19/angular表单验证/">Angular学习笔记:表单验证</a></li></ul>
+
+
+
+
+    <script>
+        
+    </script>
+</div>
+      <footer id="footer">
+    <div class="outer">
+        <div id="footer-info">
+            <div class="footer-left">
+                <i class="fa fa-copyright"></i> 
+                2016-2023 Li Yu
+            </div>
+            <div class="footer-right">
+                <a href="http://hexo.io/" target="_blank" title="快速、简洁且高效的博客框架">Hexo</a>  Theme <a href="https://github.com/MOxFIVE/hexo-theme-yelee" target="_blank" title="简而不减 Hexo 双栏博客主题  v3.5">Yelee</a> by MOxFIVE <i class="fa fa-heart animated infinite pulse"></i>
+            </div>
+        </div>
+        
+            <div class="visit">
+                
+                    <span id="busuanzi_container_site_pv" style='display:none'>
+                        <span id="site-visit" title="本站到访数"><i class="fa fa-user" aria-hidden="true"></i><span id="busuanzi_value_site_uv"></span>
+                        </span>
+                    </span>
+                
+                
+                    <span>| </span>
+                
+                
+                    <span id="busuanzi_container_page_pv" style='display:none'>
+                        <span id="page-visit"  title="本页阅读量"><i class="fa fa-eye animated infinite pulse" aria-hidden="true"></i><span id="busuanzi_value_page_pv"></span>
+                        </span>
+                    </span>
+                
+            </div>
+        
+    </div>
+</footer>
+    </div>
+    
+<script data-main="/js/main.js" src="//cdn.bootcss.com/require.js/2.2.0/require.min.js"></script>
+
+    <script>
+        $(document).ready(function() {
+            var iPad = window.navigator.userAgent.indexOf('iPad');
+            if (iPad > -1 || $(".left-col").css("display") === "none") {
+                var bgColorList = ["#9db3f4", "#414141", "#e5a859", "#f5dfc6", "#c084a0", "#847e72", "#cd8390", "#996731"];
+                var bgColor = Math.ceil(Math.random() * (bgColorList.length - 1));
+                $("body").css({"background-color": bgColorList[bgColor], "background-size": "cover"});
+            }
+            else {
+                var backgroundnum = 5;
+                var backgroundimg = "url(/background/bg-x.jpg)".replace(/x/gi, Math.ceil(Math.random() * backgroundnum));
+                $("body").css({"background": backgroundimg, "background-attachment": "fixed", "background-size": "cover"});
+            }
+        })
+    </script>
+
+
+
+
+
+<div class="scroll" id="scroll">
+    <a href="#" title="返回顶部"><i class="fa fa-arrow-up"></i></a>
+    <a href="#comments" onclick="load$hide();" title="查看评论"><i class="fa fa-comments-o"></i></a>
+    <a href="#footer" title="转到底部"><i class="fa fa-arrow-down"></i></a>
+</div>
+<script>
+    // Open in New Window
+    
+        var oOpenInNew = {
+            
+            
+             post: ".article-entry a[href], .copyright a[href]", 
+             tags: ".article-tag a", 
+             categories: ".article-category a, a.tag-list-link", 
+            
+             archives: ".archive-article-title", 
+             miniArchives: "a.post-list-link", 
+            
+             friends: "#js-friends a", 
+             socail: ".social a" 
+        }
+        for (var x in oOpenInNew) {
+            $(oOpenInNew[x]).attr("target", "_blank");
+        }
+    
+</script>
+
+<script async src="https://busuanzi.ibruce.info/busuanzi/2.3/busuanzi.pure.mini.js">
+</script>
+  </div>
+</body>
+</html>
+<script type="text/javascript">
+    var host = "liyu.fun";
+    if ((host == window.location.host) && (window.location.protocol != "https:"))
+        window.location.protocol = "https";
+</script>
+<script src='/js/myjs.js'></script>
+<script src='/js/heart.js'></script>    

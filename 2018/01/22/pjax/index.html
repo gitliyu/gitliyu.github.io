@@ -1,0 +1,584 @@
+<!DOCTYPE html>
+<html lang="zh-Hans">
+<head>
+
+    <!--[if lt IE 9]>
+        <style>body {display: none; background: none !important} </style>
+        <meta http-equiv="Refresh" Content="0; url=//outdatedbrowser.com/" />
+    <![endif]-->
+
+<meta charset="utf-8">
+<meta http-equiv="X-UA-Compatible" content="IE=edge, chrome=1" />
+<meta name="viewport" content="width=device-width, initial-scale=1, maximum-scale=1, user-scalable=no">
+<meta name="format-detection" content="telephone=no" />
+<meta name="author" content="Li Yu" />
+
+
+
+<meta name="description" content="pjax是jquery的一个插件，它使用ajax和pushState两个技术改善用户的网页浏览体验。简单来说，它的作用就是可以在实现局部刷新的同时，记录浏览历史，能使用浏览器前进后退功能，浏览器的url也会跟随内容变化。">
+<meta name="keywords" content="jquery,pjax,pushState">
+<meta property="og:type" content="article">
+<meta property="og:title" content="JQuery pjax技术简介与示例">
+<meta property="og:url" content="https://liyu.fun/2018/01/22/pjax/index.html">
+<meta property="og:site_name" content="Mr.Li">
+<meta property="og:description" content="pjax是jquery的一个插件，它使用ajax和pushState两个技术改善用户的网页浏览体验。简单来说，它的作用就是可以在实现局部刷新的同时，记录浏览历史，能使用浏览器前进后退功能，浏览器的url也会跟随内容变化。">
+<meta property="og:locale" content="zh-Hans">
+<meta property="og:image" content="https://liyu.fun/img/pjax-click.png">
+<meta property="og:image" content="https://liyu.fun/img/pjax-browser.png">
+<meta property="og:image" content="https://liyu.fun/img/pjax-event.png">
+<meta property="og:image" content="https://liyu.fun/img/pjax-option.png">
+<meta property="og:updated_time" content="2019-08-04T11:02:00.803Z">
+<meta name="twitter:card" content="summary">
+<meta name="twitter:title" content="JQuery pjax技术简介与示例">
+<meta name="twitter:description" content="pjax是jquery的一个插件，它使用ajax和pushState两个技术改善用户的网页浏览体验。简单来说，它的作用就是可以在实现局部刷新的同时，记录浏览历史，能使用浏览器前进后退功能，浏览器的url也会跟随内容变化。">
+<meta name="twitter:image" content="https://liyu.fun/img/pjax-click.png">
+
+<link rel="apple-touch-icon" href= "/apple-touch-icon.png">
+
+
+    <link rel="alternate" href="/atom.xml" title="Mr.Li" type="application/atom+xml">
+
+
+
+    <link rel="shortcut icon" href="/img/niconico.png">
+
+
+
+    <link href="//cdn.bootcss.com/animate.css/3.5.1/animate.min.css" rel="stylesheet">
+
+
+
+    <link href="//cdn.bootcss.com/fancybox/2.1.5/jquery.fancybox.min.css" rel="stylesheet">
+
+
+
+    <script src="//cdn.bootcss.com/pace/1.0.2/pace.min.js"></script>
+    <link href="//cdn.bootcss.com/pace/1.0.2/themes/blue/pace-theme-minimal.css" rel="stylesheet">
+
+
+<link rel="stylesheet" href="/css/style.css">
+
+
+
+<link href="//cdn.bootcss.com/font-awesome/4.6.3/css/font-awesome.min.css" rel="stylesheet">
+
+
+<title>JQuery pjax技术简介与示例 | Mr.Li</title>
+
+<script src="//cdn.bootcss.com/jquery/2.2.4/jquery.min.js"></script>
+<script src="//cdn.bootcss.com/clipboard.js/1.5.10/clipboard.min.js"></script>
+
+<script>
+    var yiliaConfig = {
+        fancybox: true,
+        animate: true,
+        isHome: false,
+        isPost: true,
+        isArchive: false,
+        isTag: false,
+        isCategory: false,
+        fancybox_js: "//cdn.bootcss.com/fancybox/2.1.5/jquery.fancybox.min.js",
+        scrollreveal: "//cdn.bootcss.com/scrollReveal.js/3.1.4/scrollreveal.min.js",
+        search: true
+    }
+</script>
+
+
+    <script>
+        yiliaConfig.jquery_ui = [true, "//cdn.bootcss.com/jqueryui/1.10.4/jquery-ui.min.js", "//cdn.bootcss.com/jqueryui/1.10.4/css/jquery-ui.min.css"];
+    </script>
+
+
+
+    <script> yiliaConfig.rootUrl = "\/";</script>
+
+
+
+    <script src="//s7.addthis.com/js/300/addthis_widget.js#pubid=ra-56ff76c972fc0cf9"></script>
+
+
+
+    <script>
+        var _hmt = _hmt || [];
+        (function() {
+            var hm = document.createElement("script");
+            hm.src = "//hm.baidu.com/hm.js?b8be283af49aba7fa167f7b7a45f63db";
+            var s = document.getElementsByTagName("script")[0]; 
+            s.parentNode.insertBefore(hm, s);
+        })();
+    </script>
+
+
+</head>
+<body>
+  <div id="container">
+    <div class="left-col">
+    <div class="overlay"></div>
+<div class="intrude-less">
+    <header id="header" class="inner">
+        <a href="/" class="profilepic">
+            <img src="/img/avatar.png" class="animated zoomIn">
+        </a>
+        <hgroup>
+          <h1 class="header-author"><a href="/">Li Yu</a></h1>
+        </hgroup>
+
+        
+        <p class="header-subtitle">一三五写bug，二四六改bug</p>
+        
+
+        
+            <form id="search-form">
+            <input type="text" id="local-search-input" name="q" placeholder="search..." class="search form-control" autocomplete="off" autocorrect="off" searchonload="true" />
+            <i class="fa fa-times" onclick="resetSearch()"></i>
+            </form>
+            <div id="local-search-result"></div>
+            <p class='no-result'>No results found <i class='fa fa-spinner fa-pulse'></i></p>
+        
+
+
+        
+            <div id="switch-btn" class="switch-btn">
+                <div class="icon">
+                    <div class="icon-ctn">
+                        <div class="icon-wrap icon-house" data-idx="0">
+                            <div class="birdhouse"></div>
+                            <div class="birdhouse_holes"></div>
+                        </div>
+                        <div class="icon-wrap icon-ribbon hide" data-idx="1">
+                            <div class="ribbon"></div>
+                        </div>
+                        
+                        <div class="icon-wrap icon-link hide" data-idx="2">
+                            <div class="loopback_l"></div>
+                            <div class="loopback_r"></div>
+                        </div>
+                        
+                        
+                        <div class="icon-wrap icon-me hide" data-idx="3">
+                            <div class="user"></div>
+                            <div class="shoulder"></div>
+                        </div>
+                        
+                    </div>
+                    
+                </div>
+                <div class="tips-box hide">
+                    <div class="tips-arrow"></div>
+                    <ul class="tips-inner">
+                        <li>菜单</li>
+                        <li>标签</li>
+                        
+                        <li>友情链接</li>
+                        
+                        
+                        <li>关于我</li>
+                        
+                    </ul>
+                </div>
+            </div>
+        
+
+        <div id="switch-area" class="switch-area">
+            <div class="switch-wrap">
+                <section class="switch-part switch-part1">
+                    <nav class="header-menu">
+                        <ul>
+                        
+                            <li><a href="/">主页</a></li>
+                        
+                            <li><a href="/archives/">所有文章</a></li>
+                        
+                            <li><a href="/diary">随笔</a></li>
+                        
+                            <li><a href="/tags/">标签云</a></li>
+                        
+                        </ul>
+                    </nav>
+                    <nav class="header-nav">
+                        <ul class="social">
+                            
+                                <a class="fa Email" href="mailto:1042625709@qq.com" title="Email"></a>
+                            
+                                <a class="fa GitHub" href="https://github.com/gitliyu" title="GitHub"></a>
+                            
+                                <a class="fa QQ" href="http://wpa.qq.com/msgrd?v=3&uin=1042625709&site=qq&menu=yes" title="QQ"></a>
+                            
+                        </ul>
+                    </nav>
+                </section>
+                
+                
+                <section class="switch-part switch-part2">
+                    <div class="widget tagcloud" id="js-tagcloud">
+                        <ul class="tag-list"><li class="tag-list-item"><a class="tag-list-link" href="/tags/AutoHotkey/">AutoHotkey</a></li><li class="tag-list-item"><a class="tag-list-link" href="/tags/EMQX/">EMQX</a></li><li class="tag-list-item"><a class="tag-list-link" href="/tags/SQL/">SQL</a></li><li class="tag-list-item"><a class="tag-list-link" href="/tags/angular/">angular</a></li><li class="tag-list-item"><a class="tag-list-link" href="/tags/canvas/">canvas</a></li><li class="tag-list-item"><a class="tag-list-link" href="/tags/cordova/">cordova</a></li><li class="tag-list-item"><a class="tag-list-link" href="/tags/crypto/">crypto</a></li><li class="tag-list-item"><a class="tag-list-link" href="/tags/css/">css</a></li><li class="tag-list-item"><a class="tag-list-link" href="/tags/dataTables/">dataTables</a></li><li class="tag-list-item"><a class="tag-list-link" href="/tags/echart/">echart</a></li><li class="tag-list-item"><a class="tag-list-link" href="/tags/electron/">electron</a></li><li class="tag-list-item"><a class="tag-list-link" href="/tags/es6/">es6</a></li><li class="tag-list-item"><a class="tag-list-link" href="/tags/hexo/">hexo</a></li><li class="tag-list-item"><a class="tag-list-link" href="/tags/html/">html</a></li><li class="tag-list-item"><a class="tag-list-link" href="/tags/iot/">iot</a></li><li class="tag-list-item"><a class="tag-list-link" href="/tags/jQuery/">jQuery</a></li><li class="tag-list-item"><a class="tag-list-link" href="/tags/java/">java</a></li><li class="tag-list-item"><a class="tag-list-link" href="/tags/javascript/">javascript</a></li><li class="tag-list-item"><a class="tag-list-link" href="/tags/jquery/">jquery</a></li><li class="tag-list-item"><a class="tag-list-link" href="/tags/js/">js</a></li><li class="tag-list-item"><a class="tag-list-link" href="/tags/laravel/">laravel</a></li><li class="tag-list-item"><a class="tag-list-link" href="/tags/linux/">linux</a></li><li class="tag-list-item"><a class="tag-list-link" href="/tags/mqtt/">mqtt</a></li><li class="tag-list-item"><a class="tag-list-link" href="/tags/mysql/">mysql</a></li><li class="tag-list-item"><a class="tag-list-link" href="/tags/nginx/">nginx</a></li><li class="tag-list-item"><a class="tag-list-link" href="/tags/node/">node</a></li><li class="tag-list-item"><a class="tag-list-link" href="/tags/npm/">npm</a></li><li class="tag-list-item"><a class="tag-list-link" href="/tags/otter/">otter</a></li><li class="tag-list-item"><a class="tag-list-link" href="/tags/php/">php</a></li><li class="tag-list-item"><a class="tag-list-link" href="/tags/pjax/">pjax</a></li><li class="tag-list-item"><a class="tag-list-link" href="/tags/pushState/">pushState</a></li><li class="tag-list-item"><a class="tag-list-link" href="/tags/rds/">rds</a></li><li class="tag-list-item"><a class="tag-list-link" href="/tags/redis/">redis</a></li><li class="tag-list-item"><a class="tag-list-link" href="/tags/require/">require</a></li><li class="tag-list-item"><a class="tag-list-link" href="/tags/sonarqube/">sonarqube</a></li><li class="tag-list-item"><a class="tag-list-link" href="/tags/superset/">superset</a></li><li class="tag-list-item"><a class="tag-list-link" href="/tags/thingsboard/">thingsboard</a></li><li class="tag-list-item"><a class="tag-list-link" href="/tags/vue/">vue</a></li><li class="tag-list-item"><a class="tag-list-link" href="/tags/vuex/">vuex</a></li><li class="tag-list-item"><a class="tag-list-link" href="/tags/webAPI/">webAPI</a></li><li class="tag-list-item"><a class="tag-list-link" href="/tags/websocket/">websocket</a></li><li class="tag-list-item"><a class="tag-list-link" href="/tags/yelee/">yelee</a></li><li class="tag-list-item"><a class="tag-list-link" href="/tags/微信/">微信</a></li><li class="tag-list-item"><a class="tag-list-link" href="/tags/支付宝/">支付宝</a></li><li class="tag-list-item"><a class="tag-list-link" href="/tags/游戏/">游戏</a></li></ul>
+                    </div>
+                </section>
+                
+                
+                
+                <section class="switch-part switch-part3">
+                    <div id="js-friends">
+                    
+                      <a class="main-nav-link switch-friends-link" href="https://hexo.io">Hexo</a>
+                    
+                      <a class="main-nav-link switch-friends-link" href="https://pages.github.com/">GitHub</a>
+                    
+                      <a class="main-nav-link switch-friends-link" href="http://mafei.fun/">flyforfun</a>
+                    
+                    </div>
+                </section>
+                
+
+                
+                
+                <section class="switch-part switch-part4">
+                
+                    <div id="js-aboutme">欢迎来到我的个人博客，期待你的建议与交流，可以点击菜单栏下方按钮发送邮件或者QQ给我</div>
+                </section>
+                
+            </div>
+        </div>
+    </header>                
+</div>
+    </div>
+    <div class="mid-col">
+      <nav id="mobile-nav">
+      <div class="overlay">
+          <div class="slider-trigger"></div>
+          <h1 class="header-author js-mobile-header hide"><a href="/" title="回到主页">Li Yu</a></h1>
+      </div>
+    <div class="intrude-less">
+        <header id="header" class="inner">
+            <a href="/" class="profilepic">
+                <img src="/img/avatar.png" class="animated zoomIn">
+            </a>
+            <hgroup>
+              <h1 class="header-author"><a href="/" title="回到主页">Li Yu</a></h1>
+            </hgroup>
+            
+            <p class="header-subtitle">一三五写bug，二四六改bug</p>
+            
+            <nav class="header-menu">
+                <ul>
+                
+                    <li><a href="/">主页</a></li>
+                
+                    <li><a href="/archives/">所有文章</a></li>
+                
+                    <li><a href="/diary">随笔</a></li>
+                
+                    <li><a href="/tags/">标签云</a></li>
+                
+                <div class="clearfix"></div>
+                </ul>
+            </nav>
+            <nav class="header-nav">
+                        <ul class="social">
+                            
+                                <a class="fa Email" target="_blank" href="mailto:1042625709@qq.com" title="Email"></a>
+                            
+                                <a class="fa GitHub" target="_blank" href="https://github.com/gitliyu" title="GitHub"></a>
+                            
+                                <a class="fa QQ" target="_blank" href="http://wpa.qq.com/msgrd?v=3&uin=1042625709&site=qq&menu=yes" title="QQ"></a>
+                            
+                        </ul>
+            </nav>
+        </header>                
+    </div>
+    <link class="menu-list" tags="标签" friends="友情链接" about="关于我"/>
+</nav>
+      <div class="body-wrap"><article id="post-pjax" class="article article-type-post" itemscope itemprop="blogPost">
+  
+    <div class="article-meta">
+      <a href="/2018/01/22/pjax/" class="article-date">
+      <time datetime="2018-01-22T08:15:45.000Z" itemprop="datePublished">2018-01-22</time>
+</a>
+
+
+    </div>
+  
+  <div class="article-inner">
+    
+      <input type="hidden" class="isFancy" />
+    
+    
+      <header class="article-header">
+        
+  
+    <h1 class="article-title" itemprop="name">
+      JQuery pjax技术简介与示例
+    </h1>
+  
+
+      </header>
+      
+      <div class="article-info article-info-post">
+        
+    <div class="article-category tagcloud">
+    <a class="article-category-link" href="/categories/插件工具/">插件工具</a>
+    </div>
+
+
+        
+    <div class="article-tag tagcloud">
+        <ul class="article-tag-list"><li class="article-tag-list-item"><a class="article-tag-list-link" href="/tags/jquery/">jquery</a></li><li class="article-tag-list-item"><a class="article-tag-list-link" href="/tags/pjax/">pjax</a></li><li class="article-tag-list-item"><a class="article-tag-list-link" href="/tags/pushState/">pushState</a></li></ul>
+    </div>
+
+        <div class="clearfix"></div>
+      </div>
+      
+    
+    <div class="article-entry" itemprop="articleBody">
+      
+          
+        <p>pjax是jquery的一个插件，它使用ajax和pushState两个技术改善用户的网页浏览体验。<br>简单来说，它的作用就是可以在实现局部刷新的同时，记录浏览历史，能使用浏览器前进后退功能，浏览器的url也会跟随内容变化。<br><a id="more"></a></p>
+<h4 id="实现原理"><a href="#实现原理" class="headerlink" title="实现原理"></a>实现原理</h4><p>用户点击链接时，pjax拦截了a标签的默认跳转动作，使用发送ajax请求，之后将服务器返回的HTML片段插入更新区域，页面填充完毕后，使用pushState更新当前的URL。</p>
+<h4 id="pushState"><a href="#pushState" class="headerlink" title="pushState"></a>pushState</h4><p>HTML5在History里增加了pushState方法，这个方法会将当前的url添加到历史记录中，然后修改当前url为新url。当然这个方法只会修改地址栏的Url显示，但并不会发出任何请求。</p>
+<p>pushState的使用方法：<br><figure class="highlight javascript"><table><tr><td class="gutter"><pre><span class="line">1</span><br></pre></td><td class="code"><pre><span class="line">history.pushState(state, title, url)</span><br></pre></td></tr></table></figure></p>
+<ul>
+<li>state: 可以放任意你想放的数据，它将附加到新url上，作为该页面信息的一个补充。</li>
+<li>title: 页面标题，目前浏览器支持不好。</li>
+<li>url: 新url，也就是你要显示在地址栏上的url。</li>
+</ul>
+<figure class="highlight javascript"><table><tr><td class="gutter"><pre><span class="line">1</span><br></pre></td><td class="code"><pre><span class="line">history.replaceState(state, title, url)</span><br></pre></td></tr></table></figure>
+<p>replaceState方法与pushState大同小异，区别只在于pushState会将当前url添加到历史记录，之后再修改url，而replaceState只是修改state和url，不添加历史记录。<br><figure class="highlight javascript"><table><tr><td class="gutter"><pre><span class="line">1</span><br></pre></td><td class="code"><pre><span class="line"><span class="built_in">window</span>.onpopstate</span><br></pre></td></tr></table></figure></p>
+<p>一般来说，每当url变动时&amp;用户点击浏览器历史前进后退按钮 ，popstate事件都会被触发。但若是调用pushState来修改url，该事件则不会触发，因此，我们可以把它用作浏览器的前进后退事件。</p>
+<h4 id="生命周期"><a href="#生命周期" class="headerlink" title="生命周期"></a>生命周期</h4><p>点击pjax链接<br><img src="/img/pjax-click.png" alt=""><br>触发浏览器前进后退<br><img src="/img/pjax-browser.png" alt=""><br>根据pjax的生命周期，可以在不同时间触发需要的时间，官方提供的可绑定的event函数如下：<br><img src="/img/pjax-event.png" alt=""><br>以添加loading为例，在pjax开始发送和完成之后执行，实现的代码如下：<br><figure class="highlight javascript"><table><tr><td class="gutter"><pre><span class="line">1</span><br><span class="line">2</span><br><span class="line">3</span><br><span class="line">4</span><br><span class="line">5</span><br><span class="line">6</span><br></pre></td><td class="code"><pre><span class="line">$(<span class="built_in">document</span>).on(<span class="string">'pjax:send'</span>, <span class="function"><span class="keyword">function</span>(<span class="params"></span>) </span>&#123;</span><br><span class="line">    $(<span class="string">'#loading'</span>).show()</span><br><span class="line">&#125;)</span><br><span class="line">$(<span class="built_in">document</span>).on(<span class="string">'pjax:complete'</span>, <span class="function"><span class="keyword">function</span>(<span class="params"></span>) </span>&#123;</span><br><span class="line">    $(<span class="string">'#loading'</span>).hide()</span><br><span class="line">&#125;)</span><br></pre></td></tr></table></figure></p>
+<h4 id="配置使用"><a href="#配置使用" class="headerlink" title="配置使用"></a>配置使用</h4><p>上文提到过，pjax通常使用链接或者按钮来触发，通过使用ajax请求得到html片段，首先来写一个demo来简单的应用pjax。<br>html<br><figure class="highlight php"><table><tr><td class="gutter"><pre><span class="line">1</span><br><span class="line">2</span><br><span class="line">3</span><br><span class="line">4</span><br><span class="line">5</span><br><span class="line">6</span><br><span class="line">7</span><br><span class="line">8</span><br></pre></td><td class="code"><pre><span class="line">&lt;div id=<span class="string">"container"</span>&gt;jQuery.pjax分页&lt;/div&gt; </span><br><span class="line">&lt;ul class="pagination"&gt; </span><br><span class="line">    &lt;li&gt;&lt;a href=<span class="string">"data.php?page=1"</span>&gt;<span class="number">1</span>&lt;/a&gt;&lt;/li&gt; </span><br><span class="line">    &lt;li&gt;&lt;a href=<span class="string">"data.php?page=2"</span>&gt;<span class="number">2</span>&lt;/a&gt;&lt;/li&gt; </span><br><span class="line">    &lt;li&gt;&lt;a href=<span class="string">"data.php?page=3"</span>&gt;<span class="number">3</span>&lt;/a&gt;&lt;/li&gt; </span><br><span class="line">    &lt;li&gt;&lt;a href=<span class="string">"data.php?page=4"</span>&gt;<span class="number">4</span>&lt;/a&gt;&lt;/li&gt; </span><br><span class="line">    &lt;li&gt;&lt;a href=<span class="string">"data.php?page=5"</span>&gt;<span class="number">5</span>&lt;/a&gt;&lt;/li&gt; </span><br><span class="line">&lt;/ul&gt;</span><br></pre></td></tr></table></figure></p>
+<p>js<br><figure class="highlight javascript"><table><tr><td class="gutter"><pre><span class="line">1</span><br></pre></td><td class="code"><pre><span class="line">$(<span class="built_in">document</span>).pjax(<span class="string">'a'</span>, <span class="string">'#container'</span>);</span><br></pre></td></tr></table></figure></p>
+<p>php<br><figure class="highlight php"><table><tr><td class="gutter"><pre><span class="line">1</span><br><span class="line">2</span><br><span class="line">3</span><br></pre></td><td class="code"><pre><span class="line"><span class="meta">&lt;?php</span> </span><br><span class="line">$page = $_GET[<span class="string">'page'</span>];</span><br><span class="line"><span class="keyword">echo</span> $page;</span><br></pre></td></tr></table></figure></p>
+<p>这样就可以实现，在点击a链接时，内容区显示对应的页数，并且url会修改为对应的href。</p>
+<blockquote>
+<p>因为使用了ajax，所以需要配置服务器打开</p>
+</blockquote>
+<p>上面的demo中使用了pjax的简单应用，接下来介绍一下详细的配置项与使用<br><figure class="highlight javascript"><table><tr><td class="gutter"><pre><span class="line">1</span><br></pre></td><td class="code"><pre><span class="line">$(<span class="built_in">document</span>).pjax(selector, [container], options)</span><br></pre></td></tr></table></figure></p>
+<ul>
+<li>selector 字符串，点击的对象选择器</li>
+<li>container 字符串，选择唯一标识pjax容器。</li>
+<li>options 下面所描述的一个对象。</li>
+</ul>
+<p><img src="/img/pjax-option.png" alt=""><br>举个栗子：<br><figure class="highlight javascript"><table><tr><td class="gutter"><pre><span class="line">1</span><br><span class="line">2</span><br><span class="line">3</span><br><span class="line">4</span><br><span class="line">5</span><br><span class="line">6</span><br><span class="line">7</span><br><span class="line">8</span><br></pre></td><td class="code"><pre><span class="line"><span class="keyword">var</span> pjaxoption = &#123;</span><br><span class="line">    timeout: <span class="number">10000</span>,</span><br><span class="line">    container: <span class="string">'.main_content'</span>, <span class="comment">/* 内容替换的容器 */</span></span><br><span class="line">    cache: <span class="literal">false</span>,  <span class="comment">/* 是否使用缓存 */</span></span><br><span class="line">    storage: <span class="literal">false</span>,  <span class="comment">/* 是否使用本地存储 */</span></span><br><span class="line">    titleSuffix: <span class="string">''</span> <span class="comment">/* 标题后缀 */</span></span><br><span class="line">&#125;;</span><br><span class="line">$(<span class="built_in">document</span>).pjax(<span class="string">'a'</span>, <span class="string">'#content'</span>, pjaxoption)</span><br></pre></td></tr></table></figure></p>
+<p>在配置项初始完成后还可以进行修改:<br><figure class="highlight javascript"><table><tr><td class="gutter"><pre><span class="line">1</span><br></pre></td><td class="code"><pre><span class="line">$.pjax.defaults.timeout = <span class="number">1200</span></span><br></pre></td></tr></table></figure></p>
+<p>除此之外，pjax还有一些extend的方法来触发。<br><figure class="highlight javascript"><table><tr><td class="gutter"><pre><span class="line">1</span><br><span class="line">2</span><br><span class="line">3</span><br><span class="line">4</span><br><span class="line">5</span><br><span class="line">6</span><br><span class="line">7</span><br><span class="line">8</span><br><span class="line">9</span><br><span class="line">10</span><br><span class="line">11</span><br><span class="line">12</span><br></pre></td><td class="code"><pre><span class="line"><span class="comment">//$.pjax.click</span></span><br><span class="line">$(<span class="built_in">document</span>).on(<span class="string">'click'</span>, <span class="string">'a[data-pjax]'</span>, <span class="function"><span class="keyword">function</span>(<span class="params">event</span>) </span>&#123;</span><br><span class="line">    <span class="keyword">var</span> container = $(<span class="keyword">this</span>).closest(<span class="string">'[data-pjax-container]'</span>)</span><br><span class="line">    <span class="keyword">var</span> containerSelector = <span class="string">'#'</span> + container.id</span><br><span class="line">    $.pjax.click(event, &#123;<span class="attr">container</span>: containerSelector&#125;)</span><br><span class="line">&#125;)</span><br><span class="line"><span class="comment">//$.pjax.submit</span></span><br><span class="line">$(<span class="built_in">document</span>).on(<span class="string">'submit'</span>, <span class="string">'form[data-pjax]'</span>, <span class="function"><span class="keyword">function</span>(<span class="params">event</span>) </span>&#123;</span><br><span class="line">    $.pjax.submit(event, <span class="string">'#pjax-container'</span>)</span><br><span class="line">&#125;)</span><br><span class="line"><span class="comment">//$.pjax.reload</span></span><br><span class="line">$.pjax.reload(<span class="string">'#pjax-container'</span>, options)</span><br></pre></td></tr></table></figure></p>
+
+      
+    </div>
+    
+  </div>
+  
+    
+    <div class="copyright">
+        <p><span>本文标题:</span><a href="/2018/01/22/pjax/">JQuery pjax技术简介与示例</a></p>
+        <p><span>文章作者:</span><a href="/" title="回到主页">Li Yu</a></p>
+        <p><span>发布时间:</span>2018-01-22, 16:15:45</p>
+        <p><span>最后更新:</span>2019-08-04, 19:02:00</p>
+        <p>
+            <span>原始链接:</span><a class="post-url" href="/2018/01/22/pjax/" title="JQuery pjax技术简介与示例">https://liyu.fun/2018/01/22/pjax/</a>
+            <span class="copy-path" data-clipboard-text="原文: https://liyu.fun/2018/01/22/pjax/　　作者: Li Yu" title="点击复制文章链接"><i class="fa fa-clipboard"></i></span>
+            <script> var clipboard = new Clipboard('.copy-path'); </script>
+        </p>
+        <p>
+            <span>许可协议:</span><i class="fa fa-creative-commons"></i> <a rel="license" href="http://creativecommons.org/licenses/by-nc-sa/4.0/" title="CC BY-NC-SA 4.0 International" target = "_blank">"署名-非商用-相同方式共享 4.0"</a> 转载请保留原文链接及作者。
+        </p>
+    </div>
+
+
+
+    <nav id="article-nav">
+        
+            <div id="article-nav-newer" class="article-nav-title">
+                <a href="/2018/02/08/laravel-vue/">
+                    Laravel+Vue开发环境搭建
+                </a>
+            </div>
+        
+        
+            <div id="article-nav-older" class="article-nav-title">
+                <a href="/2018/01/18/前端构建工具/">
+                    (转)前端构建工具的比较
+                </a>
+            </div>
+        
+    </nav>
+
+  
+</article>
+
+    <div id="toc" class="toc-article">
+        <strong class="toc-title">文章目录</strong>
+        
+            <ol class="toc"><li class="toc-item toc-level-4"><a class="toc-link" href="#实现原理"><span class="toc-number">1.</span> <span class="toc-text">实现原理</span></a></li><li class="toc-item toc-level-4"><a class="toc-link" href="#pushState"><span class="toc-number">2.</span> <span class="toc-text">pushState</span></a></li><li class="toc-item toc-level-4"><a class="toc-link" href="#生命周期"><span class="toc-number">3.</span> <span class="toc-text">生命周期</span></a></li><li class="toc-item toc-level-4"><a class="toc-link" href="#配置使用"><span class="toc-number">4.</span> <span class="toc-text">配置使用</span></a></li></ol>
+        
+    </div>
+    <style>
+        .left-col .switch-btn,
+        .left-col .switch-area {
+            display: none;
+        }
+        .toc-level-3 i,
+        .toc-level-3 ol {
+            display: none !important;
+        }
+    </style>
+
+    <input type="button" id="tocButton" value="隐藏目录"  title="点击按钮隐藏或者显示文章目录">
+
+    <script>
+        yiliaConfig.toc = ["隐藏目录", "显示目录", !!"false"];
+    </script>
+
+
+
+    
+<div class="share">
+    
+
+    
+        <div class="addthis_sharing_toolbox"></div>
+    
+</div>
+
+
+
+
+
+
+
+    
+    <div id="cyEmoji" role="cylabs" data-use="emoji"></div>
+	  <!--PC和WAP自适应版-->
+<div id="SOHUCS" ></div> 
+<script type="text/javascript"> 
+(function(){ 
+var appid = 'cyt8R9vtY'; 
+var conf = 'prod_be8ce27d78baffc4c5afad75a6faf6e2'; 
+var width = window.innerWidth || document.documentElement.clientWidth; 
+if (width < 960) { 
+window.document.write('<script id="changyan_mobile_js" charset="utf-8" type="text/javascript" src="//changyan.sohu.com/upload/mobile/wap-js/changyan_mobile.js?client_id=' + appid + '&conf=' + conf + '"><\/script>'); } else { var loadJs=function(d,a){var c=document.getElementsByTagName("head")[0]||document.head||document.documentElement;var b=document.createElement("script");b.setAttribute("type","text/javascript");b.setAttribute("charset","UTF-8");b.setAttribute("src",d);if(typeof a==="function"){if(window.attachEvent){b.onreadystatechange=function(){var e=b.readyState;if(e==="loaded"||e==="complete"){b.onreadystatechange=null;a()}}}else{b.onload=a}}c.appendChild(b)};loadJs("//changyan.sohu.com/upload/changyan.js",function(){window.changyan.api.config({appid:appid,conf:conf})}); } })(); </script>
+    <script type="text/javascript" charset="utf-8" src="https://changyan.sohu.com/js/changyan.labs.https.js?appid=cyt8R9vtY"></script>
+    
+
+
+
+
+    <div class="scroll" id="post-nav-button">
+        
+            <a href="/2018/02/08/laravel-vue/" title="上一篇: Laravel+Vue开发环境搭建">
+                <i class="fa fa-angle-left"></i>
+            </a>
+        
+
+        <a title="文章列表"><i class="fa fa-bars"></i><i class="fa fa-times"></i></a>
+
+        
+            <a href="/2018/01/18/前端构建工具/" title="下一篇: (转)前端构建工具的比较">
+                <i class="fa fa-angle-right"></i>
+            </a>
+        
+    </div>
+
+    <ul class="post-list"><li class="post-list-item"><a class="post-list-link" href="/2023/02/03/review-2022/">回顾一下我的2022</a></li><li class="post-list-item"><a class="post-list-link" href="/2022/05/26/emqx-wss/">EMQX搭建对接WSS</a></li><li class="post-list-item"><a class="post-list-link" href="/2022/04/20/review-2021/">回顾一下我的2021</a></li><li class="post-list-item"><a class="post-list-link" href="/2021/01/02/review-2020/">回顾一下我的2020</a></li><li class="post-list-item"><a class="post-list-link" href="/2020/11/05/thingsboard/">IOT开源项目Thingsboard开发环境搭建</a></li><li class="post-list-item"><a class="post-list-link" href="/2020/08/18/cordova/">Cordova混合开发APP踩坑记录</a></li><li class="post-list-item"><a class="post-list-link" href="/2020/07/02/sonarqube/">SonarQube简介与Mac快速搭建</a></li><li class="post-list-item"><a class="post-list-link" href="/2020/03/29/otter/">Otter数据同步简介</a></li><li class="post-list-item"><a class="post-list-link" href="/2020/03/28/rds/">阿里云RDS快速上手</a></li><li class="post-list-item"><a class="post-list-link" href="/2020/01/22/explain/">Mysql优化：Explain分析介绍</a></li><li class="post-list-item"><a class="post-list-link" href="/2020/01/15/drag-map/">插件:DragMap</a></li><li class="post-list-item"><a class="post-list-link" href="/2020/01/04/superset/">从无到有搭建Superset(Mac)</a></li><li class="post-list-item"><a class="post-list-link" href="/2020/01/01/review-2019/">回顾一下我的2019</a></li><li class="post-list-item"><a class="post-list-link" href="/2019/08/07/mamp/">MAMP配置PHP环境的一些问题</a></li><li class="post-list-item"><a class="post-list-link" href="/2019/05/16/redis/">Redis常用命令及数据结构介绍</a></li><li class="post-list-item"><a class="post-list-link" href="/2019/05/15/crontab/">Crontab定时任务</a></li><li class="post-list-item"><a class="post-list-link" href="/2019/05/14/shutdown/">PHP执行命令关闭Linux服务器</a></li><li class="post-list-item"><a class="post-list-link" href="/2019/05/09/predis/">使用Predis操作Redis</a></li><li class="post-list-item"><a class="post-list-link" href="/2019/04/25/npm-proxy/">Npm代理和镜像源设置</a></li><li class="post-list-item"><a class="post-list-link" href="/2019/04/24/electron-update-helper/">Npm包：electron-update-helper</a></li><li class="post-list-item"><a class="post-list-link" href="/2019/03/14/lazyload-widget/">Vue插件:Vue-lazyload-widget</a></li><li class="post-list-item"><a class="post-list-link" href="/2019/01/22/review-2018/">回顾一下我的2018</a></li><li class="post-list-item"><a class="post-list-link" href="/2019/01/10/wechat-refund/">微信&支付宝退款</a></li><li class="post-list-item"><a class="post-list-link" href="/2018/12/13/electron-single/">Electron阻止应用多开</a></li><li class="post-list-item"><a class="post-list-link" href="/2018/11/08/date-sql/">查询日期范围内固定时段的数据</a></li><li class="post-list-item"><a class="post-list-link" href="/2018/10/23/mobile-media/">关于移动端网页尺寸问题</a></li><li class="post-list-item"><a class="post-list-link" href="/2018/10/07/vue-loading/">Vue插件:Vue-nice-loading</a></li><li class="post-list-item"><a class="post-list-link" href="/2018/09/08/vue-note/">Vue源码分析</a></li><li class="post-list-item"><a class="post-list-link" href="/2018/08/23/wechat-login/">微信授权注册&登录</a></li><li class="post-list-item"><a class="post-list-link" href="/2018/08/02/test/">最近做的测试题</a></li><li class="post-list-item"><a class="post-list-link" href="/2018/07/20/伪静态/">伪静态地址获取用户头像</a></li><li class="post-list-item"><a class="post-list-link" href="/2018/06/15/wechat/">微信H5支付&公众号支付大型攻略</a></li><li class="post-list-item"><a class="post-list-link" href="/2018/06/01/jsKnack/">Javascript的一些实用技巧(持续更新)</a></li><li class="post-list-item"><a class="post-list-link" href="/2018/05/28/autohotkey/">AutoHotkey禁用热键以及Electron中的使用</a></li><li class="post-list-item"><a class="post-list-link" href="/2018/03/13/electron/">Electron-Vue项目记录</a></li><li class="post-list-item"><a class="post-list-link" href="/2018/03/01/webapi/">使用webAPI预览上传图片和调用摄像头</a></li><li class="post-list-item"><a class="post-list-link" href="/2018/02/08/laravel-vue/">Laravel+Vue开发环境搭建</a></li><li class="post-list-item"><a class="post-list-link" href="/2018/01/22/pjax/">JQuery pjax技术简介与示例</a></li><li class="post-list-item"><a class="post-list-link" href="/2018/01/18/前端构建工具/">(转)前端构建工具的比较</a></li><li class="post-list-item"><a class="post-list-link" href="/2018/01/16/echart/">Vue项目中对EChart的应用</a></li><li class="post-list-item"><a class="post-list-link" href="/2017/12/13/vue文本隐藏组件/">Vue实例:文本隐藏提示组件</a></li><li class="post-list-item"><a class="post-list-link" href="/2017/11/28/vuex/">Vuex简单入门</a></li><li class="post-list-item"><a class="post-list-link" href="/2017/10/13/php面向对象/">PHP学习笔记:面向对象</a></li><li class="post-list-item"><a class="post-list-link" href="/2017/10/12/vue汇总/">Vue学习笔记:汇总</a></li><li class="post-list-item"><a class="post-list-link" href="/2017/10/10/php基础语法/">PHP学习笔记:基础语法</a></li><li class="post-list-item"><a class="post-list-link" href="/2017/10/09/vue组件通信/">Vue学习笔记:组件之间的通信方式</a></li><li class="post-list-item"><a class="post-list-link" href="/2017/09/30/记录/">记录贴:那些年踩过的坑</a></li><li class="post-list-item"><a class="post-list-link" href="/2017/09/21/Crypto-JS加密/">Crypto-JS加密</a></li><li class="post-list-item"><a class="post-list-link" href="/2017/09/18/datatables分页/">Datatables分页</a></li><li class="post-list-item"><a class="post-list-link" href="/2017/08/14/requirejs/">Require.js的使用</a></li><li class="post-list-item"><a class="post-list-link" href="/2017/08/09/hexo自定义样式/">Hexo引用自定义js与css</a></li><li class="post-list-item"><a class="post-list-link" href="/2017/08/03/js实现贪吃蛇/">JS实现贪吃蛇</a></li><li class="post-list-item"><a class="post-list-link" href="/2017/08/03/Hexo使用技巧/">Hexo使用技巧(持续更新ing)</a></li><li class="post-list-item"><a class="post-list-link" href="/2017/08/03/Hexo博客畅言评论/">Hexo博客畅言评论支持</a></li><li class="post-list-item"><a class="post-list-link" href="/2017/08/01/js尺寸/">JS常用尺寸和坐标</a></li><li class="post-list-item"><a class="post-list-link" href="/2017/08/01/npm命令/">npm常用命令</a></li><li class="post-list-item"><a class="post-list-link" href="/2017/07/28/angular通信/">Angular学习笔记:通信方式</a></li><li class="post-list-item"><a class="post-list-link" href="/2017/07/25/angular$watch/">Angular学习笔记:$watch</a></li><li class="post-list-item"><a class="post-list-link" href="/2017/07/19/angular表单验证/">Angular学习笔记:表单验证</a></li></ul>
+
+
+
+
+    <script>
+        
+    </script>
+</div>
+      <footer id="footer">
+    <div class="outer">
+        <div id="footer-info">
+            <div class="footer-left">
+                <i class="fa fa-copyright"></i> 
+                2016-2023 Li Yu
+            </div>
+            <div class="footer-right">
+                <a href="http://hexo.io/" target="_blank" title="快速、简洁且高效的博客框架">Hexo</a>  Theme <a href="https://github.com/MOxFIVE/hexo-theme-yelee" target="_blank" title="简而不减 Hexo 双栏博客主题  v3.5">Yelee</a> by MOxFIVE <i class="fa fa-heart animated infinite pulse"></i>
+            </div>
+        </div>
+        
+            <div class="visit">
+                
+                    <span id="busuanzi_container_site_pv" style='display:none'>
+                        <span id="site-visit" title="本站到访数"><i class="fa fa-user" aria-hidden="true"></i><span id="busuanzi_value_site_uv"></span>
+                        </span>
+                    </span>
+                
+                
+                    <span>| </span>
+                
+                
+                    <span id="busuanzi_container_page_pv" style='display:none'>
+                        <span id="page-visit"  title="本页阅读量"><i class="fa fa-eye animated infinite pulse" aria-hidden="true"></i><span id="busuanzi_value_page_pv"></span>
+                        </span>
+                    </span>
+                
+            </div>
+        
+    </div>
+</footer>
+    </div>
+    
+<script data-main="/js/main.js" src="//cdn.bootcss.com/require.js/2.2.0/require.min.js"></script>
+
+    <script>
+        $(document).ready(function() {
+            var iPad = window.navigator.userAgent.indexOf('iPad');
+            if (iPad > -1 || $(".left-col").css("display") === "none") {
+                var bgColorList = ["#9db3f4", "#414141", "#e5a859", "#f5dfc6", "#c084a0", "#847e72", "#cd8390", "#996731"];
+                var bgColor = Math.ceil(Math.random() * (bgColorList.length - 1));
+                $("body").css({"background-color": bgColorList[bgColor], "background-size": "cover"});
+            }
+            else {
+                var backgroundnum = 5;
+                var backgroundimg = "url(/background/bg-x.jpg)".replace(/x/gi, Math.ceil(Math.random() * backgroundnum));
+                $("body").css({"background": backgroundimg, "background-attachment": "fixed", "background-size": "cover"});
+            }
+        })
+    </script>
+
+
+
+
+
+<div class="scroll" id="scroll">
+    <a href="#" title="返回顶部"><i class="fa fa-arrow-up"></i></a>
+    <a href="#comments" onclick="load$hide();" title="查看评论"><i class="fa fa-comments-o"></i></a>
+    <a href="#footer" title="转到底部"><i class="fa fa-arrow-down"></i></a>
+</div>
+<script>
+    // Open in New Window
+    
+        var oOpenInNew = {
+            
+            
+             post: ".article-entry a[href], .copyright a[href]", 
+             tags: ".article-tag a", 
+             categories: ".article-category a, a.tag-list-link", 
+            
+             archives: ".archive-article-title", 
+             miniArchives: "a.post-list-link", 
+            
+             friends: "#js-friends a", 
+             socail: ".social a" 
+        }
+        for (var x in oOpenInNew) {
+            $(oOpenInNew[x]).attr("target", "_blank");
+        }
+    
+</script>
+
+<script async src="https://busuanzi.ibruce.info/busuanzi/2.3/busuanzi.pure.mini.js">
+</script>
+  </div>
+</body>
+</html>
+<script type="text/javascript">
+    var host = "liyu.fun";
+    if ((host == window.location.host) && (window.location.protocol != "https:"))
+        window.location.protocol = "https";
+</script>
+<script src='/js/myjs.js'></script>
+<script src='/js/heart.js'></script>    
